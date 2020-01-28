@@ -1,60 +1,58 @@
 #include <vector>
 #include <stdlib.h>
+#include <iostream>
 #pragma once
 
 using namespace std;
 
-class Type {
-    public:
-        enum type {
-            Wheat, 
-            Sheep, 
-            Timber, 
-            Stone 
-        };
+enum class Type {
+    Wheat, 
+    Sheep, 
+    Timber, 
+    Stone 
 };
 
 class Building {
     private:
-        Type::type* type; //wheat, sheep, stone or timber
+        Type* type; //wheat, sheep, stone or timber
         int* cost; //cost of building, 1-6
         int* actualCost; // if the player decides to flip it and give it a new cost. This takes precedence over cost, unless null.
 
     public:
-        Building(Type::type* t, int* c) {
+        Building(Type* t, int* c) {
             type = t;
             cost = c;
         };
         void setActualCost(int* ac) {
             actualCost = ac;
         };        
-        Type::type* getType() { return type; }
+        Type* getType() { return type; }
         int* getCost() { return cost; }
         int* getActualCost() { return actualCost; }
 };
 
 class HarvestTile {
     private:
-        Type::type* topLeftNode;
-        Type::type* topRightNode;
-        Type::type* bottomLeftNode;
-        Type::type* bottomRightNode;
+        Type* topLeftNode;
+        Type* topRightNode;
+        Type* bottomLeftNode;
+        Type* bottomRightNode;
 
     public:
-        HarvestTile(Type::type* tln, 
-                    Type::type* trn, 
-                    Type::type* bln, 
-                    Type::type* brn) {
+        HarvestTile(Type* tln, 
+                    Type* trn, 
+                    Type* bln, 
+                    Type* brn) {
 
             topLeftNode = tln;
             topRightNode = trn;
             bottomLeftNode = bln;
             bottomRightNode = brn;
         };
-        Type::type* getTopLeftNode() { return topLeftNode; }
-        Type::type* getTopRightNode() { return topRightNode; }
-        Type::type* getBottomLeftNode() { return bottomLeftNode; }
-        Type::type* getBottomRightNode() { return bottomRightNode; }
+        Type* getTopLeftNode() { return topLeftNode; }
+        Type* getTopRightNode() { return topRightNode; }
+        Type* getBottomLeftNode() { return bottomLeftNode; }
+        Type* getBottomRightNode() { return bottomRightNode; }
 
 };
 
@@ -67,23 +65,26 @@ class Deck {
         vector<Building*>* generateBuildings() {
             vector<Building*>* buildingVectorPointer;
             vector<Building*> buildingVector = {};
-            for (int cost = 1; cost < 7; cost = cost + 1) {
-                Type::type type = Type::type::Timber;
-                Type::type* typePtr = &type;
-                Building building = Building(typePtr, &cost);
-                buildingVector.push_back(&building);
+            Type* timberType = new Type{Type::Timber};
+            Type* sheepType = new Type{Type::Sheep};
+            Type* stoneType = new Type{Type::Stone};
+            Type* wheatType = new Type{Type::Wheat};
+            int* cost;
+            Building* building;
 
-                type = Type::type::Stone;
-                building = Building(typePtr, &cost);
-                buildingVector.push_back(&building);
+            for (int i = 0; i < 6; i++) {
+                cost = new int(i+1);
+                building = new Building(timberType, cost);
+                buildingVector.push_back(building);
 
-                type = Type::type::Sheep;
-                building = Building(typePtr, &cost);
-                buildingVector.push_back(&building);
+                building = new Building(sheepType, cost);
+                buildingVector.push_back(building);
 
-                type = Type::type::Wheat;
-                building = Building(typePtr, &cost);
-                buildingVector.push_back(&building);
+                building = new Building(stoneType, cost);
+                buildingVector.push_back(building);
+
+                building = new Building(wheatType, cost);
+                buildingVector.push_back(building);                
             }
             buildingVectorPointer = &buildingVector;
             return buildingVectorPointer;
@@ -94,11 +95,12 @@ class Deck {
         vector<HarvestTile*>* generateHarvestTiles() {
             vector<HarvestTile*>* harvestTilevectorPointer = {};
             vector<HarvestTile*> harvestTilevector = {};
-            Type::type type = Type::type::Timber;
-            Type::type* typePtr = &type;
+            Type* type = new Type{Type::Timber};
+            HarvestTile* harvestTile;
+
             for (int i=0; i<60 ; i++) {
-                HarvestTile harvestTile = HarvestTile(typePtr, typePtr, typePtr, typePtr);
-                harvestTilevector.push_back(&harvestTile);
+                harvestTile = new HarvestTile(type, type, type, type);
+                harvestTilevector.push_back(harvestTile);
             }
             harvestTilevectorPointer = &harvestTilevector;
             return harvestTilevectorPointer;
@@ -111,17 +113,17 @@ class Deck {
         }
 
         Building* drawBuilding() {
-            vector<Building*> buildings = *getBuildingDeck();
-            int randomIndex = rand() % buildings.capacity();
-            Building* pickedBuilding = buildings[randomIndex];
-            buildings.erase(buildings.begin() + randomIndex);
+            vector<Building*>* buildings = getBuildingDeck();
+            int randomIndex = rand() % buildings->size();
+            Building* pickedBuilding = buildings->at(randomIndex);
+            buildings->erase(buildings->begin() + 0);
             return pickedBuilding;
         }
 
         HarvestTile* drawHarvestTile() {
             vector<HarvestTile*> harvestTiles = *getHarvestTileDeck();
             int randomIndex = rand() % sizeof(harvestTiles);
-            HarvestTile* pickedHarvestTile = harvestTiles[randomIndex];
+            HarvestTile* pickedHarvestTile = harvestTiles.at(randomIndex);
             harvestTiles.erase(harvestTiles.begin() + randomIndex);
             return pickedHarvestTile; 
         }
