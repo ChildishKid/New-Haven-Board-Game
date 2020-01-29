@@ -8,7 +8,7 @@
 using namespace std;
 
 enum class Type {
-    Wheat, 
+    Wheat = 0, 
     Sheep, 
     Timber, 
     Stone 
@@ -24,6 +24,8 @@ class Building {
         Building(Type* t, int* c) {
             type = t;
             cost = c;
+            actualCost = new int();
+            *actualCost = 0;
         };
         void setActualCost(int* ac) {
             actualCost = ac;
@@ -98,30 +100,35 @@ class Deck {
             Type* stoneType = new Type{Type::Stone};
             Type* wheatType = new Type{Type::Wheat};
             HarvestTile* harvestTile;
-            vector<Type> types{*sheepType, *stoneType, *timberType, *wheatType};
-            map<Type, int> map = {};
-            Type lastSelection = types.at(0);
-            vector<Type> nodeTypes = {};
-            Type type = types.at(0);
+            vector<Type*>* types = new vector<Type*>(); // vector pointer of all types
+            types->push_back(sheepType);
+            types->push_back(stoneType);
+            types->push_back(timberType);
+            types->push_back(wheatType);
+            map<Type*, int*>* typeMap = new map<Type*, int*>(); // map to keep track of types of a tile and how many times they are part of a tile
+            vector<Type*>* nodeTypes = new vector<Type*>(); // the list of types that a harvest tile will have (each one associated to a node)
+            Type* type = types->at(0); // the randomly generated type
 
             for (int i=0; i<60 ; i++) {
-                nodeTypes.clear();
-                map.clear();
-                while (nodeTypes.size() < 5) {
-	                type = types.at(rand() % types.size());
-                    if (nodeTypes.size() > 0 && (lastSelection == type || (map.find(type) == map.end() && map.size() == 3))) {
+                nodeTypes->clear(); // clear vector every iteration
+                typeMap->clear(); // clear map every iteration
+                while (nodeTypes->size() < 5) { // while 4 types haven't been selected for the tile
+	                type = types->at(rand() % types->size()); // randomly select a type
+                    if (nodeTypes->size() > 0 && // if no type was yet selected and...
+                        ((typeMap->find(type) != typeMap->end() && *(*typeMap)[type] == 3) // the randomly generated type has already been selected 3 times for the tile (at least 2 types per tile)
+                            || (typeMap->find(type) == typeMap->end() && typeMap->size() == 3))) { // the map size is 3 and the newly generated type is not part of the map (max 3 types per tile)
                         continue;
-                    } else {
-                        lastSelection = type;
-                        nodeTypes.push_back(lastSelection);
-                        if (map.find(type) == map.end()) {
-                            map[type] = 1;
+                    } else { // else push the randomly generated type to the vector and add it to the map with its count
+                        nodeTypes->push_back(new Type{*type});
+                        if (typeMap->find(type) == typeMap->end()) {
+                            (*typeMap)[type] = new int();
+                            *(*typeMap)[type] = 1;
                         } else {
-                            map[type] = map[type] + 1;
+                            *(*typeMap)[type] = *(*typeMap)[type] + 1;
                         }
                     }
                 }
-                harvestTile = new HarvestTile(&types.at(0), &types.at(1), &types.at(2), &types.at(3));
+                harvestTile = new HarvestTile(nodeTypes->at(0), nodeTypes->at(1), nodeTypes->at(2), nodeTypes->at(3));
                 harvestTilevector->push_back(harvestTile);
             }
             *harvestTilevector;
