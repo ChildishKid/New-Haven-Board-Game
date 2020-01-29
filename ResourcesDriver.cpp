@@ -1,16 +1,10 @@
-#include <iostream>
-#include <vector>
-#include "Resources.h"
 #include "ResourcesDriver.h"
-
-#define stringify( name ) # name
-
 
 using namespace std;
 
 int main() {
     Deck* d = new Deck();
-    map<Type, string> enumValues = {{Type::Wheat, "wheat"}, {Type::Stone, "stone"}, {Type::Timber, "timber"}, {Type::Sheep, "sheep"}};
+    map<Type, string> enumValues = {{Type::Wheat, "Wheat"}, {Type::Stone, "Stone"}, {Type::Timber, "Timber"}, {Type::Sheep, "Sheep"}};
     Building* building = d->drawBuilding();
     Building building2 = *building;
     
@@ -34,4 +28,22 @@ int main() {
     vector<HarvestTile*> h = *d->getHarvestTileDeck();
     cout << b.size() << endl;
     cout << h.size() << endl;
+
+    Hand* hand = new Hand();
+    Hand hand2 = *hand;
+    hand2.exchange(9, 2, 3, 4);
+
+    cout << "hi3" << endl;
+    cout << *hand2.getSheepResourceMarker() << endl;
+    cout << *hand2.getStoneResourceMarker() << endl;
+    cout << *hand2.getTimberResourceMarker() << endl;
+    cout << *hand2.getWheatResourceMarker() << endl;
+
+    hand2.exchange(-3, -1, -1, 0);
+
+    cout << "hi3" << endl;
+    cout << *hand2.getSheepResourceMarker() << endl;
+    cout << *hand2.getStoneResourceMarker() << endl;
+    cout << *hand2.getTimberResourceMarker() << endl;
+    cout << *hand2.getWheatResourceMarker() << endl;
 };
