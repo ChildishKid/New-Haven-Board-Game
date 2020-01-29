@@ -4,7 +4,6 @@
 #include <ctime>
 #include <map>
 #include "Resources.h"
-#pragma once
 
 using namespace std;
 
