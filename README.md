@@ -2,6 +2,6 @@
 
 ### Team 4
 Jamal Ghamraoui - 40027657    
-Manpreet Tahim  
+Manpreet Tahim  - 26592066
 Yaroslav Bilodid  
 Thomas Gillard  
