@@ -10,20 +10,17 @@ int main() {
 		cout << "=== ADJACENCY TEST FOR " << x << " PLAYERS ===" << endl;
 
 		// Create game board map and initialize all squares to default (i.e. emtpy values)
-		map<pair<int, int>, GBMaps::Square*> gameBoard = GBMaps::setUpBoard(x);
-
-		// Create iterator to go through each element of map
-		map<pair<int, int>, GBMaps::Square*>::iterator iterate = gameBoard.begin();
+		GBMaps* gameBoard = new GBMaps(x);
 
 		// Display edges/connections of each squares
-		for (; iterate != gameBoard.end(); ++iterate) {
+		for (; gameBoard->iterate != gameBoard->end(); ++gameBoard->iterate) {
 
 			// Create adjency vectors for each sqaure
-			vector<GBMaps::Square*> adj = iterate->second->getAdj();
+			vector<GBMaps::Square*> adj = gameBoard->iterate->second->getAdj();
 
 			// Display edges
-			cout << "(" << iterate->second->getX() << ", " << iterate->second->getY() << ")";
-			for (int i = 0; i < iterate->second->getSize(); i++) {
+			cout << "(" << gameBoard->iterate->second->getX() << ", " << gameBoard->iterate->second->getY() << ")";
+			for (int i = 0; i < gameBoard->iterate->second->getSize(); i++) {
 				GBMaps::Square* s = adj.at(i);
 				cout << " -> (" << s->getX() << ", " << s->getY() << ")";
 			}

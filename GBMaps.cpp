@@ -3,11 +3,99 @@
 using namespace std;
 #include "GBMaps.h"
 
-namespace GBMaps {
+	GBMaps::Square::Square(int x_value, int y_value) {
 
-	map<pair<int, int>, Square*> setUpBoard(int numberOfPlayers) {
+		x = new int(x_value);
+		y = new int(y_value);
+		topLeft = new string("");
+		topRight = new string("");
+		bottomLeft = new string("");
+		bottomRight = new string("");
+		status = false;
+		size = 0;
+	}
 
-		map<pair<int, int>, GBMaps::Square*> gameBoard;
+	GBMaps::Square::~Square() {
+		delete x;
+		delete y;
+		delete topLeft;
+		delete topRight;
+		delete bottomLeft;
+		delete bottomRight;
+		x = NULL;
+		y = NULL;
+		topLeft = NULL;
+		topRight = NULL;
+		bottomLeft = NULL;
+		bottomRight = NULL;
+	}
+
+	void GBMaps::Square::setTopLeft(string tL) {
+		*topLeft = tL;
+	}
+
+	void GBMaps::Square::setTopRight(string tR) {
+		*topRight = tR;
+	}
+
+	void GBMaps::Square::setBottomLeft(string bL) {
+		*bottomLeft = bL;
+	}
+
+	void GBMaps::Square::setBottomRight(string bR) {
+		*bottomRight = bR;
+	}
+
+	void GBMaps::Square::setX(int x_value) {
+		*x = x_value;
+	}
+
+	void GBMaps::Square::setY(int y_value) {
+		*y = y_value;
+	}
+
+	void GBMaps::Square::setStatus(bool value) {
+		status = value;
+	}
+
+	void GBMaps::Square::addAdj(Square* obj) {
+		adjacent.push_back(obj);
+		size++;
+	}
+
+	string GBMaps::Square::getTopLeft() const {
+		return *topLeft;
+	}
+
+	string GBMaps::Square::getTopRight() const {
+		return *topRight;
+	}
+
+	string GBMaps::Square::getBottomLeft() const {
+		return *bottomLeft;
+	}
+
+	string GBMaps::Square::getBottomRight() const {
+		return *bottomRight;
+	}
+
+	vector<GBMaps::Square*> GBMaps::Square::getAdj() const {
+		return adjacent;
+	}
+
+	int GBMaps::Square::getX() const {
+		return *x;
+	}
+
+	int GBMaps::Square::getY() const {
+		return *y;
+	}
+
+	int GBMaps::Square::getSize() const {
+		return size;
+	}
+
+	void GBMaps::setUpBoard(int numberOfPlayers) {
 
 		if (numberOfPlayers == 2 || numberOfPlayers == 3) {
 
@@ -18,7 +106,7 @@ namespace GBMaps {
 			for (int i = 0; i < max_height; i++) {
 				for (int j = 0; j < max_width; j++) {
 
-					gameBoard[{i, j}] = new Square(i, j);
+					gameBoard[{i, j}] = new GBMaps::Square(i, j);
 				}
 			}
 
@@ -99,98 +187,21 @@ namespace GBMaps {
 				}
 			}
 		}
-		return gameBoard;
 	}
 
-	Square::Square(int x_value, int y_value) {
-
-		x = new int(x_value);
-		y = new int(y_value);
-		topLeft = new string("");
-		topRight = new string("");
-		bottomLeft = new string("");
-		bottomRight = new string("");
-		status = false;
-		size = 0;
+	GBMaps::GBMaps(int numberOfPlayers) {
+		setUpBoard(numberOfPlayers);
+		iterate = gameBoard.begin();
 	}
 
-	Square::~Square() {
-		delete x;
-		delete y;
-		delete topLeft;
-		delete topRight;
-		delete bottomLeft;
-		delete bottomRight;
-		x = NULL;
-		y = NULL;
-		topLeft = NULL;
-		topRight = NULL;
-		bottomLeft = NULL;
-		bottomRight = NULL;
+	GBMaps::Square* GBMaps::getSquare(int x_value, int y_value) const {
+		return gameBoard.at({ x_value, y_value });
 	}
 
-	void Square::setTopLeft(string tL) {
-		*topLeft = tL;
+	map<pair<int, int>, GBMaps::Square*>::iterator GBMaps::begin() {
+		return gameBoard.begin();
 	}
 
-	void Square::setTopRight(string tR) {
-		*topRight = tR;
+	map<pair<int, int>, GBMaps::Square*>::iterator GBMaps::end() {
+		return gameBoard.end();
 	}
-
-	void Square::setBottomLeft(string bL) {
-		*bottomLeft = bL;
-	}
-
-	void Square::setBottomRight(string bR) {
-		*bottomRight = bR;
-	}
-
-	void Square::setX(int x_value) {
-		*x = x_value;
-	}
-
-	void Square::setY(int y_value) {
-		*y = y_value;
-	}
-
-	void Square::setStatus(bool value) {
-		status = value;
-	}
-
-	void Square::addAdj(Square* obj) {
-		adjacent.push_back(obj);
-		size++;
-	}
-
-	string Square::getTopLeft() const {
-		return *topLeft;
-	}
-
-	string Square::getTopRight() const {
-		return *topRight;
-	}
-
-	string Square::getBottomLeft() const {
-		return *bottomLeft;
-	}
-
-	string Square::getBottomRight() const {
-		return *bottomRight;
-	}
-
-	vector<Square*> Square::getAdj() const {
-		return adjacent;
-	}
-
-	int Square::getX() const {
-		return *x;
-	}
-
-	int Square::getY() const {
-		return *y;
-	}
-
-	int Square::getSize() const {
-		return size;
-	}
-}

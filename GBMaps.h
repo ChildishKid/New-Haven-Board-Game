@@ -4,8 +4,9 @@
 #include <map>
 using namespace std;
 
-namespace GBMaps {
+class GBMaps {
 
+public:
 	class Square {
 	public:
 		Square(int x_value, int y_value);
@@ -43,8 +44,15 @@ namespace GBMaps {
 
 	};
 
-	//typedef pair<int, int> position;
-	//extern map<position, Square*> gameBoard;
+	map<pair<int, int>, Square*>::iterator iterate;
 
-	map<pair<int, int>, Square*> setUpBoard(int numberOfPlayers);
-}
+	GBMaps(int numberOfPlayers);
+	Square* getSquare(int x_value, int y_value) const;
+	map<pair<int, int>, Square*>::iterator begin();
+	map<pair<int, int>, Square*>::iterator end();
+
+private:
+	map<pair<int, int>, Square*> gameBoard;
+	void setUpBoard(int numberOfPlayers);
+
+};
