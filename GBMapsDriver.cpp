@@ -15,13 +15,10 @@ int main() {
 		// Display edges/connections of each squares
 		for (; gameBoard->iterate != gameBoard->end(); ++gameBoard->iterate) {
 
-			// Create adjency vectors for each sqaure
-			vector<GBMaps::Square*> adj = gameBoard->iterate->second->getAdj();
-
 			// Display edges
 			cout << "(" << gameBoard->iterate->second->getX() << ", " << gameBoard->iterate->second->getY() << ")";
 			for (int i = 0; i < gameBoard->iterate->second->getSize(); i++) {
-				GBMaps::Square* s = adj.at(i);
+				GBMaps::Square* s = gameBoard->iterate->second->getAdj().at(i);
 				cout << " -> (" << s->getX() << ", " << s->getY() << ")";
 			}
 			cout << endl;
