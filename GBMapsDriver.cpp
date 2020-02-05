@@ -11,10 +11,8 @@ int main() {
 
 		// Create game board map and initialize all squares to default (i.e. emtpy values)
 		GBMaps* gameBoard = new GBMaps(x);
-
 		// Display edges/connections of each squares
 		for (; gameBoard->iterate != gameBoard->end(); ++gameBoard->iterate) {
-
 			// Display edges
 			cout << "(" << gameBoard->iterate->second->getX() << ", " << gameBoard->iterate->second->getY() << ")";
 			for (int i = 0; i < gameBoard->iterate->second->getSize(); i++) {
