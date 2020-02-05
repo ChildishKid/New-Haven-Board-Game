@@ -4,15 +4,15 @@ using namespace std;
 #include "GBMaps.h"
 
 	GBMaps::Square::Square(int x_value, int y_value) {
-
 		x = new int(x_value);
 		y = new int(y_value);
-		topLeft = new string("");
-		topRight = new string("");
-		bottomLeft = new string("");
-		bottomRight = new string("");
-		status = false;
-		size = 0;
+		topLeft = NULL;
+		topRight = NULL;
+		bottomLeft = NULL;
+		bottomRight = NULL;
+		status = new bool(false);
+		size = new int(0);
+		adjacent = new vector<Square*>();
 	}
 
 	GBMaps::Square::~Square() {
@@ -30,19 +30,19 @@ using namespace std;
 		bottomRight = NULL;
 	}
 
-	void GBMaps::Square::setTopLeft(string tL) {
+	void GBMaps::Square::setTopLeft(Type tL) {
 		*topLeft = tL;
 	}
 
-	void GBMaps::Square::setTopRight(string tR) {
+	void GBMaps::Square::setTopRight(Type tR) {
 		*topRight = tR;
 	}
 
-	void GBMaps::Square::setBottomLeft(string bL) {
+	void GBMaps::Square::setBottomLeft(Type bL) {
 		*bottomLeft = bL;
 	}
 
-	void GBMaps::Square::setBottomRight(string bR) {
+	void GBMaps::Square::setBottomRight(Type bR) {
 		*bottomRight = bR;
 	}
 
@@ -55,32 +55,32 @@ using namespace std;
 	}
 
 	void GBMaps::Square::setStatus(bool value) {
-		status = value;
+		*status = value;
 	}
 
 	void GBMaps::Square::addAdj(Square* obj) {
-		adjacent.push_back(obj);
-		size++;
+		adjacent->push_back(obj);
+		(*size)++;
 	}
 
-	string GBMaps::Square::getTopLeft() const {
+	Type GBMaps::Square::getTopLeft() const {
 		return *topLeft;
 	}
 
-	string GBMaps::Square::getTopRight() const {
+	Type GBMaps::Square::getTopRight() const {
 		return *topRight;
 	}
 
-	string GBMaps::Square::getBottomLeft() const {
+	Type GBMaps::Square::getBottomLeft() const {
 		return *bottomLeft;
 	}
 
-	string GBMaps::Square::getBottomRight() const {
+	Type GBMaps::Square::getBottomRight() const {
 		return *bottomRight;
 	}
 
 	vector<GBMaps::Square*> GBMaps::Square::getAdj() const {
-		return adjacent;
+		return *adjacent;
 	}
 
 	int GBMaps::Square::getX() const {
@@ -92,21 +92,19 @@ using namespace std;
 	}
 
 	int GBMaps::Square::getSize() const {
-		return size;
+		return *size;
 	}
 
 	void GBMaps::setUpBoard(int numberOfPlayers) {
 
 		if (numberOfPlayers == 2 || numberOfPlayers == 3) {
-
 			int max_width = 5;
 			int max_height = (numberOfPlayers == 2) ? 5 : 7;
 
 			// Set up each square piece
 			for (int i = 0; i < max_height; i++) {
 				for (int j = 0; j < max_width; j++) {
-
-					gameBoard[{i, j}] = new GBMaps::Square(i, j);
+					(*gameBoard)[{i, j}] = new GBMaps::Square(i, j);
 				}
 			}
 
@@ -115,19 +113,19 @@ using namespace std;
 				for (int j = 0; j < max_width; j++) {
 
 					if (!(i - 1 < 0)) {
-						gameBoard[{i, j}]->addAdj(gameBoard[{(i - 1), j}]);
+						(*gameBoard)[{i, j}]->addAdj((*gameBoard)[{(i - 1), j}]);
 					}
 
 					if (!(i + 1 > 4)) {
-						gameBoard[{i, j}]->addAdj(gameBoard[{(i + 1), j}]);
+						(*gameBoard)[{i, j}]->addAdj((*gameBoard)[{(i + 1), j}]);
 					}
 
 					if (!(j - 1 < 0)) {
-						gameBoard[{i, j}]->addAdj(gameBoard[{i, (j - 1)}]);
+						(*gameBoard)[{i, j}]->addAdj((*gameBoard)[{i, (j - 1)}]);
 					}
 
 					if (!(j + 1 > 4)) {
-						gameBoard[{i, j}]->addAdj(gameBoard[{i, (j + 1)}]);
+						(*gameBoard)[{i, j}]->addAdj((*gameBoard)[{i, (j + 1)}]);
 					}
 				}
 			}
@@ -146,7 +144,7 @@ using namespace std;
 						|| (i == max_height - 1 && j == max_width - 1)) {
 						continue;
 					}
-					gameBoard[{i, j}] = new Square(i, j);
+					(*gameBoard)[{i, j}] = new Square(i, j);
 				}
 			}
 
@@ -164,25 +162,25 @@ using namespace std;
 					if (!(i - 1 < 0)
 						&& !(i - 1 == 0 && j == 0)
 						&& !(i - 1 == 0 && j == max_width - 1)) {
-						gameBoard[{i, j}]->addAdj(gameBoard[{(i - 1), j}]);
+						(*gameBoard)[{i, j}]->addAdj((*gameBoard)[{(i - 1), j}]);
 					}
 
 					if (!(i + 1 == max_height)
 						&& !(i + 1 == max_height - 1 && j == 0)
 						&& !(i + 1 == max_height - 1 && j == max_width - 1)) {
-						gameBoard[{i, j}]->addAdj(gameBoard[{(i + 1), j}]);
+						(*gameBoard)[{i, j}]->addAdj((*gameBoard)[{(i + 1), j}]);
 					}
 
 					if (!(j - 1 < 0)
 						&& !(i == 0 && j - 1 == 0)
 						&& !(i == max_height - 1 && j - 1 == 0)) {
-						gameBoard[{i, j}]->addAdj(gameBoard[{i, (j - 1)}]);
+						(*gameBoard)[{i, j}]->addAdj((*gameBoard)[{i, (j - 1)}]);
 					}
 
 					if (!(j + 1 == max_width)
 						&& !(i == 0 && j + 1 == max_width - 1)
 						&& !(i == max_height - 1 && j + 1 == max_width - 1)) {
-						gameBoard[{i, j}]->addAdj(gameBoard[{i, (j + 1)}]);
+						(*gameBoard)[{i, j}]->addAdj((*gameBoard)[{i, (j + 1)}]);
 					}
 				}
 			}
@@ -190,18 +188,19 @@ using namespace std;
 	}
 
 	GBMaps::GBMaps(int numberOfPlayers) {
+		gameBoard = new map<pair<int, int>, Square*>();
 		setUpBoard(numberOfPlayers);
-		iterate = gameBoard.begin();
+		iterate = gameBoard->begin();
 	}
 
 	GBMaps::Square* GBMaps::getSquare(int x_value, int y_value) const {
-		return gameBoard.at({ x_value, y_value });
+		return (*gameBoard).at({ x_value, y_value });
 	}
 
 	map<pair<int, int>, GBMaps::Square*>::iterator GBMaps::begin() {
-		return gameBoard.begin();
+		return (*gameBoard).begin();
 	}
 
 	map<pair<int, int>, GBMaps::Square*>::iterator GBMaps::end() {
-		return gameBoard.end();
+		return (*gameBoard).end();
 	}

@@ -2,6 +2,7 @@
 #include <string>
 #include <vector>
 #include <map>
+#include "Resources.h"
 using namespace std;
 
 class GBMaps {
@@ -12,19 +13,19 @@ public:
 		Square(int x_value, int y_value);
 		~Square();
 
-		void setTopLeft(string tL);
-		void setTopRight(string tR);
-		void setBottomLeft(string bL);
-		void setBottomRight(string bR);
+		void setTopLeft(Type tL);
+		void setTopRight(Type tR);
+		void setBottomLeft(Type bL);
+		void setBottomRight(Type bR);
 		void setX(int x_value);
 		void setY(int y_value);
 		void setStatus(bool value);
 		void addAdj(Square* obj);
 
-		string getTopLeft() const;
-		string getTopRight() const;
-		string getBottomLeft() const;
-		string getBottomRight() const;
+		Type getTopLeft() const;
+		Type getTopRight() const;
+		Type getBottomLeft() const;
+		Type getBottomRight() const;
 		vector<Square*> getAdj() const;
 		int getX() const;
 		int getY() const;
@@ -32,15 +33,15 @@ public:
 
 
 	private:
-		string* topLeft;
-		string* topRight;
-		string* bottomLeft;
-		string* bottomRight;
+		Type* topLeft;
+		Type* topRight;
+		Type* bottomLeft;
+		Type* bottomRight;
 		int* x;
 		int* y;
-		bool status;
-		vector<Square*> adjacent;
-		int size;
+		bool* status;
+		vector<Square*>* adjacent;
+		int* size;
 
 	};
 
@@ -52,7 +53,7 @@ public:
 	map<pair<int, int>, Square*>::iterator end();
 
 private:
-	map<pair<int, int>, Square*> gameBoard;
+	map<pair<int, int>, Square*>* gameBoard;
 	void setUpBoard(int numberOfPlayers);
 
 };
