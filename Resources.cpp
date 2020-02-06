@@ -84,7 +84,7 @@ vector<HarvestTile*>* Deck::generateHarvestTiles() {
         nodeTypes->clear(); // clear vector every iteration
         typeMap->clear(); // clear map every iteration
         while (nodeTypes->size() < 5) { // while 4 types haven't been selected for the tile
-            type = types->at(rand() % types->size()); // randomly select a type
+            type = types->at(rand() % types->size() - 1); // randomly select a type
             if (nodeTypes->size() > 0 && // if no type was yet selected and...
                 ((typeMap->find(type) != typeMap->end() && *(*typeMap)[type] == 3) // the randomly generated type has already been selected 3 times for the tile (at least 2 types per tile)
                     || (typeMap->find(type) == typeMap->end() && typeMap->size() == 3))) { // the map size is 3 and the newly generated type is not part of the map (max 3 types per tile)

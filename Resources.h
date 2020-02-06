@@ -11,7 +11,8 @@ enum class Type {
     Wheat = 0, 
     Sheep, 
     Timber, 
-    Stone
+    Stone,
+    None
 };
 
 class Building {
