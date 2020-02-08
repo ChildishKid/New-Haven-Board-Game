@@ -16,8 +16,8 @@ int main() {
 	VGMap* VG = new VGMap(name);
 
 
-	for (int i = 0; i < 5; i++) {
-		for (int j = 0; j < 6; j++) {
+	for (int i = 0; i < VG->getWidth(); i++) {
+		for (int j = 0; j < VG->getHeight(); j++) {
 			VGMap::Circle* circle = VG->getCircle(i, j);
 			cout << "(" << circle->getX() << ", " << circle->getY() << ")" << endl;
 			vector<VGMap::Circle*> adj = circle->getAdj();

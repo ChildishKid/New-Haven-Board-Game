@@ -9,7 +9,7 @@ using namespace std;
 VGMap::Circle::Circle(int x_value, int y_value) {
 	x = new int(x_value);
 	y = new int(y_value);
-	colour = NULL;
+	type = NULL;
 	cost = new int(y_value + 1);
 	status = NULL;
 	adjacent = new vector<Circle*>();
@@ -18,7 +18,7 @@ VGMap::Circle::Circle(int x_value, int y_value) {
 VGMap::Circle::Circle() {
 	x = 0;
 	y = 0;
-	colour = NULL;
+	type = NULL;
 	cost = 0;
 	status = NULL;
 	adjacent = new vector<Circle*>();
@@ -27,13 +27,13 @@ VGMap::Circle::Circle() {
 VGMap::Circle::~Circle() {
 	delete x;
 	delete y;
-	delete colour;
+	delete type;
 	delete cost;
 	delete status;
 	delete adjacent;
 	x = NULL;
 	y = NULL;
-	colour = NULL;
+	type = NULL;
 	cost = NULL;
 	status = NULL;
 	adjacent = NULL;
@@ -47,8 +47,8 @@ void VGMap::Circle::setY(int y_value) {
 	*y = y_value;
 }
 
-void VGMap::Circle::setColour(Type clr) {
-	*colour = clr;
+void VGMap::Circle::setType(Type clr) {
+	*type = clr;
 }
 
 void VGMap::Circle::setCost(int val) {
@@ -72,8 +72,8 @@ int VGMap::Circle::getY() const {
 	return *y;
 }
 
-Type VGMap::Circle::getColour() const {
-	return *colour;
+Type VGMap::Circle::getType() const {
+	return *type;
 }
 
 int VGMap::Circle::getCost() const{
@@ -91,15 +91,17 @@ vector<VGMap::Circle*> VGMap::Circle::getAdj() const {
 VGMap::VGMap(string player) {
 	playerName = player;
 	playerBoard = new map<pair<int, int>, Circle*>();
+	width = new int (5);
+	height = new int (6);
 
-	for (int i = 0; i < 5; i++) {
-		for (int j = 0; j < 6; j++) {
+	for (int i = 0; i < *width; i++) {
+		for (int j = 0; j < *height; j++) {
 			(*playerBoard)[{i, j}] = new VGMap::Circle(i, j);
 		}
 	}
 
-	for (int i = 0; i < 5; i++) {
-		for (int j = 0; j < 6; j++) {
+	for (int i = 0; i < *width; i++) {
+		for (int j = 0; j < *height; j++) {
 
 			if (!(i - 1 < 0)) {
 				(*playerBoard)[{i, j}]->addAdj((*playerBoard)[{(i - 1), j}]);
@@ -126,20 +128,34 @@ VGMap::VGMap(string player) {
 VGMap::VGMap() {
 	playerName = "";
 	playerBoard = new map<pair<int, int>, Circle*>();
+	*width = 5;
+	*height = 6;
 }
 
 VGMap::~VGMap() {
-	for (int i = 0; i < 5; i++) {
-		for (int j = 0; j < 6; j++) {
+	for (int i = 0; i < *width; i++) {
+		for (int j = 0; j < *height; j++) {
 			delete (*playerBoard)[{i, j}];
 			(*playerBoard)[{i, j}] = NULL;
 		}
 	}
 
 	delete playerBoard;
+	delete width;
+	delete height;
 	playerBoard = NULL;
+	width = NULL;
+	height = NULL;
 }
 
 VGMap::Circle* VGMap::getCircle(int x_value, int y_value) const {
 	return (*playerBoard).at({ x_value, y_value });
+}
+
+int VGMap::getWidth() {
+	return *width;
+}
+
+int VGMap::getHeight() {
+	return *height;
 }

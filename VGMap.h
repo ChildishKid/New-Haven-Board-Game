@@ -17,14 +17,14 @@ public:
 
 		void setX(int x);
 		void setY(int y);
-		void setColour(Type colour);
+		void setType(Type type);
 		void setCost(int val);
 		void setStatus(string stat);
 		void addAdj(Circle* obj);
 
 		int getX() const;
 		int getY() const;
-		Type getColour() const;
+		Type getType() const;
 		int getCost() const;
 		string getStatus() const;
 		vector<Circle*> getAdj() const;
@@ -32,7 +32,7 @@ public:
 	private: 
 		int* x;
 		int* y;
-		Type* colour;
+		Type* type;
 		int* cost;
 		string* status;
 		vector<Circle*>* adjacent;
@@ -42,10 +42,14 @@ public:
 	VGMap();
 	~VGMap();
 	Circle* getCircle(int x_value, int y_value) const;
+	int getWidth();
+	int getHeight();
 	
 
 private:
 	map<pair<int, int>, Circle*>* playerBoard;
 	string playerName;
+	int* width;
+	int* height;
 };
 
