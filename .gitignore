@@ -1,7 +1,10 @@
 
+
 .vs/
 
 .vscode
+
+*.exe
 
 Project1/debug
 
@@ -16,3 +19,4 @@ Project1/Project1.vcxproj.user
 Project1/
 
 ProjectVG/
+
