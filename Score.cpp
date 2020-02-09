@@ -21,16 +21,18 @@ map<Type, int*>* ResourceCounter::calculateCollectedResources(int x_value, int y
     GBMaps::Square* square = getGBMap().getSquare(x_value, y_value);
     // 0) Initialize required pointers
     map<Type, int*>* collectedResources = new map<Type, int*>();
+    (*collectedResources)[Type::Sheep] = new int(0);
+    (*collectedResources)[Type::Stone] = new int(0);
+    (*collectedResources)[Type::Timber] = new int(0);
+    (*collectedResources)[Type::Wheat] = new int(0);
+    (*collectedResources)[Type::None] = new int(0);
+
     vector<GBMaps::Node*>* visitedNodes = new vector<GBMaps::Node*>();
     // 1) Find adjacent nodes of top left node
     // 1.a) Set node as visited
     visitedNodes->push_back(square->getTopLeft());
-    // 1.b) Add to map if doesn't exist and initialize with value 1, otherwise add 1 to value
-    if (collectedResources->find(square->getTopLeft()->getType()) == collectedResources->end()) {
-        (*collectedResources)[square->getTopLeft()->getType()] = new int(1);
-    } else {
-        (*collectedResources)[square->getTopLeft()->getType()] = new int(*((*collectedResources)[square->getTopLeft()->getType()]) + 1);
-    }
+    // 1.b) add 1
+    (*collectedResources)[square->getTopLeft()->getType()] = new int(*((*collectedResources)[square->getTopLeft()->getType()]) + 1);
     // 1.c) Check if square to left of top left node exists
     if (getGBMap().squareToLeftExists(x_value, y_value)) {
         // If top right node of square to the left has not been visited, visit it
@@ -51,12 +53,8 @@ map<Type, int*>* ResourceCounter::calculateCollectedResources(int x_value, int y
     // 2) Find adjcant nodes of top right node
     // 2.a) Set node as visited
     visitedNodes->push_back(square->getTopRight());
-    // 2.b) Add to map if doesn't exist and initialize with value 1, otherwise add 1 to value
-    if (collectedResources->find(square->getTopRight()->getType()) == collectedResources->end()) {
-        (*collectedResources)[square->getTopRight()->getType()] = new int(1);
-    } else {
-        (*collectedResources)[square->getTopRight()->getType()] = new int(*(*collectedResources)[square->getTopRight()->getType()] + 1);
-    }
+    // 2.b) add 1
+    (*collectedResources)[square->getTopRight()->getType()] = new int(*(*collectedResources)[square->getTopRight()->getType()] + 1);
     // 2.c) Check if square to right of top right node exists
     if (getGBMap().squareToRightExists(x_value, y_value)) {
         // If top left node of square to the right has not been visited, visit it
@@ -77,12 +75,8 @@ map<Type, int*>* ResourceCounter::calculateCollectedResources(int x_value, int y
     // 3) Find adjacent nodes of bottom left node
     // 3.a) Set node as visited
     visitedNodes->push_back(square->getBottomLeft());
-    // 3.b) Add to map if doesn't exist and initialize with value 1, otherwise add 1 to value
-    if (collectedResources->find(square->getBottomLeft()->getType()) == collectedResources->end()) {
-        (*collectedResources)[square->getBottomLeft()->getType()] = new int(1);
-    } else {
-        (*collectedResources)[square->getBottomLeft()->getType()] = new int(*(*collectedResources)[square->getBottomLeft()->getType()] + 1);
-    }
+    // 3.b) add 1
+    (*collectedResources)[square->getBottomLeft()->getType()] = new int(*(*collectedResources)[square->getBottomLeft()->getType()] + 1);
     // 3.c) Check if square to left of bottom left node exists
     if (getGBMap().squareToLeftExists(x_value, y_value)) {
         // If bottom right node of square to the left has not been visited, visit it
@@ -103,12 +97,8 @@ map<Type, int*>* ResourceCounter::calculateCollectedResources(int x_value, int y
     // 4) Find adjacent nodes of bottom right node
     // 4.a) Set node as visited
     visitedNodes->push_back(square->getBottomRight());
-    // 4.b) Add to map if doesn't exist and initialize with value 1, otherwise add 1 to value
-    if (collectedResources->find(square->getBottomRight()->getType()) == collectedResources->end()) {
-        (*collectedResources)[square->getBottomRight()->getType()] = new int(1);
-    } else {
-        (*collectedResources)[square->getBottomRight()->getType()] = new int(*(*collectedResources)[square->getBottomRight()->getType()] + 1);
-    }
+    // 4.b) Add 1
+    (*collectedResources)[square->getBottomRight()->getType()] = new int(*(*collectedResources)[square->getBottomRight()->getType()] + 1);
     // 4.c) Check if square to the right of bottom right node exists
     if (getGBMap().squareToRightExists(x_value, y_value)) {
         // If bottom left node of square to the right has not been visited, visit it
