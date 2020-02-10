@@ -23,6 +23,7 @@ class GBMaps {
 		class Square {
 			public:
 				Square(int x_value, int y_value);
+				Square();
 				~Square();
 
 				void setTopLeft(Node tL);
@@ -59,6 +60,9 @@ class GBMaps {
 		map<pair<int, int>, Square*>::iterator iterate;
 
 		GBMaps(int numOfPlayers);
+		GBMaps();
+		~GBMaps();
+
 		Square* getSquare(int x_value, int y_value);
 		map<pair<int, int>, Square*>::iterator begin();
 		map<pair<int, int>, Square*>::iterator end();
