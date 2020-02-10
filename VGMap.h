@@ -48,7 +48,7 @@ public:
 
 private:
 	map<pair<int, int>, Circle*>* playerBoard;
-	string playerName;
+	string* playerName;
 	int* width;
 	int* height;
 };

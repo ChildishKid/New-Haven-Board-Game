@@ -89,7 +89,7 @@ vector<VGMap::Circle*> VGMap::Circle::getAdj() const {
 }
 
 VGMap::VGMap(string player) {
-	playerName = player;
+	playerName = new string(player);
 	playerBoard = new map<pair<int, int>, Circle*>();
 	width = new int (5);
 	height = new int (6);
@@ -126,7 +126,7 @@ VGMap::VGMap(string player) {
 }
 
 VGMap::VGMap() {
-	playerName = "";
+	playerName = new string("");
 	playerBoard = new map<pair<int, int>, Circle*>();
 	*width = 5;
 	*height = 6;
@@ -143,7 +143,9 @@ VGMap::~VGMap() {
 	delete playerBoard;
 	delete width;
 	delete height;
+	delete playerName;
 	playerBoard = NULL;
+	playerName = NULL;
 	width = NULL;
 	height = NULL;
 }
