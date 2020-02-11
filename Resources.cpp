@@ -162,13 +162,13 @@ void Hand::initialize() {
 void Hand::exchange() {
     int x_value, y_value;
     cout << "Enter a column: ";
-    while(!(cin >> x_value) || x_value < 0 || x_value >= resourceCounter->getGBMap().getWidth()) {
+    while(!(cin >> x_value) || x_value < 0 || x_value >= resourceCounter->getGBMap()->getWidth()) {
         cin.clear();
         cin.ignore(numeric_limits<streamsize>::max(), '\n');
         cout << "Invalid column. Try again: ";
     }
     cout << "Enter a row: ";
-    while(!(cin >> y_value) || y_value < 0 || x_value >= resourceCounter->getGBMap().getHeight()) {
+    while(!(cin >> y_value) || y_value < 0 || x_value >= resourceCounter->getGBMap()->getHeight()) {
         cin.clear();
         cin.ignore(numeric_limits<streamsize>::max(), '\n');
         cout << "Invalid row. Try again: ";

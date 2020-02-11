@@ -10,7 +10,7 @@ class ResourceCounter {
 
     public:
         ResourceCounter(GBMaps* gBMap);    
-        GBMaps getGBMap();
+        GBMaps* getGBMap();
         map<Type, int*>* calculateCollectedResources(int x_value, int y_value);
 
     private:

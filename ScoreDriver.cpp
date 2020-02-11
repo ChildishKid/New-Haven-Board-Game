@@ -119,7 +119,6 @@ int main() {
         it++;
     }
 
-
     cout << endl << endl << "============================ SCORE TESTS ============================" << endl;
     VGMap* vgmap = new VGMap();
     Score* score = new Score(vgmap);
@@ -189,4 +188,6 @@ int main() {
     cout << endl << "============= Simulated end game =============" << endl;
     cout << "Expected score: 21" << endl;
     cout << "Actual score: " << score->calculateScore() << endl;
+
+    system("pause");
 }
