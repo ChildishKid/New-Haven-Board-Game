@@ -35,6 +35,18 @@ GBMaps::Square::Square(int x_value, int y_value) {
 	adjacent = new vector<Square*>();
 }
 
+GBMaps::Square::Square() {
+	x = new int(0);
+	y = new int(0);
+	topLeft = new Node(new Type{ Type::None });
+	topRight = new Node(new Type{ Type::None });
+	bottomLeft = new Node(new Type{ Type::None });
+	bottomRight = new Node(new Type{ Type::None });
+	status = new bool(false);
+	size = new int(0);
+	adjacent = new vector<Square*>();
+}
+
 GBMaps::Square::~Square() {
 	delete x;
 	delete y;
@@ -212,6 +224,27 @@ GBMaps::GBMaps(int numOfPlayers) {
 	gameBoard = new map<pair<int, int>, Square*>();	
 	setUpBoard();
 	iterate = gameBoard->begin();
+}
+
+GBMaps::GBMaps() {
+
+	// Default constructor sets it to two players
+	numberOfPlayers = new int(2);
+	gameBoard = new map<pair<int, int>, Square*>();
+	setUpBoard();
+	iterate = gameBoard->begin();
+}
+
+GBMaps::~GBMaps() {
+	delete gameBoard;
+	delete height;
+	delete width;
+	delete numberOfPlayers;
+
+	gameBoard = NULL;
+	height = NULL;
+	width = NULL;
+	numberOfPlayers = NULL;
 }
 
 GBMaps::Square* GBMaps::getSquare(int x_value, int y_value) {
