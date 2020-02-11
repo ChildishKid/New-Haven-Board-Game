@@ -75,7 +75,7 @@ class GBMaps {
 		bool squareToRightExists(int x_value, int y_value);
 
 	private:
-		map<pair<int, int>, Square*>* gameBoard;
+		map<pair<int, int>, Square*> *gameBoard;
 		int* height;
 		int* width;
 		int* numberOfPlayers;
