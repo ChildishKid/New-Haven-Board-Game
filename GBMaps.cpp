@@ -235,17 +235,17 @@ GBMaps::GBMaps() {
 	iterate = gameBoard->begin();
 }
 
-// GBMaps::~GBMaps() {
-// 	delete gameBoard;
-// 	delete height;
-// 	delete width;
-// 	delete numberOfPlayers;
+GBMaps::~GBMaps() {
+	delete gameBoard;
+	delete height;
+	delete width;
+	delete numberOfPlayers;
 
-// 	gameBoard = NULL;
-// 	height = NULL;
-// 	width = NULL;
-// 	numberOfPlayers = NULL;
-// }
+	gameBoard = NULL;
+	height = NULL;
+	width = NULL;
+	numberOfPlayers = NULL;
+}
 
 GBMaps::Square* GBMaps::getSquare(int x_value, int y_value) {
 	return (*gameBoard).at({ x_value, y_value });

@@ -264,8 +264,8 @@ Score::Score(VGMap* v) {
     vgMap = v;
 };
 
-VGMap Score::getVGMap() {
-    return *vgMap; 
+VGMap* Score::getVGMap() {
+    return vgMap; 
 };
 
 int Score::calculateScore() {
@@ -274,19 +274,19 @@ int Score::calculateScore() {
     bool doubled;
 
     // Calculate score from columns
-    for (int i = 0; i < getVGMap().getWidth(); i++) {
+    for (int i = 0; i < getVGMap()->getWidth(); i++) {
         doubled = true;
-		for (int j = 0; j < getVGMap().getHeight(); j++) {
+		for (int j = 0; j < getVGMap()->getHeight(); j++) {
             // Check that the building is not null
-            if (getVGMap().getCircle(i, j)->getBuilding() == NULL) {
+            if (getVGMap()->getCircle(i, j)->getBuilding() == NULL) {
                 break;
             }
             // if actual cost is greater than 0, this means the building was flipped
-            if (*getVGMap().getCircle(i, j)->getBuilding()->getActualCost() > 0) {
+            if (*getVGMap()->getCircle(i, j)->getBuilding()->getActualCost() > 0) {
                 doubled = false;
             }
             // if last building, then add the score
-            if (j == getVGMap().getHeight() - 1) {
+            if (j == getVGMap()->getHeight() - 1) {
                 if (i == 0 || i == 4) {
                     score = 5;
                 } else if (i == 1 || i == 3) {
@@ -302,19 +302,19 @@ int Score::calculateScore() {
 	}
 
     // Calculate score from rows
-    for (int i = 0; i < getVGMap().getHeight(); i++) {
+    for (int i = 0; i < getVGMap()->getHeight(); i++) {
         doubled = true;
-		for (int j = 0; j < getVGMap().getWidth(); j++) {
+		for (int j = 0; j < getVGMap()->getWidth(); j++) {
             // Check that the building is not null
-            if (getVGMap().getCircle(j, i)->getBuilding() == NULL) {
+            if (getVGMap()->getCircle(j, i)->getBuilding() == NULL) {
                 break;
             }
             // if actual cost is greater than 0, this means the building was flipped
-            if (*getVGMap().getCircle(j, i)->getBuilding()->getActualCost() > 0) {
+            if (*getVGMap()->getCircle(j, i)->getBuilding()->getActualCost() > 0) {
                 doubled = false;
             }
             // if last building, then add the score
-            if (j == getVGMap().getWidth() - 1) {
+            if (j == getVGMap()->getWidth() - 1) {
                 doubled 
                     ? totalScore = totalScore + ((i+1) * 2)
                     : totalScore = totalScore + (i+1);

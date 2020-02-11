@@ -41,7 +41,7 @@ public:
 
 	VGMap(string player);
 	VGMap();
-	// ~VGMap();
+	~VGMap();
 	Circle* getCircle(int x_value, int y_value) const;
 	int getWidth();
 	int getHeight();

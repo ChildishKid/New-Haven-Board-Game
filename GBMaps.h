@@ -61,7 +61,7 @@ class GBMaps {
 
 		GBMaps(int numOfPlayers);
 		GBMaps();
-		// ~GBMaps();
+		~GBMaps();
 
 		Square* getSquare(int x_value, int y_value);
 		map<pair<int, int>, Square*>::iterator begin();

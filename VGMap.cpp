@@ -102,23 +102,23 @@ VGMap::VGMap() {
 	setupBoard();
 }
 
-// VGMap::~VGMap() {
-// 	for (int i = 0; i < *width; i++) {
-// 		for (int j = 0; j < *height; j++) {
-// 			delete (*playerBoard)[{i, j}];
-// 			(*playerBoard)[{i, j}] = NULL;
-// 		}
-// 	}
+VGMap::~VGMap() {
+	for (int i = 0; i < *width; i++) {
+		for (int j = 0; j < *height; j++) {
+			delete (*playerBoard)[{i, j}];
+			(*playerBoard)[{i, j}] = NULL;
+		}
+	}
 
-// 	delete playerBoard;
-// 	delete width;
-// 	delete height;
-// 	delete playerName;
-// 	playerBoard = NULL;
-// 	playerName = NULL;
-// 	width = NULL;
-// 	height = NULL;
-// }
+	delete playerBoard;
+	delete width;
+	delete height;
+	delete playerName;
+	playerBoard = NULL;
+	playerName = NULL;
+	width = NULL;
+	height = NULL;
+}
 
 VGMap::Circle* VGMap::getCircle(int x_value, int y_value) const {
 	return (*playerBoard).at({ x_value, y_value });
