@@ -116,4 +116,6 @@ int main() {
         cout << *count << " " << enumValues[type] << ", ";
         it++;
     }
+
+    system("pause");
 }
