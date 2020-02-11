@@ -3,6 +3,7 @@
 #include <vector>
 #include <map>
 #include "GBMaps.h"
+#include "VGMap.h"
 using namespace std;
 
 class ResourceCounter {
@@ -16,4 +17,14 @@ class ResourceCounter {
         GBMaps* gbMap;
         void calculateCollectedResources2(int x_value, int y_value, Type type, GBMaps::Node* node,
             map<Type, int*>* collectedResources, vector<GBMaps::Node*>* visitedNodes);
+};
+
+class Score {
+    public:
+        Score(VGMap* vGMap);
+        VGMap getVGMap();
+        int calculateScore();
+
+    private:
+        VGMap* vgMap;
 };
