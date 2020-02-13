@@ -159,4 +159,3 @@ int* Hand::getSheepResourceMarker() { return sheepResourceMarker; }
 int* Hand::getStoneResourceMarker() { return stoneResourceMarker; }
 int* Hand::getTimberResourceMarker() { return timberResourceMarker; }
 int* Hand::getWheatResourceMarker() { return wheatResourceMarker; }
-

@@ -86,3 +86,21 @@ class Hand {
         int* getWheatResourceMarker();
 };
 
+inline std::ostream& operator<<(std::ostream& stream, const Type &type) {
+
+    if (Type::Wheat == type) {
+        return stream << "Wheat";
+    }
+    else if (Type::Sheep == type) {
+        return stream << "Sheep";
+    }
+    else if (Type::Timber == type) {
+        return stream << "Timber";
+    }
+    else if (Type::Stone == type) {
+        return stream << "Stone";
+    }
+    else {
+        return stream << "None";
+    }
+}

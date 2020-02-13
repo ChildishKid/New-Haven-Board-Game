@@ -3,19 +3,21 @@
 #include <vector>
 #include <map>
 #include "Resources.h"
+#include <afx.h>
 using namespace std;
 
-class GBMaps {
+class GBMaps : public CObject {
 
 	public:
 		class Node {
 			public:
 				Node(Type* type);
 				Type getType();
+				string getTypeString();
 				void setType(Type* type);
 
-			private:
-				Type* type;
+		private:
+			Type* type;
 				friend bool operator==(const GBMaps::Node &lhs, const GBMaps::Node &rhs);
 				friend bool operator!=(const GBMaps::Node &lhs, const GBMaps::Node &rhs);
 		};
@@ -43,7 +45,8 @@ class GBMaps {
 				int getX() const;
 				int getY() const;
 				int getSize() const;
-
+				bool getStatus() const;
+				
 
 			private:
 				Node* topLeft;
@@ -63,16 +66,20 @@ class GBMaps {
 		GBMaps();
 		~GBMaps();
 
-		Square* getSquare(int x_value, int y_value);
 		map<pair<int, int>, Square*>::iterator begin();
 		map<pair<int, int>, Square*>::iterator end();
+
 		int getHeight();
 		int getWidth();
 		int getNumberOfPlayers();
+		Square* getSquare(int x_value, int y_value);
 		bool squareAboveExists(int x_value, int y_value);
 		bool squareBelowExists(int x_value, int y_value);
 		bool squareToLeftExists(int x_value, int y_value);
 		bool squareToRightExists(int x_value, int y_value);
+		virtual void Serialize(CArchive& ar);
+		void saveGame();
+		void loadGame();
 
 	private:
 		map<pair<int, int>, Square*>* gameBoard;
@@ -80,4 +87,8 @@ class GBMaps {
 		int* width;
 		int* numberOfPlayers;
 		void setUpBoard();
+		void setUpAdjacencies();
+
+	protected:
+		DECLARE_SERIAL(GBMaps);
 };
