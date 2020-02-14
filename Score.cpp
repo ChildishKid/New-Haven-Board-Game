@@ -259,3 +259,68 @@ void ResourceCounter::calculateCollectedResources2(int x_value, int y_value, Typ
         }
     } 
 };
+
+Score::Score(VGMap* v) {
+    vgMap = v;
+};
+
+VGMap* Score::getVGMap() {
+    return vgMap; 
+};
+
+int Score::calculateScore() {
+    int score;
+    int totalScore = 0;
+    bool doubled;
+
+    // Calculate score from columns
+    for (int i = 0; i < getVGMap()->getWidth(); i++) {
+        doubled = true;
+		for (int j = 0; j < getVGMap()->getHeight(); j++) {
+            // Check that the building is not null
+            if (getVGMap()->getCircle(i, j)->getBuilding() == NULL) {
+                break;
+            }
+            // if actual cost is greater than 0, this means the building was flipped
+            if (*getVGMap()->getCircle(i, j)->getBuilding()->getActualCost() > 0) {
+                doubled = false;
+            }
+            // if last building, then add the score
+            if (j == getVGMap()->getHeight() - 1) {
+                if (i == 0 || i == 4) {
+                    score = 5;
+                } else if (i == 1 || i == 3) {
+                    score = 4;
+                } else {
+                    score = 3;
+                }
+                doubled 
+                    ? totalScore = totalScore + (score * 2)
+                    : totalScore = totalScore + (score);
+            }
+		}
+	}
+
+    // Calculate score from rows
+    for (int i = 0; i < getVGMap()->getHeight(); i++) {
+        doubled = true;
+		for (int j = 0; j < getVGMap()->getWidth(); j++) {
+            // Check that the building is not null
+            if (getVGMap()->getCircle(j, i)->getBuilding() == NULL) {
+                break;
+            }
+            // if actual cost is greater than 0, this means the building was flipped
+            if (*getVGMap()->getCircle(j, i)->getBuilding()->getActualCost() > 0) {
+                doubled = false;
+            }
+            // if last building, then add the score
+            if (j == getVGMap()->getWidth() - 1) {
+                doubled 
+                    ? totalScore = totalScore + ((i+1) * 2)
+                    : totalScore = totalScore + (i+1);
+            }
+		}
+	}
+
+    return totalScore;
+};
