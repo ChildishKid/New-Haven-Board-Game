@@ -49,17 +49,20 @@ vector<Building*>* Deck::generateBuildings() {
 
     for (int i = 0; i < 6; i++) {
         cost = new int(i+1);
-        building = new Building(timberType, cost);
-        buildingVector->push_back(building);
 
-        building = new Building(sheepType, cost);
-        buildingVector->push_back(building);
+        for (int j = 0; j < 6; j++) {
+            building = new Building(timberType, cost);
+            buildingVector->push_back(building);
 
-        building = new Building(stoneType, cost);
-        buildingVector->push_back(building);
+            building = new Building(sheepType, cost);
+            buildingVector->push_back(building);
 
-        building = new Building(wheatType, cost);
-        buildingVector->push_back(building);                
+            building = new Building(stoneType, cost);
+            buildingVector->push_back(building);
+
+            building = new Building(wheatType, cost);
+            buildingVector->push_back(building);  
+        }              
     }
     return buildingVector;
 }
