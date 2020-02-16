@@ -1,3 +1,7 @@
+
+
+.vs/
+
 .vscode
 *.exe
 
@@ -8,3 +12,20 @@ NewHaven.vcxproj
 NewHaven.vcxproj.user
 NewHaven.vcxproj.filters
 Release/
+
+*.exe
+
+Project1/debug
+
+Project1/Project1.sln
+
+Project1/Project1.vcxproj
+
+Project1/Project1.vcproj.filters
+
+Project1/Project1.vcxproj.user
+
+Project1/
+
+ProjectVG/
+

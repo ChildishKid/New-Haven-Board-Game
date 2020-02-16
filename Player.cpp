@@ -4,7 +4,8 @@ using namespace std;
 
 
 Player::Player() {
-
+	playersHand = new Hand();
+	playersVGMap = new VGMap();
 	}
 void Player::placeOnGBoard() {
 	
