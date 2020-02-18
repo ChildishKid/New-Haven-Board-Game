@@ -20,11 +20,13 @@ public:
 		void setType(Type type);
 		void setCost(int val);
 		void setStatus(string stat);
+		void setTypeString(string type);
 		void addAdj(Circle* obj);
 
 		int getX() const;
 		int getY() const;
 		Type getType() const;
+		string getTypeString() const;
 		int getCost() const;
 		string getStatus() const;
 		vector<Circle*> getAdj() const;
@@ -44,6 +46,7 @@ public:
 	Circle* getCircle(int x_value, int y_value) const;
 	int getWidth();
 	int getHeight();
+	string getPlayerName();
 	
 
 private:

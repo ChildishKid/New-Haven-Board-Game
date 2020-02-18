@@ -9,18 +9,18 @@ using namespace std;
 VGMap::Circle::Circle(int x_value, int y_value) {
 	x = new int(x_value);
 	y = new int(y_value);
-	type = NULL;
+	type = new Type(Type::None);
 	cost = new int(y_value + 1);
-	status = NULL;
+	status = new string("Empty");
 	adjacent = new vector<Circle*>();
 }
 
 VGMap::Circle::Circle() {
 	x = 0;
 	y = 0;
-	type = NULL;
+	type = new Type(Type::None);
 	cost = 0;
-	status = NULL;
+	status = new string("Empty");
 	adjacent = new vector<Circle*>();
 }
 
@@ -59,6 +59,24 @@ void VGMap::Circle::setStatus(string stat) {
 	*status = stat;
 }
 
+void VGMap::Circle::setTypeString(string typ) {
+	if (typ == "Wheat") {
+		*type = Type::Wheat;
+	}
+	else if (typ == "Sheep") {
+		*type = Type::Sheep;
+	}
+	else if (typ == "Timber") {
+		*type = Type::Timber;
+	}
+	else if (typ == "Stone") {
+		*type = Type::Stone;
+	}
+	else {
+		*type = Type::None;
+	}
+}
+
 void VGMap::Circle::addAdj(Circle* obj) {
 	adjacent->push_back(obj);
 }
@@ -74,6 +92,26 @@ int VGMap::Circle::getY() const {
 
 Type VGMap::Circle::getType() const {
 	return *type;
+}
+
+string VGMap::Circle::getTypeString() const{
+	if (Type::Wheat == *type) {
+		return "Wheat";
+	}
+	else if (Type::Sheep == *type) {
+		return "Sheep";
+	}
+	else if (Type::Timber == *type) {
+		return "Timber";
+	}
+	else if (Type::Stone == *type) {
+		return "Stone";
+	}
+	else if (Type::None == *type) {
+		return "None";
+	}
+	else
+		return "";
 }
 
 int VGMap::Circle::getCost() const{
@@ -128,8 +166,36 @@ VGMap::VGMap(string player) {
 VGMap::VGMap() {
 	playerName = new string("");
 	playerBoard = new map<pair<int, int>, Circle*>();
-	*width = 5;
-	*height = 6;
+	width = new int(5);
+	height = new int (6);
+
+	for (int i = 0; i < *width; i++) {
+		for (int j = 0; j < *height; j++) {
+			(*playerBoard)[{i, j}] = new VGMap::Circle(i, j);
+		}
+	}
+
+	for (int i = 0; i < *width; i++) {
+		for (int j = 0; j < *height; j++) {
+
+			if (!(i - 1 < 0)) {
+				(*playerBoard)[{i, j}]->addAdj((*playerBoard)[{(i - 1), j}]);
+			}
+
+			if (!(i + 1 > 4)) {
+				(*playerBoard)[{i, j}]->addAdj((*playerBoard)[{(i + 1), j}]);
+			}
+
+			if (!(j - 1 < 0)) {
+				(*playerBoard)[{i, j}]->addAdj((*playerBoard)[{i, (j - 1)}]);
+			}
+
+			if (!(j + 1 > 5)) {
+				(*playerBoard)[{i, j}]->addAdj((*playerBoard)[{i, (j + 1)}]);
+			}
+
+		}
+	}
 }
 
 VGMap::~VGMap() {
@@ -160,4 +226,8 @@ int VGMap::getWidth() {
 
 int VGMap::getHeight() {
 	return *height;
+}
+
+string VGMap::getPlayerName() {
+	return *playerName;
 }
