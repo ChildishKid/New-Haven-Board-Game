@@ -12,7 +12,7 @@ void VGMapLoader::save(VGMap* gameboard, string fileName) {
 		for (int j = 0; j < gameboard->getHeight(); j++) {
 			output << gameboard->getCircle(i, j)->getCost() << endl;
 			output << gameboard->getCircle(i, j)->getStatus() << endl;
-			output << gameboard->getCircle(i, j)->getTypeString() << endl;
+			output << gameboard->getCircle(i, j)->getType() << endl;
 		}
 	}
 
@@ -36,8 +36,9 @@ VGMap* VGMapLoader::load(string fileName) {
 				gameboard->getCircle(i, j)->setCost(stoi(input));
 				inputStream >> input;
 				gameboard->getCircle(i, j)->setStatus(input);
-				inputStream >> input;
-				gameboard->getCircle(i, j)->setTypeString(input);
+				Type resource;
+				inputStream >> resource;
+				gameboard->getCircle(i, j)->setType(resource);
 			}
 		}
 

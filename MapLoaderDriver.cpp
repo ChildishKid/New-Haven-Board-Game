@@ -49,8 +49,8 @@ int main() {
 
 	//Changes to VGMap Circle tiles
 	cout << "Test: Setting Circle 2,3 to type Wheat, and 3,4 to type Stone" << endl;
-	gameboard->getCircle(2, 3)->setTypeString("Wheat");
-	gameboard->getCircle(3, 4)->setTypeString("Stone");
+	gameboard->getCircle(2, 3)->setType(Type::Wheat);
+	gameboard->getCircle(3, 4)->setType(Type::Stone);
 
 	//Saving gameboard
 	cout << "Input name of the save file (with the .txt suffix):" << endl;
@@ -68,8 +68,8 @@ int main() {
 	
 	//testing the loaded map
 	cout << "Test: checking the types loaded map for circle 2,3 and circle 3,4" << endl;
-	cout << "circle 2,3 is type: " << gameboard2->getCircle(2, 3)->getTypeString() << endl;
-	cout << "circle 3,4 is type: " << gameboard2->getCircle(3, 4)->getTypeString() << endl;
+	cout << "circle 2,3 is type: " << gameboard2->getCircle(2, 3)->getType() << endl;
+	cout << "circle 3,4 is type: " << gameboard2->getCircle(3, 4)->getType() << endl;
 	cout << "Loading successful" << endl;
 
 	system("pause");
