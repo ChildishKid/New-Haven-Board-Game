@@ -98,6 +98,7 @@ class Hand {
 
         void exchange();
 
+        Deck* getDeck() { return this->deck; };
         int* getSheepResourceMarker();
         int* getStoneResourceMarker();
         int* getTimberResourceMarker();

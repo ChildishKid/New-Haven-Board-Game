@@ -16,7 +16,7 @@ Player::Player(){
 }
 
 void Player::placeHarvestTile(int x, int y){ 
-	vector<HarvestTile*> available = this->getPlayersHand().getHarvestTiles();
+	vector<HarvestTile*> available = this->getPlayersHand()->getHarvestTiles();
 	cout << "Here are Harvest Tiles available for you:" << endl << endl;
 	for (int i = 0; i < available.size(); i++) {
 		cout << "Option " << i << ":" << endl << endl;
@@ -29,7 +29,7 @@ void Player::placeHarvestTile(int x, int y){
 
 	cout << "Here are the options on how to place it:" << endl;
 	for (int i = 0; i < 4; i++) {
-		cout << "Option " << i << ":" << endl << endl;
+		cout << "Option " << i << " :" << endl << endl;
 		cout << *(available[option]->getTopLeftNode()) << " " << *(available[option]->getTopRightNode()) << endl;
 		cout << *(available[option]->getBottomLeftNode()) << " " << *(available[option]->getBottomRightNode()) << endl << endl;
 		available[option]->rotateTile();
@@ -49,20 +49,49 @@ void Player::placeHarvestTile(int x, int y){
 	target->setTopLeft(GBMaps::Node(available[option]->getTopLeftNode()));
 	target->setTopRight(GBMaps::Node(available[option]->getTopRightNode()));
 	target->setStatus(true);
-	}
-
-Building* Player::DrawBuilding() {
 
 	}
-HarvestTile* Player::DrawHarvestTile() {
 
+//need to figure out how to cast from Resource to Building
+void Player::DrawBuilding() {
+	Resource* drawn;
+	drawn = this->getPlayersHand()->getDeck()->draw(ResourceType::Building);
+	this->getPlayersHand()->getBuildings().push_back(drawn);
 	}
+
+//need to figure out how to cast from Resource to HarvestTile
+void Player::DrawHarvestTile() {
+	Resource* drawn;
+	drawn = this->getPlayersHand()->getDeck()->draw(ResourceType::HarvestTile);
+	this->getPlayersHand()->getHarvestTiles().push_back(drawn);
+	}
+
 map<string, int> Player::ResourceTracker() {
 
 	}
-void Player::BuildVillage(pair<int, int>) {
 
+void Player::BuildVillage(int x, int y) {
+	vector<Building*> available = this->getPlayersHand()->getBuildings();
+	cout << "Here are Buildings available for you:" << endl << endl;
+	for (int i = 0; i < available.size(); i++) {
+		cout << "Option " << i << " :" << endl;
+		cout << *(available[i]->getType()) << " " << *(available[i]->getCost()) << endl << endl;
 	}
+	cout << "Choose your option:";
+	int option;
+	cin >> option;
+
+	cout << "Choose your cost:";
+	int cost;
+	cin >> cost;
+	
+	if (cost < *(available[option]->getCost())) {
+		available[option]->setActualCost(&cost);
+	}
+	this->getVGMap()->getCircle(x, y)->setBuilding(available[option]);
+	this->getVGMap()->getCircle(x, y)->setCost(cost);
+	}
+
 map<string, int> Player::CalculateResources() {
 
 	}

@@ -22,6 +22,8 @@ class Player {
 		map<string, int> ResourceTracker(); //return map for all the resources
 		void BuildVillage(int x, int y); //build village on specific coordinates
 		map<string, int> CalculateResources();
-		Hand getPlayersHand() { return *playersHand; };
+
+		VGMap* getVGMap() { return playersVGMap; }
+		Hand* getPlayersHand() { return playersHand; };
 		GBMaps* getGBoard() { return gboard; };
 };
