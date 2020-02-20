@@ -1,8 +1,8 @@
 #include <fstream>
 #include "GBMapLoader.h"
 
-void GBMapLoader::save(GBMaps* gameBoard) {
-	ofstream output("BoardGameSave.txt");
+void GBMapLoader::save(GBMaps* gameBoard, string fileName) {
+	ofstream output(fileName);
 
 	output << gameBoard->getNumberOfPlayers() << endl;
 
@@ -12,19 +12,19 @@ void GBMapLoader::save(GBMaps* gameBoard) {
 		output << gameBoard->iterate->second->getX() << endl;
 		output << gameBoard->iterate->second->getY() << endl;
 		output << gameBoard->iterate->second->getStatus() << endl;
-		output << gameBoard->iterate->second->getTopLeft()->getTypeString() << endl;
-		output << gameBoard->iterate->second->getTopRight()->getTypeString() << endl;
-		output << gameBoard->iterate->second->getBottomLeft()->getTypeString() << endl;
-		output << gameBoard->iterate->second->getBottomRight()->getTypeString() << endl;
+		output << gameBoard->iterate->second->getTopLeft()->getType() << endl;
+		output << gameBoard->iterate->second->getTopRight()->getType() << endl;
+		output << gameBoard->iterate->second->getBottomLeft()->getType() << endl;
+		output << gameBoard->iterate->second->getBottomRight()->getType() << endl;
 	}
 
 	output.close();
 }
 
-GBMaps* GBMapLoader::load() {
+GBMaps* GBMapLoader::load(string fileName) {
 
 	try {
-		ifstream inputStream("BoardGameSave.txt");
+		ifstream inputStream(fileName);
 
 		// Load basic member variables
 		string input;
@@ -63,85 +63,26 @@ GBMaps* GBMapLoader::load() {
 			}
 			square->setStatus(status);
 
-			string resourceTL;
+			Type resourceTL;
 			inputStream >> resourceTL;
-			string resourceTR;
+			Type resourceTR;
 			inputStream >> resourceTR;
-			string resourceBL;
+			Type resourceBL;
 			inputStream >> resourceBL;
-			string resourceBR;
+			Type resourceBR;
 			inputStream >> resourceBR;
 
-			if (resourceTL == "Wheat") {
-				square->setTopLeft(GBMaps::Node(new Type(Type::Wheat)));
-			}
-			else if (resourceTL == "Sheep") {
-				square->setTopLeft(GBMaps::Node(new Type(Type::Wheat)));
-			}
-			else if (resourceTL == "Timber") {
-				square->setTopLeft(GBMaps::Node(new Type(Type::Wheat)));
-			}
-			else if (resourceTL == "Stone") {
-				square->setTopLeft(GBMaps::Node(new Type(Type::Wheat)));
-			}
-			else {
-				square->setTopLeft(GBMaps::Node(new Type(Type::None)));
-			}
-
-			if (resourceTR == "Wheat") {
-				square->setTopRight(GBMaps::Node(new Type(Type::Wheat)));
-			}
-			else if (resourceTR == "Sheep") {
-				square->setTopRight(GBMaps::Node(new Type(Type::Wheat)));
-			}
-			else if (resourceTR == "Timber") {
-				square->setTopRight(GBMaps::Node(new Type(Type::Wheat)));
-			}
-			else if (resourceTR == "Stone") {
-				square->setTopRight(GBMaps::Node(new Type(Type::Wheat)));
-			}
-			else {
-				square->setTopRight(GBMaps::Node(new Type(Type::None)));
-			}
-
-			if (resourceBL == "Wheat") {
-				square->setBottomLeft(GBMaps::Node(new Type(Type::Wheat)));
-			}
-			else if (resourceBL == "Sheep") {
-				square->setBottomLeft(GBMaps::Node(new Type(Type::Wheat)));
-			}
-			else if (resourceBL == "Timber") {
-				square->setBottomLeft(GBMaps::Node(new Type(Type::Wheat)));
-			}
-			else if (resourceBL == "Stone") {
-				square->setBottomLeft(GBMaps::Node(new Type(Type::Wheat)));
-			}
-			else {
-				square->setBottomLeft(GBMaps::Node(new Type(Type::None)));
-			}
-
-			if (resourceBR == "Wheat") {
-				square->setBottomRight(GBMaps::Node(new Type(Type::Wheat)));
-			}
-			else if (resourceBR == "Sheep") {
-				square->setBottomRight(GBMaps::Node(new Type(Type::Wheat)));
-			}
-			else if (resourceBR == "Timber") {
-				square->setBottomRight(GBMaps::Node(new Type(Type::Wheat)));
-			}
-			else if (resourceBR == "Stone") {
-				square->setBottomRight(GBMaps::Node(new Type(Type::Wheat)));
-			}
-			else {
-				square->setBottomRight(GBMaps::Node(new Type(Type::None)));
-			}
+			square->getTopLeft()->setType(new Type(resourceTL));
+			square->getTopRight()->setType(new Type(resourceTR));
+			square->getBottomLeft()->setType(new Type(resourceBL));
+			square->getBottomRight()->setType(new Type(resourceBR));
 		}
 
 		inputStream.close();
 		return gameBoard;
 	}
 	catch (exception e) {
-		cout << "Invalid Save File!";
+		cout << "Invalid Save File!" << endl;
 		return NULL;
 	}
 }

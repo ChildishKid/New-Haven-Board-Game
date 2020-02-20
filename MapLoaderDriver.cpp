@@ -7,40 +7,35 @@ using namespace std;
 #include "VGMapLoader.h"
 
 int main() {
+	string fileName = "BoardGameSave.txt";
 
 	// Create board of player size 3;
 	cout << "=== CREATING NEW BOARD GAME OF 3 PLAYERS ===" << endl;
 	GBMaps* gameBoardOriginal = new GBMaps(3);
+	cout << "DONE!" << endl << endl;
 
-	// Display edges/connections of each squares
-	for (; gameBoardOriginal->iterate != gameBoardOriginal->end(); ++gameBoardOriginal->iterate) {
-		// Display edges
-		cout << "(" << gameBoardOriginal->iterate->second->getX() << ", " << gameBoardOriginal->iterate->second->getY() << ")";
-		for (int i = 0; i < gameBoardOriginal->iterate->second->getSize(); i++) {
-			GBMaps::Square* s = gameBoardOriginal->iterate->second->getAdj().at(i);
-			cout << " -> (" << s->getX() << ", " << s->getY() << ")";
-		}
-		cout << endl;
-	}
-	cout << endl << endl;
+	cout << "=== SETTING RESOURCES ON FIRST SQUARE ===" << endl;
+	gameBoardOriginal->getSquare(0, 0)->setBottomLeft(new Type(Type::Wheat));
+	gameBoardOriginal->getSquare(0, 0)->setBottomRight(new Type(Type::Stone));
+	gameBoardOriginal->getSquare(0, 0)->setTopLeft(new Type(Type::Sheep));
+	gameBoardOriginal->getSquare(0, 0)->setTopRight(new Type(Type::Timber));
+	cout << "Top Left: " << gameBoardOriginal->getSquare(0, 0)->getTopLeft()->getType() << endl;
+	cout << "Top Right: " << gameBoardOriginal->getSquare(0, 0)->getTopRight()->getType() << endl;
+	cout << "Bottom Left: " << gameBoardOriginal->getSquare(0, 0)->getBottomLeft()->getType() << endl;
+	cout << "Bottom Right: " << gameBoardOriginal->getSquare(0, 0)->getBottomRight()->getType() << endl;
+	cout << endl;
 
-	cout << "=== LOADED GAME BOARD ===" << endl;
-	GBMapLoader::save(gameBoardOriginal);
-	GBMaps* gameBoardReplace = GBMapLoader::load();
+	cout << "=== SAVE AND LOAD GAME BOARD ===" << endl;
+	GBMapLoader::save(gameBoardOriginal, fileName);
+	GBMaps* gameBoardReplace = GBMapLoader::load(fileName);
+	cout << "DONE!" << endl << endl;
 
-	gameBoardReplace->iterate = gameBoardReplace->begin();
-
-	// Display edges/connections of each squares
-	for (; gameBoardReplace->iterate != gameBoardReplace->end(); ++gameBoardReplace->iterate) {
-		// Display edges
-		cout << "(" << gameBoardReplace->iterate->second->getX() << ", " << gameBoardReplace->iterate->second->getY() << ")";
-		for (int i = 0; i < gameBoardReplace->iterate->second->getSize(); i++) {
-			GBMaps::Square* s = gameBoardReplace->iterate->second->getAdj().at(i);
-			cout << " -> (" << s->getX() << ", " << s->getY() << ")";
-		}
-		cout << endl;
-	}
-	cout << endl << endl;
+	cout << "=== DISPLAY RESOURCES ON FIRST SQUARE ===" << endl;
+	cout << "Top Left: " << gameBoardReplace->getSquare(0, 0)->getTopLeft()->getType() << endl;
+	cout << "Top Right: " << gameBoardReplace->getSquare(0, 0)->getTopRight()->getType() << endl;
+	cout << "Bottom Left: " << gameBoardReplace->getSquare(0, 0)->getBottomLeft()->getType() << endl;
+	cout << "Bottom Right: " << gameBoardReplace->getSquare(0, 0)->getBottomRight()->getType() << endl;
+	cout << endl;
 
 	//Creating new Village Board
 

@@ -3,7 +3,7 @@
 
 namespace GBMapLoader {
 	
-	void save(GBMaps* gameBoard);
-	GBMaps* load();
+	void save(GBMaps* gameBoard, string fileName);
+	GBMaps* load(string fileName);
 };
 
