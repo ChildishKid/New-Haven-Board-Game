@@ -3,6 +3,7 @@
 #include <iostream>
 #include <ctime>
 #include <map>
+#include <limits>
 #include "Resources.h"
 
 using namespace std;
@@ -48,17 +49,20 @@ vector<Building*>* Deck::generateBuildings() {
 
     for (int i = 0; i < 6; i++) {
         cost = new int(i+1);
-        building = new Building(timberType, cost);
-        buildingVector->push_back(building);
 
-        building = new Building(sheepType, cost);
-        buildingVector->push_back(building);
+        for (int j = 0; j < 6; j++) {
+            building = new Building(timberType, cost);
+            buildingVector->push_back(building);
 
-        building = new Building(stoneType, cost);
-        buildingVector->push_back(building);
+            building = new Building(sheepType, cost);
+            buildingVector->push_back(building);
 
-        building = new Building(wheatType, cost);
-        buildingVector->push_back(building);                
+            building = new Building(stoneType, cost);
+            buildingVector->push_back(building);
+
+            building = new Building(wheatType, cost);
+            buildingVector->push_back(building);  
+        }              
     }
     return buildingVector;
 }
@@ -84,7 +88,7 @@ vector<HarvestTile*>* Deck::generateHarvestTiles() {
         nodeTypes->clear(); // clear vector every iteration
         typeMap->clear(); // clear map every iteration
         while (nodeTypes->size() < 5) { // while 4 types haven't been selected for the tile
-            type = types->at(rand() % types->size() - 1); // randomly select a type
+            type = types->at(rand() % (types->size() - 1)); // randomly select a type
             if (nodeTypes->size() > 0 && // if no type was yet selected and...
                 ((typeMap->find(type) != typeMap->end() && *(*typeMap)[type] == 3) // the randomly generated type has already been selected 3 times for the tile (at least 2 types per tile)
                     || (typeMap->find(type) == typeMap->end() && typeMap->size() == 3))) { // the map size is 3 and the newly generated type is not part of the map (max 3 types per tile)
@@ -114,48 +118,75 @@ Deck::Deck() {
     harvestTileDeck = generateHarvestTiles();
 }
 
-Building* Deck::drawBuilding() {
-    vector<Building*>* buildings = new vector<Building*>();
-    buildings = getBuildingDeck();
-    int randomIndex = rand() % buildings->size();
-    Building* pickedBuilding = buildings->at(randomIndex);
-    buildings->erase(buildings->begin() + randomIndex);
-    *buildings;
-    return pickedBuilding;
-}
-
-HarvestTile* Deck::drawHarvestTile() {
-    vector<HarvestTile*>* harvestTiles = new vector<HarvestTile*>();
-    harvestTiles = getHarvestTileDeck();
-    int randomIndex = rand() % harvestTiles->size();
-    HarvestTile* pickedHarvestTile = harvestTiles->at(randomIndex);
-    harvestTiles->erase(harvestTiles->begin() + randomIndex);
-    return pickedHarvestTile; 
+Resource* Deck::draw(ResourceType resourceType) {
+    if (resourceType == ResourceType::Building) {
+        vector<Building*>* buildings = new vector<Building*>();
+        buildings = getBuildingDeck();
+        int randomIndex = rand() % buildings->size();
+        Building* pickedBuilding = buildings->at(randomIndex);
+        buildings->erase(buildings->begin() + randomIndex);
+        *buildings;
+        return pickedBuilding;
+    } else {
+        vector<HarvestTile*>* harvestTiles = new vector<HarvestTile*>();
+        harvestTiles = getHarvestTileDeck();
+        int randomIndex = rand() % harvestTiles->size();
+        HarvestTile* pickedHarvestTile = harvestTiles->at(randomIndex);
+        harvestTiles->erase(harvestTiles->begin() + randomIndex);
+        return pickedHarvestTile; 
+    }
 }
 
 vector<Building*>* Deck::getBuildingDeck() { return buildingDeck; }
 vector<HarvestTile*>* Deck::getHarvestTileDeck() { return harvestTileDeck; }
 
-Hand::Hand() {
-    sheepResourceMarker = new int();
-    *sheepResourceMarker = 0;
-    stoneResourceMarker = new int();
-    *stoneResourceMarker = 0;
-    timberResourceMarker = new int();
-    *timberResourceMarker = 0;
-    wheatResourceMarker = new int();
-    *wheatResourceMarker = 0;
+Hand::Hand(Deck* d, ResourceCounter* rc) {
+    deck = d;
+    resourceCounter = rc;
+    sheepResourceMarker = new int(0);
+    stoneResourceMarker = new int(0);
+    timberResourceMarker = new int(0);
+    wheatResourceMarker = new int(0);
+    buildings = new vector<Building*>();
+    harvestTiles = new vector<HarvestTile*>();
+    initialize();
 }
 
-void Hand::exchange(int sheepResources, int stoneResources, 
-    int timberResources, int wheatResources) {
-        *sheepResourceMarker = *sheepResourceMarker + sheepResources;
-        *stoneResourceMarker = *stoneResourceMarker + stoneResources;
-        *timberResourceMarker = *timberResourceMarker + timberResources;
-        *wheatResourceMarker = *wheatResourceMarker + wheatResources;
+// 
+void Hand::initialize() {
+    // Draw 6 buildings and 2 harvest tiles
+    for (int i = 0 ; i < 6 ; i++) {
+        buildings->push_back(static_cast<Building*>(deck->draw(ResourceType::Building)));
+    }
+    harvestTiles->push_back(static_cast<HarvestTile*>(deck->draw(ResourceType::HarvestTile)));
+    harvestTiles->push_back(static_cast<HarvestTile*>(deck->draw(ResourceType::HarvestTile)));
+}
+
+void Hand::exchange() {
+    int x_value, y_value;
+    cout << "Enter a column: ";
+    while(!(cin >> x_value) || x_value < 0 || x_value >= resourceCounter->getGBMap()->getWidth()) {
+        cin.clear();
+        cin.ignore(numeric_limits<streamsize>::max(), '\n');
+        cout << "Invalid column. Try again: ";
+    }
+    cout << "Enter a row: ";
+    while(!(cin >> y_value) || y_value < 0 || x_value >= resourceCounter->getGBMap()->getHeight()) {
+        cin.clear();
+        cin.ignore(numeric_limits<streamsize>::max(), '\n');
+        cout << "Invalid row. Try again: ";
+    }
+    map<Type, int*>* calculatedResources = new map<Type, int*>();
+    calculatedResources = resourceCounter->calculateCollectedResources(x_value, y_value);
+    *sheepResourceMarker = *sheepResourceMarker + *(*calculatedResources)[Type::Sheep];
+    *stoneResourceMarker = *stoneResourceMarker + *(*calculatedResources)[Type::Stone];
+    *timberResourceMarker = *timberResourceMarker + *(*calculatedResources)[Type::Timber];
+    *wheatResourceMarker = *wheatResourceMarker + *(*calculatedResources)[Type::Wheat];
 }
 
 int* Hand::getSheepResourceMarker() { return sheepResourceMarker; }
 int* Hand::getStoneResourceMarker() { return stoneResourceMarker; }
 int* Hand::getTimberResourceMarker() { return timberResourceMarker; }
 int* Hand::getWheatResourceMarker() { return wheatResourceMarker; }
+vector<Building*> Hand::getBuildings() { return *buildings; }
+vector<HarvestTile*> Hand::getHarvestTiles() { return *harvestTiles; }

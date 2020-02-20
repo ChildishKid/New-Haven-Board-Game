@@ -7,6 +7,9 @@
 
 using namespace std;
 
+// Needed as forward reference.
+class ResourceCounter;
+
 enum class Type {
     Wheat = 0, 
     Sheep, 
@@ -15,7 +18,14 @@ enum class Type {
     None
 };
 
-class Building {
+enum class ResourceType {
+    Building = 0,
+    HarvestTile
+};
+
+class Resource { };
+
+class Building : public Resource {
     private:
         Type* type; //wheat, sheep, stone or timber
         int* cost; //cost of building, 1-6
@@ -29,7 +39,7 @@ class Building {
         int* getActualCost();
 };
 
-class HarvestTile {
+class HarvestTile : public Resource {
     private:
         Type* topLeftNode;
         Type* topRightNode;
@@ -58,32 +68,34 @@ class Deck {
 
     public:
         Deck();
-
-        Building* drawBuilding();
-
-        HarvestTile* drawHarvestTile();
-
+        Resource* draw(ResourceType ResourceType);
         vector<Building*>* getBuildingDeck();
         vector<HarvestTile*>* getHarvestTileDeck();
 };
 
 class Hand {
     private:
+        Deck* deck;
+        ResourceCounter* resourceCounter;
         int* sheepResourceMarker;
         int* stoneResourceMarker;
         int* timberResourceMarker;
         int* wheatResourceMarker;
+        vector<Building*>* buildings;
+        vector<HarvestTile*>* harvestTiles;
+        void initialize();
 
     public: 
-        Hand();
+        Hand(Deck* deck, ResourceCounter* rc);
 
-        void exchange(int sheepResources, int stoneResources, 
-            int timberResources, int wheatResources);
+        void exchange();
 
         int* getSheepResourceMarker();
         int* getStoneResourceMarker();
         int* getTimberResourceMarker();
         int* getWheatResourceMarker();
+        vector<Building*> getBuildings();
+        vector<HarvestTile*> getHarvestTiles();
 };
 
 inline std::ostream& operator<<(std::ostream& stream, const Type &type) {
