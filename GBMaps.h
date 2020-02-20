@@ -13,7 +13,6 @@ public:
 		Node();
 
 		Type getType();
-		string getTypeString();
 		void setType(Type* type);
 
 	private:

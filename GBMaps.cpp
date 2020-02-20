@@ -23,26 +23,6 @@ void GBMaps::Node::setType(Type* t) {
 	*type = *t;
 };
 
-string GBMaps::Node::getTypeString() {
-	if (Type::Wheat == *type) {
-		return "Wheat";
-	}
-	else if (Type::Sheep == *type) {
-		return "Sheep";
-	}
-	else if (Type::Timber == *type) {
-		return "Timber";
-	}
-	else if (Type::Stone == *type) {
-		return "Stone";
-	}
-	else if (Type::None == *type) {
-		return "None";
-	}
-	else
-		return "";
-}
-
 bool operator==(const GBMaps::Node& lhs, const GBMaps::Node& rhs) {
     return &lhs==&rhs;
 };
