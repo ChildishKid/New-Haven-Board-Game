@@ -37,6 +37,20 @@ Type* HarvestTile::getTopRightNode() { return topRightNode; }
 Type* HarvestTile::getBottomLeftNode() { return bottomLeftNode; }
 Type* HarvestTile::getBottomRightNode() { return bottomRightNode; }
 
+void HarvestTile::rotateTile() //rotates harvest tile
+{
+    Type bl = *this->bottomLeftNode;
+    Type br = *this->bottomRightNode;
+    Type tl = *this->topLeftNode;
+    Type tr = *this->topRightNode;
+
+    this->bottomLeftNode = &br;
+    this->bottomRightNode = &tr;
+    this->topLeftNode = &bl;
+    this->topRightNode = &tl;
+
+}
+
 // This method will generate all of the buildings needed at the start of the game.
 vector<Building*>* Deck::generateBuildings() {
     vector<Building*>* buildingVector = new vector<Building*>();

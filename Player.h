@@ -11,15 +11,17 @@ class Player {
 	private:
 		Hand* playersHand;
 		VGMap* playersVGMap;
-
+		GBMaps* gboard;
 
 	public:
 		Player();
-		void placeOnGBoard();
-		void placeHarvestTile(pair<int,int>); //place tile on specific coordinates
-		Building* DrawBuilding();  //return object of Building that has been drawn
-		HarvestTile* DrawHarvestTile(); //return object of HarvestTile that has been drawn
+		Player(Deck* deck, ResourceCounter* rc, GBMaps* gboard);
+		void placeHarvestTile(int x, int y); //place tile on specific coordinates
+		void DrawBuilding();  //add object of Building that has been drawn to players Hand
+		void DrawHarvestTile(); //add object of HarvestTile that has been drawn to players Hand
 		map<string, int> ResourceTracker(); //return map for all the resources
-		void BuildVillage(pair<int, int>); //build village on specific coordinates
+		void BuildVillage(int x, int y); //build village on specific coordinates
 		map<string, int> CalculateResources();
+		Hand getPlayersHand() { return *playersHand; };
+		GBMaps* getGBoard() { return gboard; };
 };
