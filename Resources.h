@@ -3,6 +3,7 @@
 #include <iostream>
 #include <ctime>
 #include <map>
+#include "Score.h"
 #pragma once
 
 using namespace std;
@@ -98,6 +99,7 @@ class Hand {
 
         void exchange();
 
+        ResourceCounter* getResourceCounter() { return this->resourceCounter; };
         Deck* getDeck() { return this->deck; };
         int* getSheepResourceMarker();
         int* getStoneResourceMarker();

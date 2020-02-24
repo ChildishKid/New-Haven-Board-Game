@@ -54,20 +54,23 @@ void Player::placeHarvestTile(int x, int y){
 
 //need to figure out how to cast from Resource to Building
 void Player::DrawBuilding() {
-	Resource* drawn;
-	drawn = this->getPlayersHand()->getDeck()->draw(ResourceType::Building);
+	Building* drawn = static_cast<Building*>(this->getPlayersHand()->getDeck()->draw(ResourceType::Building));
 	this->getPlayersHand()->getBuildings().push_back(drawn);
 	}
 
 //need to figure out how to cast from Resource to HarvestTile
 void Player::DrawHarvestTile() {
-	Resource* drawn;
-	drawn = this->getPlayersHand()->getDeck()->draw(ResourceType::HarvestTile);
+	HarvestTile* drawn = static_cast<HarvestTile*>(this->getPlayersHand()->getDeck()->draw(ResourceType::HarvestTile));
 	this->getPlayersHand()->getHarvestTiles().push_back(drawn);
 	}
 
 map<string, int> Player::ResourceTracker() {
-
+	map<string, int> container;
+	container.insert(pair<string, int>("Sheep", *this->getPlayersHand()->getSheepResourceMarker()));
+	container.insert(pair<string, int>("Stone", *this->getPlayersHand()->getStoneResourceMarker()));
+	container.insert(pair<string, int>("Timber", *this->getPlayersHand()->getTimberResourceMarker()));
+	container.insert(pair<string, int>("Wheat", *this->getPlayersHand()->getWheatResourceMarker()));
+	return container;
 	}
 
 void Player::BuildVillage(int x, int y) {
@@ -92,6 +95,6 @@ void Player::BuildVillage(int x, int y) {
 	this->getVGMap()->getCircle(x, y)->setCost(cost);
 	}
 
-map<string, int> Player::CalculateResources() {
-
+map<Type, int*>* Player::CalculateResources(int x, int y) {
+	return this->getPlayersHand()->getResourceCounter()->calculateCollectedResources(x, y);
 	}
