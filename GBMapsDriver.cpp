@@ -5,12 +5,14 @@ using namespace std;
 
 int main() {
 
+	GBMaps* gameBoard;
+
 	for (int x = 2; x <= 4; x++) {
 
 		cout << "=== ADJACENCY TEST FOR " << x << " PLAYERS ===" << endl;
 
 		// Create game board map and initialize all squares to default (i.e. emtpy values)
-		GBMaps* gameBoard = new GBMaps(x);
+		gameBoard = new GBMaps(x);
 		// Display edges/connections of each squares
 		for (; gameBoard->iterate != gameBoard->end(); ++gameBoard->iterate) {
 			// Display edges
@@ -21,8 +23,8 @@ int main() {
 			}
 			cout << endl;
 		}
-
 		cout << endl << endl;
 	}
+
 	system("pause");
 }

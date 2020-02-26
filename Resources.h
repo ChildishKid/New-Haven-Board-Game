@@ -1,15 +1,13 @@
 #include <vector>
 #include <stdlib.h>
 #include <iostream>
+#include <fstream>
 #include <ctime>
 #include <map>
 #include "Score.h"
 #pragma once
 
 using namespace std;
-
-// Needed as forward reference.
-class ResourceCounter;
 
 enum class Type {
     Wheat = 0, 
@@ -47,7 +45,7 @@ class Building : public Resource {
         int* getActualCost();
 };
 
-class HarvestTile : public Resource {
+class HarvestTile {
     private:
         Type* topLeftNode;
         Type* topRightNode;
@@ -77,27 +75,27 @@ class Deck {
 
     public:
         Deck();
-        Resource* draw(ResourceType ResourceType);
+
+        Building* drawBuilding();
+
+        HarvestTile* drawHarvestTile();
+
         vector<Building*>* getBuildingDeck();
         vector<HarvestTile*>* getHarvestTileDeck();
 };
 
 class Hand {
     private:
-        Deck* deck;
-        ResourceCounter* resourceCounter;
         int* sheepResourceMarker;
         int* stoneResourceMarker;
         int* timberResourceMarker;
         int* wheatResourceMarker;
-        vector<Building*>* buildings;
-        vector<HarvestTile*>* harvestTiles;
-        void initialize();
 
     public: 
-        Hand(Deck* deck, ResourceCounter* rc);
+        Hand();
 
-        void exchange();
+        void exchange(int sheepResources, int stoneResources, 
+            int timberResources, int wheatResources);
 
         ResourceCounter* getResourceCounter() { return this->resourceCounter; };
         Deck* getDeck() { return this->deck; };
@@ -105,7 +103,68 @@ class Hand {
         int* getStoneResourceMarker();
         int* getTimberResourceMarker();
         int* getWheatResourceMarker();
-        vector<Building*> getBuildings();
-        vector<HarvestTile*> getHarvestTiles();
 };
 
+inline std::ostream& operator<<(std::ostream& stream, const Type &type) {
+
+    if (Type::Wheat == type) {
+        return stream << "Wheat";
+    }
+    else if (Type::Sheep == type) {
+        return stream << "Sheep";
+    }
+    else if (Type::Timber == type) {
+        return stream << "Timber";
+    }
+    else if (Type::Stone == type) {
+        return stream << "Stone";
+    }
+    else {
+        return stream << "None";
+    }
+}
+
+inline std::ofstream& operator<<(std::ofstream& stream, const Type& type) {
+
+    if (Type::Wheat == type) {
+        stream << "Wheat";
+    }
+    else if (Type::Sheep == type) {
+        stream << "Sheep";
+    }
+    else if (Type::Timber == type) {
+        stream << "Timber";
+    }
+    else if (Type::Stone == type) {
+        stream << "Stone";
+    }
+    else {
+        stream << "None";
+    }
+
+    return stream;
+}
+
+inline std::ifstream& operator>>(std::ifstream& stream, Type& type) {
+
+    string read;
+    stream >> read;
+
+    if ("Wheat" == read) {
+        type = Type::Wheat;
+    }
+    else if ("Sheep" == read) {
+        type = Type::Sheep;
+    }
+    else if ("Timber" == read) {
+        type = Type::Timber;
+    }
+    else if ("Stone" == read) {
+        type = Type::Stone;
+    }
+    else {
+        type = Type::None;
+    }
+
+    return stream;
+}
