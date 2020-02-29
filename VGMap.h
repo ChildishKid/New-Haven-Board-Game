@@ -11,13 +11,13 @@ using namespace std;
 class VGMap {
 public:
 	class Circle {
-	public:Circle(int x_value, int y_value);
-		   Circle();
+	public:	
+		Circle(int x_value, int y_value);
+		Circle();
 		~Circle();
 
 		void setX(int x);
 		void setY(int y);
-		void setType(Type type);
 		void setCost(int val);
 		void setStatus(bool stat);
 		void setBuilding(Building* b);
@@ -28,14 +28,15 @@ public:
 		int getCost() const;
 		bool getStatus() const;
 		vector<Circle*> getAdj() const;
+		Building* getBuilding() const;
 
 	private: 
 		int* x;
 		int* y;
-		Type* type;
 		int* cost;
 		bool* status;
 		vector<Circle*>* adjacent;
+		Building* building;
 	};
 
 	VGMap(string player);
@@ -52,5 +53,5 @@ private:
 	string* playerName;
 	int* width;
 	int* height;
+	void setupBoard();
 };
-

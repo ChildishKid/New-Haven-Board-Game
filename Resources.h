@@ -9,6 +9,9 @@
 
 using namespace std;
 
+// Needed as forward reference.
+class ResourceCounter;
+
 enum class Type {
     Wheat = 0, 
     Sheep, 
@@ -45,7 +48,7 @@ class Building : public Resource {
         int* getActualCost();
 };
 
-class HarvestTile {
+class HarvestTile : public Resource {
     private:
         Type* topLeftNode;
         Type* topRightNode;
@@ -75,11 +78,7 @@ class Deck {
 
     public:
         Deck();
-
-        Building* drawBuilding();
-
-        HarvestTile* drawHarvestTile();
-
+        Resource* draw(ResourceType ResourceType);
         vector<Building*>* getBuildingDeck();
         vector<HarvestTile*>* getHarvestTileDeck();
 };
@@ -87,16 +86,20 @@ class Deck {
 
 class Hand {
     private:
+        Deck* deck;
+        ResourceCounter* resourceCounter;
         int* sheepResourceMarker;
         int* stoneResourceMarker;
         int* timberResourceMarker;
         int* wheatResourceMarker;
+        vector<Building*>* buildings;
+        vector<HarvestTile*>* harvestTiles;
+        void initialize();
 
     public: 
-        Hand();
+        Hand(Deck* deck, ResourceCounter* rc);
 
-        void exchange(int sheepResources, int stoneResources, 
-            int timberResources, int wheatResources);
+        void exchange();
 
         ResourceCounter* getResourceCounter() { return this->resourceCounter; };
         Deck* getDeck() { return this->deck; };
@@ -104,6 +107,8 @@ class Hand {
         int* getStoneResourceMarker();
         int* getTimberResourceMarker();
         int* getWheatResourceMarker();
+        vector<Building*> getBuildings();
+        vector<HarvestTile*> getHarvestTiles();
 };
 
 inline std::ostream& operator<<(std::ostream& stream, const Type &type) {

@@ -12,6 +12,7 @@ VGMap::Circle::Circle(int x_value, int y_value) {
 	cost = new int(y_value + 1);
 	status = new bool(false);
 	adjacent = new vector<Circle*>();
+	building = NULL;
 }
 
 VGMap::Circle::Circle() {
@@ -20,18 +21,17 @@ VGMap::Circle::Circle() {
 	cost = 0;
 	status = new bool(false);
 	adjacent = new vector<Circle*>();
+	building = NULL;
 }
 
 VGMap::Circle::~Circle() {
 	delete x;
 	delete y;
-	delete type;
 	delete cost;
 	delete status;
 	delete adjacent;
 	x = NULL;
 	y = NULL;
-	type = NULL;
 	cost = NULL;
 	status = NULL;
 	adjacent = NULL;
@@ -43,10 +43,6 @@ void VGMap::Circle::setX(int x_value) {
 
 void VGMap::Circle::setY(int y_value) {
 	*y = y_value;
-}
-
-void VGMap::Circle::setType(Type clr) {
-	*type = clr;
 }
 
 void VGMap::Circle::setCost(int val) {
@@ -64,6 +60,7 @@ void VGMap::Circle::setBuilding(Building* b) {
 void VGMap::Circle::addAdj(Circle* obj) {
 	adjacent->push_back(obj);
 }
+
 
 int VGMap::Circle::getX() const {
 	return *x;
@@ -85,41 +82,16 @@ vector<VGMap::Circle*> VGMap::Circle::getAdj() const {
 	return *adjacent;
 }
 
+Building* VGMap::Circle::getBuilding() const {
+	return building;
+}
+
 VGMap::VGMap(string player) {
 	playerName = new string(player);
 	playerBoard = new map<pair<int, int>, Circle*>();
 	width = new int (5);
 	height = new int (6);
-
-	for (int i = 0; i < *width; i++) {
-		for (int j = 0; j < *height; j++) {
-			(*playerBoard)[{i, j}] = new VGMap::Circle(i, j);
-		}
-	}
-
-	for (int i = 0; i < *width; i++) {
-		for (int j = 0; j < *height; j++) {
-
-			if (!(i - 1 < 0)) {
-				(*playerBoard)[{i, j}]->addAdj((*playerBoard)[{(i - 1), j}]);
-			}
-
-			if (!(i + 1 > 4)) {
-				(*playerBoard)[{i, j}]->addAdj((*playerBoard)[{(i + 1), j}]);
-			}
-
-			if (!(j - 1 < 0)) {
-				(*playerBoard)[{i, j}]->addAdj((*playerBoard)[{i, (j - 1)}]);
-			}
-
-			if (!(j + 1 > 5)) {
-				(*playerBoard)[{i, j}]->addAdj((*playerBoard)[{i, (j + 1)}]);
-			}
-
-		}
-	}
-
-
+	setupBoard();
 }
 
 VGMap::VGMap() {
@@ -155,6 +127,7 @@ VGMap::VGMap() {
 
 		}
 	}
+	setupBoard();
 }
 
 VGMap::~VGMap() {
