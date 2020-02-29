@@ -17,6 +17,7 @@ void VGMapLoader::save(VGMap* gameboard, string fileName) {
 			}
 			else {
 				output << *gameboard->getCircle(i, j)->getBuilding()->getCost() << endl;
+				output << *gameboard->getCircle(i, j)->getBuilding()->getActualCost() << endl;
 				output << *gameboard->getCircle(i, j)->getBuilding()->getType() << endl;
 			}
 		}
@@ -51,10 +52,15 @@ VGMap* VGMapLoader::load(string fileName) {
 				gameboard->getCircle(i, j)->setStatus(status);
 
 				inputStream >> input;
+
 				if (input != "NULL") {
+					string actualCost;
+					inputStream >> actualCost;
 					Type resource;
 					inputStream >> resource;
+
 					gameboard->getCircle(i, j)->setBuilding(new Building(new Type(resource), new int(stoi(input))));
+					gameboard->getCircle(i, j)->getBuilding()->setActualCost(new int(stoi(actualCost)));
 				}
 			}
 		}
