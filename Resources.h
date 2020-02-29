@@ -74,6 +74,7 @@ class Deck {
         vector<HarvestTile*>* getHarvestTileDeck();
 };
 
+
 class Hand {
     private:
         Deck* deck;

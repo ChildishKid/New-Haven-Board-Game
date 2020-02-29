@@ -10,18 +10,18 @@ VGMap::Circle::Circle(int x_value, int y_value) {
 	x = new int(x_value);
 	y = new int(y_value);
 	cost = new int(y_value + 1);
-	status = NULL;
+	status = new bool(false);
 	adjacent = new vector<Circle*>();
-	building = NULL;
+	building = new Building(new Type(Type::None), cost);
 }
 
 VGMap::Circle::Circle() {
 	x = 0;
 	y = 0;
 	cost = 0;
-	status = NULL;
+	status = new bool(false);
 	adjacent = new vector<Circle*>();
-	building = NULL;
+	building = new Building(new Type(Type::None), cost);
 }
 
 VGMap::Circle::~Circle() {
@@ -49,7 +49,7 @@ void VGMap::Circle::setCost(int val) {
 	*cost = val;
 }
 
-void VGMap::Circle::setStatus(string stat) {
+void VGMap::Circle::setStatus(bool stat) {
 	*status = stat;
 }
 
@@ -74,7 +74,7 @@ int VGMap::Circle::getCost() const{
 	return *cost;
 }
 
-string VGMap::Circle::getStatus() const {
+bool VGMap::Circle::getStatus() const {
 	return *status;
 }
 
