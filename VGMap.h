@@ -19,14 +19,14 @@ public:
 		void setY(int y);
 		void setType(Type type);
 		void setCost(int val);
-		void setStatus(string stat);
+		void setStatus(bool stat);
+		void setBuilding(Building* b);
 		void addAdj(Circle* obj);
 
 		int getX() const;
 		int getY() const;
-		Type getType() const;
 		int getCost() const;
-		string getStatus() const;
+		bool getStatus() const;
 		vector<Circle*> getAdj() const;
 
 	private: 
@@ -34,7 +34,7 @@ public:
 		int* y;
 		Type* type;
 		int* cost;
-		string* status;
+		bool* status;
 		vector<Circle*>* adjacent;
 	};
 

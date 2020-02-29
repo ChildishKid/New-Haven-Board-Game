@@ -37,6 +37,7 @@ int main() {
 	cout << "Bottom Right: " << gameBoardReplace->getSquare(0, 0)->getBottomRight()->getType() << endl;
 	cout << endl;
 
+	
 	//Creating new Village Board
 
 	cout << "=== CREATING VILLAGE BOARD ===" << endl;
@@ -46,11 +47,13 @@ int main() {
 
 	//Create VGMap object
 	VGMap* gameboard = new VGMap(boardName);
-
+	
 	//Changes to VGMap Circle tiles
 	cout << "Test: Setting Circle 2,3 to type Wheat, and 3,4 to type Stone" << endl;
-	gameboard->getCircle(2, 3)->setType(Type::Wheat);
-	gameboard->getCircle(3, 4)->setType(Type::Stone);
+	int cost = gameboard->getCircle(2, 3)->getCost();
+	gameboard->getCircle(2, 3)->setBuilding(new Building(new Type(Type::Wheat), new int (cost)));
+	cost = gameboard->getCircle(3, 4)->getCost();
+	gameboard->getCircle(3, 4)->setBuilding(new Building(new Type(Type::Stone), new int(cost)));
 
 	//Saving gameboard
 	cout << "Input name of the save file (with the .txt suffix):" << endl;
@@ -68,9 +71,9 @@ int main() {
 	
 	//testing the loaded map
 	cout << "Test: checking the types loaded map for circle 2,3 and circle 3,4" << endl;
-	cout << "circle 2,3 is type: " << gameboard2->getCircle(2, 3)->getType() << endl;
-	cout << "circle 3,4 is type: " << gameboard2->getCircle(3, 4)->getType() << endl;
+	cout << "circle 2,3 is type: " << *gameboard2->getCircle(2, 3)->getBuilding()->getType() << endl;
+	cout << "circle 3,4 is type: " << *gameboard2->getCircle(3, 4)->getBuilding()->getType() << endl;
 	cout << "Loading successful" << endl;
-
+	
 	system("pause");
 }
