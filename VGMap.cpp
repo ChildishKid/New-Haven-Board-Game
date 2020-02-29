@@ -9,9 +9,8 @@ using namespace std;
 VGMap::Circle::Circle(int x_value, int y_value) {
 	x = new int(x_value);
 	y = new int(y_value);
-	type = new Type(Type::None);
 	cost = new int(y_value + 1);
-	status = new string("Empty");
+	status = NULL;
 	adjacent = new vector<Circle*>();
 	building = NULL;
 }
@@ -19,9 +18,8 @@ VGMap::Circle::Circle(int x_value, int y_value) {
 VGMap::Circle::Circle() {
 	x = 0;
 	y = 0;
-	type = new Type(Type::None);
 	cost = 0;
-	status = new string("Empty");
+	status = NULL;
 	adjacent = new vector<Circle*>();
 	building = NULL;
 }
@@ -70,10 +68,6 @@ int VGMap::Circle::getX() const {
 
 int VGMap::Circle::getY() const {
 	return *y;
-}
-
-Type VGMap::Circle::getType() const {
-	return *type;
 }
 
 int VGMap::Circle::getCost() const{
