@@ -20,13 +20,6 @@ enum class Type {
     None
 };
 
-//added operator overload to print enums
-std::ostream& operator << (std::ostream& os, const Type& obj)
-{
-    os << static_cast<std::underlying_type<Type>::type>(obj);
-    return os;
-}
-
 enum class ResourceType {
     Building = 0,
     HarvestTile
