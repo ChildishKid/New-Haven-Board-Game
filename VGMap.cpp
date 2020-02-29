@@ -162,6 +162,7 @@ int VGMap::getHeight() {
 
 string VGMap::getPlayerName() {
 	return *playerName;
+}
   
 void VGMap::setupBoard() {
 	
