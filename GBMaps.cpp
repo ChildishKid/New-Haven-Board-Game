@@ -1,11 +1,19 @@
 #include <string>
+#include <cstring>
 #include <iostream>
+#include <fstream>
 using namespace std;
 #include "GBMaps.h"
+#include "Resources.h"
 
+/* === Node === */
 GBMaps::Node::Node(Type* t) {
 	type = t;
 };
+
+GBMaps::Node::Node() {
+	type = new Type(Type::None);
+}
 
 Type GBMaps::Node::getType() {
 	return *type;
@@ -23,6 +31,7 @@ bool operator!=(const GBMaps::Node &lhs, const GBMaps::Node &rhs) {
     return !(lhs == rhs);
 };
 
+/* === Square === */
 GBMaps::Square::Square(int x_value, int y_value) {
 	x = new int(x_value);
 	y = new int(y_value);
@@ -48,18 +57,24 @@ GBMaps::Square::Square() {
 }
 
 GBMaps::Square::~Square() {
-	delete x;
-	delete y;
 	delete topLeft;
 	delete topRight;
 	delete bottomLeft;
 	delete bottomRight;
-	x = NULL;
-	y = NULL;
+	delete x;
+	delete y;
+	delete status;
+	delete adjacent;
+	delete size;
 	topLeft = NULL;
 	topRight = NULL;
 	bottomLeft = NULL;
 	bottomRight = NULL;
+	x = NULL;
+	y = NULL;
+	status = NULL;
+	adjacent = NULL;
+	size = NULL;
 }
 
 void GBMaps::Square::setTopLeft(Node tL) {
@@ -127,6 +142,46 @@ int GBMaps::Square::getSize() const {
 	return *size;
 }
 
+bool GBMaps::Square::getStatus() const {
+	return *status;
+}
+
+/* === GBMaps === */
+GBMaps::GBMaps(int numOfPlayers) {
+	numberOfPlayers = new int(numOfPlayers);
+	gameBoard = new map<pair<int, int>, Square*>();	
+	setUpBoard();
+	setUpAdjacencies();
+	iterate = gameBoard->begin();
+}
+
+GBMaps::GBMaps() {
+	// Default constructor sets it to two players
+	numberOfPlayers = new int(2);
+	gameBoard = new map<pair<int, int>, Square*>();
+	setUpBoard();
+	setUpAdjacencies();
+	iterate = gameBoard->begin();
+}
+
+GBMaps::~GBMaps() {
+	iterate = gameBoard->begin();
+	for (; iterate != end(); ++iterate) {
+		delete(iterate->second);
+		iterate->second = NULL;
+	}
+
+	delete gameBoard;
+	delete height;
+	delete width;
+	delete numberOfPlayers;
+
+	gameBoard = NULL;
+	height = NULL;
+	width = NULL;
+	numberOfPlayers = NULL;
+}
+
 void GBMaps::setUpBoard() {
 
 	if (getNumberOfPlayers() == 2 || getNumberOfPlayers() == 3) {
@@ -139,8 +194,30 @@ void GBMaps::setUpBoard() {
 				(*gameBoard)[{i, j}] = new GBMaps::Square(i, j);
 			}
 		}
+	}
 
-		// Set up adjencies
+	if (getNumberOfPlayers() == 4) {
+		width = new int(7);
+		height = new int(7);
+
+		// Set up each square piece
+		for (int i = 0; i < *height; i++) {
+			for (int j = 0; j < *width; j++) {
+				if ((i == 0 && j == 0)
+					|| (i == 0 && j == *width - 1)
+					|| (i == *height - 1 && j == 0)
+					|| (i == *height - 1 && j == *width - 1)) {
+					continue;
+				}
+				(*gameBoard)[{i, j}] = new Square(i, j);
+			}
+		}
+	}
+}
+
+void GBMaps::setUpAdjacencies() {
+	if (getNumberOfPlayers() == 2 || getNumberOfPlayers() == 3) {
+
 		for (int i = 0; i < *width; i++) {
 			for (int j = 0; j < *height; j++) {
 
@@ -164,87 +241,43 @@ void GBMaps::setUpBoard() {
 	}
 
 	if (getNumberOfPlayers() == 4) {
-		int max_width = 7;
-		int max_height = 7;
 
-		// Set up each square piece
-		for (int i = 0; i < max_height; i++) {
-			for (int j = 0; j < max_width; j++) {
-				if ((i == 0 && j == 0)
-					|| (i == 0 && j == max_width - 1)
-					|| (i == max_height - 1 && j == 0)
-					|| (i == max_height - 1 && j == max_width - 1)) {
-					continue;
-				}
-				(*gameBoard)[{i, j}] = new Square(i, j);
-			}
-		}
-
-		// Set up adjencies
-		for (int i = 0; i < max_height; i++) {
-			for (int j = 0; j < max_width; j++) {
+		for (int i = 0; i < *height; i++) {
+			for (int j = 0; j < *width; j++) {
 
 				if ((i == 0 && j == 0)
-					|| (i == 0 && j == max_width - 1)
-					|| (i == max_height - 1 && j == 0)
-					|| (i == max_height - 1 && j == max_width - 1)) {
+					|| (i == 0 && j == *width - 1)
+					|| (i == *height - 1 && j == 0)
+					|| (i == *height - 1 && j == *width - 1)) {
 					continue;
 				}
 
 				if (!(i - 1 < 0)
 					&& !(i - 1 == 0 && j == 0)
-					&& !(i - 1 == 0 && j == max_width - 1)) {
+					&& !(i - 1 == 0 && j == *width - 1)) {
 					(*gameBoard)[{i, j}]->addAdj((*gameBoard)[{(i - 1), j}]);
 				}
 
-				if (!(i + 1 == max_height)
-					&& !(i + 1 == max_height - 1 && j == 0)
-					&& !(i + 1 == max_height - 1 && j == max_width - 1)) {
+				if (!(i + 1 == *height)
+					&& !(i + 1 == *height - 1 && j == 0)
+					&& !(i + 1 == *height - 1 && j == *width - 1)) {
 					(*gameBoard)[{i, j}]->addAdj((*gameBoard)[{(i + 1), j}]);
 				}
 
 				if (!(j - 1 < 0)
 					&& !(i == 0 && j - 1 == 0)
-					&& !(i == max_height - 1 && j - 1 == 0)) {
+					&& !(i == *height - 1 && j - 1 == 0)) {
 					(*gameBoard)[{i, j}]->addAdj((*gameBoard)[{i, (j - 1)}]);
 				}
 
-				if (!(j + 1 == max_width)
-					&& !(i == 0 && j + 1 == max_width - 1)
-					&& !(i == max_height - 1 && j + 1 == max_width - 1)) {
+				if (!(j + 1 == *width)
+					&& !(i == 0 && j + 1 == *width - 1)
+					&& !(i == *height - 1 && j + 1 == *width - 1)) {
 					(*gameBoard)[{i, j}]->addAdj((*gameBoard)[{i, (j + 1)}]);
 				}
 			}
 		}
 	}
-}
-
-GBMaps::GBMaps(int numOfPlayers) {
-	numberOfPlayers = new int(numOfPlayers);
-	gameBoard = new map<pair<int, int>, Square*>();	
-	setUpBoard();
-	iterate = gameBoard->begin();
-}
-
-GBMaps::GBMaps() {
-
-	// Default constructor sets it to two players
-	numberOfPlayers = new int(2);
-	gameBoard = new map<pair<int, int>, Square*>();
-	setUpBoard();
-	iterate = gameBoard->begin();
-}
-
-GBMaps::~GBMaps() {
-	delete gameBoard;
-	delete height;
-	delete width;
-	delete numberOfPlayers;
-
-	gameBoard = NULL;
-	height = NULL;
-	width = NULL;
-	numberOfPlayers = NULL;
 }
 
 GBMaps::Square* GBMaps::getSquare(int x_value, int y_value) {
@@ -290,3 +323,15 @@ bool GBMaps::squareToRightExists(int x_value, int y_value) {
 	return (x_value != getWidth() - 1 || (getNumberOfPlayers() == 4 && 
 		x_value != getWidth() - 2 && (y_value !=0 || y_value != getHeight() - 1)));
 };
+
+void GBMaps::setHeight(int h) {
+	*height = h;
+}
+
+void GBMaps::setWidth(int w) {
+	*width = w;
+}
+
+void GBMaps::setNumberOfPlayers(int players) {
+	*numberOfPlayers = players;
+}

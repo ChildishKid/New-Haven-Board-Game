@@ -4,6 +4,7 @@
 #include <ctime>
 #include <map>
 #include <limits>
+#include "Score.h"
 #include "Resources.h"
 
 using namespace std;
@@ -24,6 +25,7 @@ Type* Building::getType() { return type; }
 int* Building::getCost() { return cost; }
 
 int* Building::getActualCost() { return actualCost; }
+
 
 HarvestTile::HarvestTile(Type* tln, Type* trn, Type* bln, Type* brn) {
     topLeftNode = tln;
@@ -190,4 +192,3 @@ int* Hand::getTimberResourceMarker() { return timberResourceMarker; }
 int* Hand::getWheatResourceMarker() { return wheatResourceMarker; }
 vector<Building*> Hand::getBuildings() { return *buildings; }
 vector<HarvestTile*> Hand::getHarvestTiles() { return *harvestTiles; }
-

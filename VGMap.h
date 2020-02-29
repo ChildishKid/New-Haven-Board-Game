@@ -19,14 +19,14 @@ public:
 		void setX(int x);
 		void setY(int y);
 		void setCost(int val);
-		void setStatus(string stat);
+		void setStatus(bool stat);
 		void setBuilding(Building* b);
 		void addAdj(Circle* obj);
 
 		int getX() const;
 		int getY() const;
 		int getCost() const;
-		string getStatus() const;
+		bool getStatus() const;
 		vector<Circle*> getAdj() const;
 		Building* getBuilding() const;
 
@@ -34,7 +34,7 @@ public:
 		int* x;
 		int* y;
 		int* cost;
-		string* status;
+		bool* status;
 		vector<Circle*>* adjacent;
 		Building* building;
 	};
@@ -45,6 +45,7 @@ public:
 	Circle* getCircle(int x_value, int y_value) const;
 	int getWidth();
 	int getHeight();
+	string getPlayerName();
 	
 
 private:

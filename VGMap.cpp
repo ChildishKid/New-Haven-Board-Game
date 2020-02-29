@@ -10,7 +10,7 @@ VGMap::Circle::Circle(int x_value, int y_value) {
 	x = new int(x_value);
 	y = new int(y_value);
 	cost = new int(y_value + 1);
-	status = NULL;
+	status = new bool(false);
 	adjacent = new vector<Circle*>();
 	building = NULL;
 }
@@ -19,7 +19,7 @@ VGMap::Circle::Circle() {
 	x = 0;
 	y = 0;
 	cost = 0;
-	status = NULL;
+	status = new bool(false);
 	adjacent = new vector<Circle*>();
 	building = NULL;
 }
@@ -49,7 +49,7 @@ void VGMap::Circle::setCost(int val) {
 	*cost = val;
 }
 
-void VGMap::Circle::setStatus(string stat) {
+void VGMap::Circle::setStatus(bool stat) {
 	*status = stat;
 }
 
@@ -74,7 +74,7 @@ int VGMap::Circle::getCost() const{
 	return *cost;
 }
 
-string VGMap::Circle::getStatus() const {
+bool VGMap::Circle::getStatus() const {
 	return *status;
 }
 
@@ -98,7 +98,35 @@ VGMap::VGMap() {
 	playerName = new string("");
 	playerBoard = new map<pair<int, int>, Circle*>();
 	width = new int(5);
-	height = new int(6);
+	height = new int (6);
+
+	for (int i = 0; i < *width; i++) {
+		for (int j = 0; j < *height; j++) {
+			(*playerBoard)[{i, j}] = new VGMap::Circle(i, j);
+		}
+	}
+
+	for (int i = 0; i < *width; i++) {
+		for (int j = 0; j < *height; j++) {
+
+			if (!(i - 1 < 0)) {
+				(*playerBoard)[{i, j}]->addAdj((*playerBoard)[{(i - 1), j}]);
+			}
+
+			if (!(i + 1 > 4)) {
+				(*playerBoard)[{i, j}]->addAdj((*playerBoard)[{(i + 1), j}]);
+			}
+
+			if (!(j - 1 < 0)) {
+				(*playerBoard)[{i, j}]->addAdj((*playerBoard)[{i, (j - 1)}]);
+			}
+
+			if (!(j + 1 > 5)) {
+				(*playerBoard)[{i, j}]->addAdj((*playerBoard)[{i, (j + 1)}]);
+			}
+
+		}
+	}
 	setupBoard();
 }
 
@@ -132,6 +160,10 @@ int VGMap::getHeight() {
 	return *height;
 }
 
+string VGMap::getPlayerName() {
+	return *playerName;
+}
+  
 void VGMap::setupBoard() {
 	
 	for (int i = 0; i < *width; i++) {
