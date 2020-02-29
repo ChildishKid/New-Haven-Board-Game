@@ -12,7 +12,7 @@ VGMap::Circle::Circle(int x_value, int y_value) {
 	cost = new int(y_value + 1);
 	status = new bool(false);
 	adjacent = new vector<Circle*>();
-	building = new Building(new Type(Type::None), cost);
+	building = NULL;
 }
 
 VGMap::Circle::Circle() {
@@ -21,7 +21,7 @@ VGMap::Circle::Circle() {
 	cost = 0;
 	status = new bool(false);
 	adjacent = new vector<Circle*>();
-	building = new Building(new Type(Type::None), cost);
+	building = NULL;
 }
 
 VGMap::Circle::~Circle() {

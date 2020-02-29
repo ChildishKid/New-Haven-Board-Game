@@ -12,8 +12,13 @@ void VGMapLoader::save(VGMap* gameboard, string fileName) {
 		for (int j = 0; j < gameboard->getHeight(); j++) {
 			output << gameboard->getCircle(i, j)->getCost() << endl;
 			output << gameboard->getCircle(i, j)->getStatus() << endl;
-			output << *gameboard->getCircle(i, j)->getBuilding()->getCost() << endl;
-			output << *gameboard->getCircle(i, j)->getBuilding()->getType() << endl;
+			if (gameboard->getCircle(i, j)->getBuilding() == NULL) {
+				output << "NULL" << endl;
+			}
+			else {
+				output << *gameboard->getCircle(i, j)->getBuilding()->getCost() << endl;
+				output << *gameboard->getCircle(i, j)->getBuilding()->getType() << endl;
+			}
 		}
 	}
 
@@ -34,8 +39,8 @@ VGMap* VGMapLoader::load(string fileName) {
 			for (int j = 0; j < gameboard->getHeight(); j++) {
 				inputStream >> input;
 				gameboard->getCircle(i, j)->setCost(stoi(input));
-				inputStream >> input;
 
+				inputStream >> input;
 				bool status;
 				if (stoi(input)) {
 					status = true;
@@ -43,12 +48,14 @@ VGMap* VGMapLoader::load(string fileName) {
 				else {
 					status = false;
 				}
-
 				gameboard->getCircle(i, j)->setStatus(status);
+
 				inputStream >> input;
-				Type resource;
-				inputStream >> resource;
-				gameboard->getCircle(i, j)->setBuilding(new Building(new Type(resource), new int(stoi(input))));
+				if (input != "NULL") {
+					Type resource;
+					inputStream >> resource;
+					gameboard->getCircle(i, j)->setBuilding(new Building(new Type(resource), new int(stoi(input))));
+				}
 			}
 		}
 
