@@ -55,23 +55,6 @@ void VGMap::Circle::setStatus(string stat) {
 	*status = stat;
 }
 
-void VGMap::Circle::setTypeString(string typ) {
-	if (typ == "Wheat") {
-		*type = Type::Wheat;
-	}
-	else if (typ == "Sheep") {
-		*type = Type::Sheep;
-	}
-	else if (typ == "Timber") {
-		*type = Type::Timber;
-	}
-	else if (typ == "Stone") {
-		*type = Type::Stone;
-	}
-	else {
-		*type = Type::None;
-	}
-
 void VGMap::Circle::setBuilding(Building* b) {
 	building = b;
 }
@@ -91,26 +74,6 @@ int VGMap::Circle::getY() const {
 
 Type VGMap::Circle::getType() const {
 	return *type;
-}
-
-string VGMap::Circle::getTypeString() const{
-	if (Type::Wheat == *type) {
-		return "Wheat";
-	}
-	else if (Type::Sheep == *type) {
-		return "Sheep";
-	}
-	else if (Type::Timber == *type) {
-		return "Timber";
-	}
-	else if (Type::Stone == *type) {
-		return "Stone";
-	}
-	else if (Type::None == *type) {
-		return "None";
-	}
-	else
-		return "";
 }
 
 int VGMap::Circle::getCost() const{

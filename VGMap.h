@@ -20,14 +20,12 @@ public:
 		void setY(int y);
 		void setCost(int val);
 		void setStatus(string stat);
-		void setTypeString(string type);
 		void setBuilding(Building* b);
 		void addAdj(Circle* obj);
 
 		int getX() const;
 		int getY() const;
 		Type getType() const;
-		string getTypeString() const;
 		int getCost() const;
 		string getStatus() const;
 		vector<Circle*> getAdj() const;
