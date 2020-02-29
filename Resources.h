@@ -4,7 +4,6 @@
 #include <fstream>
 #include <ctime>
 #include <map>
-#include "Score.h"
 #pragma once
 
 using namespace std;
