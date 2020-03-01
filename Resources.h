@@ -4,6 +4,7 @@
 #include <fstream>
 #include <ctime>
 #include <map>
+#include <string>
 #pragma once
 
 using namespace std;
