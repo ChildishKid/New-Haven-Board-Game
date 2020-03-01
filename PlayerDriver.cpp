@@ -7,10 +7,14 @@ int main() {
 	GBMaps gb = GBMaps();
 	ResourceCounter rc = ResourceCounter(&gb);
 	Player p1 = Player(&d, &rc, &gb);
-	p1.placeHarvestTile(3,5);
+	p1.placeHarvestTile(1,0);
+	map<Type, int*> testmap1 = *p1.CalculateResources(1, 0);
+	for (auto it = testmap1.cbegin(); it != testmap1.cend(); ++it)
+	{
+		std::cout << it->first << " " << *it->second << endl;
+	}
 	
 	
-	/*
 	cout << "HarvestTiles before: " << p1.getPlayersHand()->getHarvestTiles()->size() << endl;
 	p1.DrawHarvestTile();
 	cout << "HarvestTiles after: " << p1.getPlayersHand()->getHarvestTiles()->size() << endl;
@@ -28,10 +32,6 @@ int main() {
 	p1.BuildVillage(1, 1);
 	cout << "After: ";
 	printf(p1.getVGMap()->getCircle(1, 1)->getStatus() ? "true \n" : "false \n");
-	map<Type, int*> testmap1 = *p1.CalculateResources(0,0);
-	for (auto it = testmap1.cbegin(); it != testmap1.cend(); ++it)
-	{
-		std::cout << it->first << " " << *it->second << endl;
-	}*/
+	
 	return 0;
 }

@@ -40,16 +40,16 @@ Type* HarvestTile::getBottomLeftNode() { return bottomLeftNode; }
 Type* HarvestTile::getBottomRightNode() { return bottomRightNode; }
 
 void HarvestTile::rotateTile() //rotates harvest tile
-{
-    Type bl = *this->bottomLeftNode;
-    Type br = *this->bottomRightNode;
-    Type tl = *this->topLeftNode;
-    Type tr = *this->topRightNode;
+{   
+    Type* bl = new Type(*this->bottomLeftNode);
+    Type* br = new Type(*this->bottomRightNode);
+    Type* tl = new Type(*this->topLeftNode);
+    Type* tr = new Type(*this->topRightNode);
 
-    this->bottomLeftNode = &br;
-    this->bottomRightNode = &tr;
-    this->topLeftNode = &bl;
-    this->topRightNode = &tl;
+    this->bottomLeftNode = br;
+    this->bottomRightNode = tr;
+    this->topLeftNode = bl;
+    this->topRightNode = tl;
 
 }
 

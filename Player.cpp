@@ -46,10 +46,10 @@ void Player::placeHarvestTile(int x, int y){
 	}
 
 	GBMaps::Square* target = this->getGBoard()->getSquare(x, y);
-	target->setBottomLeft(GBMaps::Node(available->at(option)->getBottomLeftNode()));
-	target->setBottomRight(GBMaps::Node(available->at(option)->getBottomRightNode()));
-	target->setTopLeft(GBMaps::Node(available->at(option)->getTopLeftNode()));
-	target->setTopRight(GBMaps::Node(available->at(option)->getTopRightNode()));
+	target->setBottomLeft(GBMaps::Node(chosen->getBottomLeftNode()));
+	target->setBottomRight(GBMaps::Node(chosen->getBottomRightNode()));
+	target->setTopLeft(GBMaps::Node(chosen->getTopLeftNode()));
+	target->setTopRight(GBMaps::Node(chosen->getTopRightNode()));
 	target->setStatus(true);
 
 	}
