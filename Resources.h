@@ -99,8 +99,8 @@ class Hand {
         int* getStoneResourceMarker();
         int* getTimberResourceMarker();
         int* getWheatResourceMarker();
-        vector<Building*> getBuildings();
-        vector<HarvestTile*> getHarvestTiles();
+        vector<Building*>* getBuildings();
+        vector<HarvestTile*>* getHarvestTiles();
 };
 
 inline std::ostream& operator<<(std::ostream& stream, const Type &type) {
