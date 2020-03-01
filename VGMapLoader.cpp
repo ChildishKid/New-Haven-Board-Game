@@ -2,6 +2,7 @@
 #include <fstream>
 #include "VGMapLoader.h"
 #include <string>
+#include <stdlib.h>
 
 void VGMapLoader::save(VGMap* gameboard, string fileName) {
 	ofstream output(fileName);
@@ -70,7 +71,8 @@ VGMap* VGMapLoader::load(string fileName) {
 	}
 
 	catch (exception e) {
-		cout << "Invalid Save File!";
-		return NULL;
+		cout << "Invalid Save File! Exiting Program...";
+		system("pause");
+		exit(EXIT_FAILURE);
 	}
 }
