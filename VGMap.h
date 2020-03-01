@@ -55,4 +55,3 @@ private:
 	int* height;
 	void setupBoard();
 };
-

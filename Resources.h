@@ -53,6 +53,7 @@ class HarvestTile : public Resource {
         Type* getTopRightNode();
         Type* getBottomLeftNode();
         Type* getBottomRightNode();
+        void rotateTile();
 
 };
 
@@ -92,12 +93,14 @@ class Hand {
 
         void exchange();
 
+        ResourceCounter* getResourceCounter() { return this->resourceCounter; };
+        Deck* getDeck() { return this->deck; };
         int* getSheepResourceMarker();
         int* getStoneResourceMarker();
         int* getTimberResourceMarker();
         int* getWheatResourceMarker();
-        vector<Building*> getBuildings();
-        vector<HarvestTile*> getHarvestTiles();
+        vector<Building*>* getBuildings();
+        vector<HarvestTile*>* getHarvestTiles();
 };
 
 inline std::ostream& operator<<(std::ostream& stream, const Type &type) {

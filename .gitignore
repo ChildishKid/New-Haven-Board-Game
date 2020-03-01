@@ -3,6 +3,15 @@
 .vs/
 
 .vscode
+*.exe
+
+.vs/
+Debug/
+NewHaven.sln
+NewHaven.vcxproj
+NewHaven.vcxproj.user
+NewHaven.vcxproj.filters
+Release/
 
 *.exe
 

@@ -39,6 +39,20 @@ Type* HarvestTile::getTopRightNode() { return topRightNode; }
 Type* HarvestTile::getBottomLeftNode() { return bottomLeftNode; }
 Type* HarvestTile::getBottomRightNode() { return bottomRightNode; }
 
+void HarvestTile::rotateTile() //rotates harvest tile
+{   
+    Type* bl = new Type(*this->bottomLeftNode);
+    Type* br = new Type(*this->bottomRightNode);
+    Type* tl = new Type(*this->topLeftNode);
+    Type* tr = new Type(*this->topRightNode);
+
+    this->bottomLeftNode = br;
+    this->bottomRightNode = tr;
+    this->topLeftNode = bl;
+    this->topRightNode = tl;
+
+}
+
 // This method will generate all of the buildings needed at the start of the game.
 vector<Building*>* Deck::generateBuildings() {
     vector<Building*>* buildingVector = new vector<Building*>();
@@ -154,7 +168,6 @@ Hand::Hand(Deck* d, ResourceCounter* rc) {
     initialize();
 }
 
-// 
 void Hand::initialize() {
     // Draw 6 buildings and 2 harvest tiles
     for (int i = 0 ; i < 6 ; i++) {
@@ -190,5 +203,5 @@ int* Hand::getSheepResourceMarker() { return sheepResourceMarker; }
 int* Hand::getStoneResourceMarker() { return stoneResourceMarker; }
 int* Hand::getTimberResourceMarker() { return timberResourceMarker; }
 int* Hand::getWheatResourceMarker() { return wheatResourceMarker; }
-vector<Building*> Hand::getBuildings() { return *buildings; }
-vector<HarvestTile*> Hand::getHarvestTiles() { return *harvestTiles; }
+vector<Building*>* Hand::getBuildings() { return buildings; }
+vector<HarvestTile*>* Hand::getHarvestTiles() { return harvestTiles; }
