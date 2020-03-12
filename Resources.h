@@ -55,7 +55,7 @@ class HarvestTile : public Resource {
         Type* getBottomLeftNode();
         Type* getBottomRightNode();
         void rotateTile();
-
+        friend std::ostream& operator<<(std::ostream& stream, const HarvestTile& harvestTile);
 };
 
 class Deck {
@@ -87,9 +87,11 @@ class Hand {
         int* wheatResourceMarker;
         vector<Building*>* buildings;
         vector<HarvestTile*>* harvestTiles;
+        HarvestTile* shipmentTile;
         void initialize();
 
     public: 
+        Hand();
         Hand(Deck* deck, ResourceCounter* rc);
 
         void exchange();
@@ -102,7 +104,20 @@ class Hand {
         int* getWheatResourceMarker();
         vector<Building*>* getBuildings();
         vector<HarvestTile*>* getHarvestTiles();
+        void setShipmentTile(HarvestTile* st);
+        HarvestTile* getShipmentTile() const;
+        void setDeck(Deck* d);
 };
+
+inline std::ostream& operator<<(std::ostream& stream, const HarvestTile& harvestTile) {
+    map<Type, string> enumValues = {{Type::Wheat, "Wheat"}, {Type::Stone, "Stone"}, 
+        {Type::Timber, "Timber"}, {Type::Sheep, "Sheep"}};
+    stream << "\n---------------" << endl;
+    stream << enumValues[*harvestTile.topLeftNode] << " | " << enumValues[*harvestTile.topRightNode] << endl;
+    stream << enumValues[*harvestTile.bottomLeftNode] << " | " << enumValues[*harvestTile.bottomRightNode] << endl;
+    stream << "---------------" << endl;
+    return stream;
+}
 
 inline std::ostream& operator<<(std::ostream& stream, const Type &type) {
 
@@ -121,27 +136,6 @@ inline std::ostream& operator<<(std::ostream& stream, const Type &type) {
     else {
         return stream << "None";
     }
-}
-
-inline std::ofstream& operator<<(std::ofstream& stream, const Type& type) {
-
-    if (Type::Wheat == type) {
-        stream << "Wheat";
-    }
-    else if (Type::Sheep == type) {
-        stream << "Sheep";
-    }
-    else if (Type::Timber == type) {
-        stream << "Timber";
-    }
-    else if (Type::Stone == type) {
-        stream << "Stone";
-    }
-    else {
-        stream << "None";
-    }
-
-    return stream;
 }
 
 inline std::ifstream& operator>>(std::ifstream& stream, Type& type) {

@@ -90,39 +90,80 @@ vector<HarvestTile*>* Deck::generateHarvestTiles() {
     Type* sheepType = new Type{Type::Sheep};
     Type* stoneType = new Type{Type::Stone};
     Type* wheatType = new Type{Type::Wheat};
-    HarvestTile* harvestTile;
-    vector<Type*>* types = new vector<Type*>(); // vector pointer of all types
-    types->push_back(sheepType);
-    types->push_back(stoneType);
-    types->push_back(timberType);
-    types->push_back(wheatType);
-    map<Type*, int*>* typeMap = new map<Type*, int*>(); // map to keep track of types of a tile and how many times they are part of a tile
-    vector<Type*>* nodeTypes = new vector<Type*>(); // the list of types that a harvest tile will have (each one associated to a node)
-    Type* type = types->at(0); // the randomly generated type
 
-    for (int i=0; i<60 ; i++) {
-        nodeTypes->clear(); // clear vector every iteration
-        typeMap->clear(); // clear map every iteration
-        while (nodeTypes->size() < 5) { // while 4 types haven't been selected for the tile
-            type = types->at(rand() % (types->size() - 1)); // randomly select a type
-            if (nodeTypes->size() > 0 && // if no type was yet selected and...
-                ((typeMap->find(type) != typeMap->end() && *(*typeMap)[type] == 3) // the randomly generated type has already been selected 3 times for the tile (at least 2 types per tile)
-                    || (typeMap->find(type) == typeMap->end() && typeMap->size() == 3))) { // the map size is 3 and the newly generated type is not part of the map (max 3 types per tile)
-                continue;
-            } else { // else push the randomly generated type to the vector and add it to the map with its count
-                nodeTypes->push_back(new Type{*type});
-                if (typeMap->find(type) == typeMap->end()) {
-                    (*typeMap)[type] = new int();
-                    *(*typeMap)[type] = 1;
-                } else {
-                    *(*typeMap)[type] = *(*typeMap)[type] + 1;
-                }
-            }
-        }
-        harvestTile = new HarvestTile(nodeTypes->at(0), nodeTypes->at(1), nodeTypes->at(2), nodeTypes->at(3));
-        harvestTilevector->push_back(harvestTile);
-    }
-    *harvestTilevector;
+    // 1. Harvest tiles with 2 types, where 2 nodes have same type (12 configurations)
+    harvestTilevector->push_back(new HarvestTile(sheepType, stoneType, sheepType, stoneType));
+    harvestTilevector->push_back(new HarvestTile(sheepType, stoneType, stoneType, sheepType));
+    harvestTilevector->push_back(new HarvestTile(sheepType, timberType, sheepType, timberType));
+    harvestTilevector->push_back(new HarvestTile(sheepType, timberType, timberType, sheepType));
+    harvestTilevector->push_back(new HarvestTile(sheepType, wheatType, sheepType, wheatType));
+    harvestTilevector->push_back(new HarvestTile(sheepType, wheatType, wheatType, sheepType));
+    harvestTilevector->push_back(new HarvestTile(stoneType, timberType, stoneType, timberType));
+    harvestTilevector->push_back(new HarvestTile(stoneType, timberType, timberType, stoneType));
+    harvestTilevector->push_back(new HarvestTile(stoneType, wheatType, stoneType, wheatType));
+    harvestTilevector->push_back(new HarvestTile(stoneType, wheatType, wheatType, stoneType));
+    harvestTilevector->push_back(new HarvestTile(timberType, wheatType, timberType, wheatType));
+    harvestTilevector->push_back(new HarvestTile(timberType, wheatType, wheatType, timberType));
+
+    // 2. harvest tiles with 2 types, where 3 nodes have same type (12 configurations)
+    harvestTilevector->push_back(new HarvestTile(sheepType, sheepType, sheepType, stoneType));
+    harvestTilevector->push_back(new HarvestTile(sheepType, sheepType, sheepType, timberType));
+    harvestTilevector->push_back(new HarvestTile(sheepType, sheepType, sheepType, wheatType));
+    harvestTilevector->push_back(new HarvestTile(stoneType, stoneType, stoneType, wheatType));
+    harvestTilevector->push_back(new HarvestTile(stoneType, stoneType, stoneType, sheepType));
+    harvestTilevector->push_back(new HarvestTile(stoneType, stoneType, stoneType, timberType));
+    harvestTilevector->push_back(new HarvestTile(timberType, timberType, timberType, wheatType));
+    harvestTilevector->push_back(new HarvestTile(timberType, timberType, timberType, sheepType));
+    harvestTilevector->push_back(new HarvestTile(timberType, timberType, timberType, stoneType));
+    harvestTilevector->push_back(new HarvestTile(wheatType, wheatType, wheatType, stoneType));
+    harvestTilevector->push_back(new HarvestTile(wheatType, wheatType, wheatType, sheepType));
+    harvestTilevector->push_back(new HarvestTile(wheatType, wheatType, wheatType, timberType));
+
+    // 3. Harvest tiles with 3 types, where 2 nodes are of same type (36 configurations)
+    // 3A. 2 sheep
+    harvestTilevector->push_back(new HarvestTile(sheepType, sheepType, stoneType, timberType));
+    harvestTilevector->push_back(new HarvestTile(sheepType, sheepType, timberType, stoneType));
+    harvestTilevector->push_back(new HarvestTile(sheepType, stoneType, timberType, sheepType));
+    harvestTilevector->push_back(new HarvestTile(sheepType, sheepType, wheatType, timberType));
+    harvestTilevector->push_back(new HarvestTile(sheepType, sheepType, timberType, wheatType));
+    harvestTilevector->push_back(new HarvestTile(sheepType, wheatType, timberType, sheepType));
+    harvestTilevector->push_back(new HarvestTile(sheepType, sheepType, stoneType, wheatType));
+    harvestTilevector->push_back(new HarvestTile(sheepType, sheepType, wheatType, stoneType));
+    harvestTilevector->push_back(new HarvestTile(sheepType, stoneType, wheatType, sheepType));
+    
+    // 3B. 2 stone
+    harvestTilevector->push_back(new HarvestTile(stoneType, stoneType, sheepType, timberType));
+    harvestTilevector->push_back(new HarvestTile(stoneType, stoneType, timberType, sheepType));
+    harvestTilevector->push_back(new HarvestTile(stoneType, sheepType, timberType, stoneType));
+    harvestTilevector->push_back(new HarvestTile(stoneType, stoneType, wheatType, timberType));
+    harvestTilevector->push_back(new HarvestTile(stoneType, stoneType, timberType, wheatType));
+    harvestTilevector->push_back(new HarvestTile(stoneType, timberType, wheatType, stoneType));
+    harvestTilevector->push_back(new HarvestTile(stoneType, stoneType, sheepType, wheatType));
+    harvestTilevector->push_back(new HarvestTile(stoneType, stoneType, wheatType, sheepType));
+    harvestTilevector->push_back(new HarvestTile(stoneType, wheatType, sheepType, stoneType));    
+
+    // 3C. 2 Timber
+    harvestTilevector->push_back(new HarvestTile(timberType, timberType, sheepType, stoneType));
+    harvestTilevector->push_back(new HarvestTile(timberType, timberType, stoneType, sheepType));
+    harvestTilevector->push_back(new HarvestTile(timberType, stoneType, sheepType, timberType));
+    harvestTilevector->push_back(new HarvestTile(timberType, timberType, sheepType, wheatType));
+    harvestTilevector->push_back(new HarvestTile(timberType, timberType, wheatType, sheepType));
+    harvestTilevector->push_back(new HarvestTile(timberType, wheatType, sheepType, timberType));
+    harvestTilevector->push_back(new HarvestTile(timberType, timberType, stoneType, wheatType));
+    harvestTilevector->push_back(new HarvestTile(timberType, timberType, wheatType, stoneType));
+    harvestTilevector->push_back(new HarvestTile(timberType, stoneType, wheatType, timberType));
+
+    // 3D. 2 Wheat
+    harvestTilevector->push_back(new HarvestTile(wheatType, wheatType, sheepType, stoneType));
+    harvestTilevector->push_back(new HarvestTile(wheatType, wheatType, stoneType, sheepType));
+    harvestTilevector->push_back(new HarvestTile(wheatType, sheepType, stoneType, wheatType));
+    harvestTilevector->push_back(new HarvestTile(wheatType, wheatType, stoneType, timberType));
+    harvestTilevector->push_back(new HarvestTile(wheatType, wheatType, timberType, stoneType));
+    harvestTilevector->push_back(new HarvestTile(wheatType, timberType, stoneType, wheatType));
+    harvestTilevector->push_back(new HarvestTile(wheatType, wheatType, sheepType, timberType));
+    harvestTilevector->push_back(new HarvestTile(wheatType, wheatType, timberType, sheepType));
+    harvestTilevector->push_back(new HarvestTile(wheatType, sheepType, timberType, wheatType));
+
     return harvestTilevector;
 }
 
@@ -155,6 +196,15 @@ Resource* Deck::draw(ResourceType resourceType) {
 
 vector<Building*>* Deck::getBuildingDeck() { return buildingDeck; }
 vector<HarvestTile*>* Deck::getHarvestTileDeck() { return harvestTileDeck; }
+
+Hand::Hand() {
+    sheepResourceMarker = new int(0);
+    stoneResourceMarker = new int(0);
+    timberResourceMarker = new int(0);
+    wheatResourceMarker = new int(0);
+    buildings = new vector<Building*>();
+    harvestTiles = new vector<HarvestTile*>();
+}
 
 Hand::Hand(Deck* d, ResourceCounter* rc) {
     deck = d;
@@ -205,3 +255,15 @@ int* Hand::getTimberResourceMarker() { return timberResourceMarker; }
 int* Hand::getWheatResourceMarker() { return wheatResourceMarker; }
 vector<Building*>* Hand::getBuildings() { return buildings; }
 vector<HarvestTile*>* Hand::getHarvestTiles() { return harvestTiles; }
+
+void Hand::setShipmentTile(HarvestTile* st) {
+    shipmentTile = st;
+}
+
+HarvestTile* Hand::getShipmentTile() const {
+    return shipmentTile;
+}
+
+void Hand::setDeck(Deck* d) {
+    deck = d;
+}
