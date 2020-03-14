@@ -8,7 +8,7 @@ int main() {
 	ResourceCounter rc = ResourceCounter(&gb);
 	Player p1 = Player(&d, &rc, &gb);
 	p1.placeHarvestTile(1,0);
-	map<Type, int*> testmap1 = *p1.CalculateResources(1, 0);
+	map<Type, int*> testmap1 = *p1.calculateResources(1, 0);
 	for (auto it = testmap1.cbegin(); it != testmap1.cend(); ++it)
 	{
 		std::cout << it->first << " " << *it->second << endl;
@@ -16,12 +16,12 @@ int main() {
 	
 	
 	cout << "HarvestTiles before: " << p1.getPlayersHand()->getHarvestTiles()->size() << endl;
-	p1.DrawHarvestTile();
+	p1.drawHarvestTile();
 	cout << "HarvestTiles after: " << p1.getPlayersHand()->getHarvestTiles()->size() << endl;
 	cout << "Buildings before: " << p1.getPlayersHand()->getBuildings()->size() << endl;
-	p1.DrawBuilding();
+	p1.drawBuilding();
 	cout << "Buildings after: "  << p1.getPlayersHand()->getBuildings()->size() << endl;
-	map<string, int> testmap = p1.ResourceTracker();
+	map<string, int> testmap = p1.resourceTracker();
 	cout << "ResourceTracker test:" << endl;
 	for (auto it = testmap.cbegin(); it != testmap.cend(); ++it)
 	{
@@ -29,7 +29,7 @@ int main() {
 	}
 	cout << "Before: " ;
 	printf(p1.getVGMap()->getCircle(1, 1)->getStatus() ? "true \n" : "false \n");
-	p1.BuildVillage(1, 1);
+	p1.buildVillage(1, 1);
 	cout << "After: ";
 	printf(p1.getVGMap()->getCircle(1, 1)->getStatus() ? "true \n" : "false \n");
 	

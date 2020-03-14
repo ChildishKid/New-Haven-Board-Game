@@ -9,7 +9,11 @@ Player::Player(Deck* deck, ResourceCounter* rc, GBMaps* gboard) {
 	this->playersHand = new Hand(deck,rc);
 	this->playersVGMap = new VGMap();
 	this->gboard = gboard;
-	}
+}
+
+Player::Player(string n) {
+	this->name = new string(n);
+}
 
 Player::Player(){
 
@@ -52,30 +56,28 @@ void Player::placeHarvestTile(int x, int y){
 	target->setTopRight(GBMaps::Node(chosen->getTopRightNode()));
 	target->setStatus(true);
 
-	}
+}
 
-//need to figure out how to cast from Resource to Building
-void Player::DrawBuilding() {
+void Player::drawBuilding() {
 	Building* drawn = static_cast<Building*>(this->getPlayersHand()->getDeck()->draw(ResourceType::Building));
 	this->getPlayersHand()->getBuildings()->push_back(drawn);
-	}
+}
 
-//need to figure out how to cast from Resource to HarvestTile
-void Player::DrawHarvestTile() {
+void Player::drawHarvestTile() {
 	HarvestTile* drawn = static_cast<HarvestTile*>(this->getPlayersHand()->getDeck()->draw(ResourceType::HarvestTile));
 	this->getPlayersHand()->getHarvestTiles()->push_back(drawn);
-	}
+}
 
-map<string, int> Player::ResourceTracker() {
+map<string, int> Player::resourceTracker() {
 	map<string, int> container;
 	container.insert(pair<string, int>("Sheep", *this->getPlayersHand()->getSheepResourceMarker()));
 	container.insert(pair<string, int>("Stone", *this->getPlayersHand()->getStoneResourceMarker()));
 	container.insert(pair<string, int>("Timber", *this->getPlayersHand()->getTimberResourceMarker()));
 	container.insert(pair<string, int>("Wheat", *this->getPlayersHand()->getWheatResourceMarker()));
 	return container;
-	}
+}
 
-void Player::BuildVillage(int x, int y) {
+void Player::buildVillage(int x, int y) {
 	vector<Building*>* available = this->getPlayersHand()->getBuildings();
 	cout << "Here are Buildings available for you:" << endl << endl;
 	for (int i = 0; i < available->size(); i++) {
@@ -96,8 +98,16 @@ void Player::BuildVillage(int x, int y) {
 	this->getVGMap()->getCircle(x, y)->setBuilding(available->at(option));
 	this->getVGMap()->getCircle(x, y)->setCost(cost);
 	this->getVGMap()->getCircle(x, y)->setStatus(true);
-	}
+}
 
-map<Type, int*>* Player::CalculateResources(int x, int y) {
+map<Type, int*>* Player::calculateResources(int x, int y) {
 	return this->getPlayersHand()->getResourceCounter()->calculateCollectedResources(x, y);
-	}
+}
+
+void Player::setPlayersVGMap(VGMap* map) {
+	playersVGMap = map;
+}
+
+void Player::setPlayersHand(Hand* h) {
+	playersHand = h;
+}
