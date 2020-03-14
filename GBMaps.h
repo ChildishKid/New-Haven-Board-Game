@@ -70,6 +70,7 @@ public:
 	int getHeight();
 	int getWidth();
 	int getNumberOfPlayers();
+	int getNumberOfEmptySlots();
 	Square* getSquare(int x_value, int y_value);
 	bool squareAboveExists(int x_value, int y_value);
 	bool squareBelowExists(int x_value, int y_value);

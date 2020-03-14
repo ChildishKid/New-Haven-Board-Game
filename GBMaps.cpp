@@ -305,23 +305,23 @@ int GBMaps::getNumberOfPlayers() {
 }
 
 bool GBMaps::squareAboveExists(int x_value, int y_value) {
-	return (y_value != getHeight() - 1 || (getNumberOfPlayers() == 4 && 
-		y_value != getHeight() - 2 && (x_value !=0 || x_value != getWidth() - 1)));
+	return (y_value != getHeight() - 1 || (getNumberOfPlayers() == 4 &&
+		y_value != getHeight() - 2 && (x_value != 0 || x_value != getWidth() - 1)));
 };
 
 bool GBMaps::squareBelowExists(int x_value, int y_value) {
-	return (y_value != 0 || (getNumberOfPlayers() == 4 && 
-		y_value != 1 && (x_value !=0 || x_value != getWidth() - 1)));
+	return (y_value != 0 || (getNumberOfPlayers() == 4 &&
+		y_value != 1 && (x_value != 0 || x_value != getWidth() - 1)));
 };
 
 bool GBMaps::squareToLeftExists(int x_value, int y_value) {
-	return (x_value != 0 || (getNumberOfPlayers() == 4 && 
-		x_value != 1 && (y_value !=0 || y_value != getHeight() - 1)));
+	return (x_value != 0 || (getNumberOfPlayers() == 4 &&
+		x_value != 1 && (y_value != 0 || y_value != getHeight() - 1)));
 };
 
 bool GBMaps::squareToRightExists(int x_value, int y_value) {
-	return (x_value != getWidth() - 1 || (getNumberOfPlayers() == 4 && 
-		x_value != getWidth() - 2 && (y_value !=0 || y_value != getHeight() - 1)));
+	return (x_value != getWidth() - 1 || (getNumberOfPlayers() == 4 &&
+		x_value != getWidth() - 2 && (y_value != 0 || y_value != getHeight() - 1)));
 };
 
 void GBMaps::setHeight(int h) {
@@ -334,4 +334,17 @@ void GBMaps::setWidth(int w) {
 
 void GBMaps::setNumberOfPlayers(int players) {
 	*numberOfPlayers = players;
+}
+
+int GBMaps::getNumberOfEmptySlots() {
+	int emptySlots = 0;
+	begin();
+	while (iterate != end()) {
+		if (iterate->second->getStatus == false) {
+			emptySlots++;
+		}
+		iterate++;
+	}
+
+	return emptySlots;
 }

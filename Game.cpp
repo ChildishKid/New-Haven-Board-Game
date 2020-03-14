@@ -115,6 +115,22 @@ int Game::getWheatResourceMarker() const {
     return *wheatResourceMarker;
 }
 
+void Game::setSheepResourceMarker(int s) {
+    *sheepResourceMarker = s;
+}
+
+void Game::setStoneResourceMarker(int s) {
+    *stoneResourceMarker = s;
+}
+
+void Game::setTimberResourceMarker(int s) {
+    *timberResourceMarker = s;
+}
+
+void Game::setWheatResourceMarker(int s) {
+    *wheatResourceMarker = s;
+}
+
 Deck* Game::getDeck() const {
     return deck;
 }
