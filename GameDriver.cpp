@@ -1,11 +1,15 @@
 #include <iostream>
+#include <algorithm>
 #include "Game.h"
+#include "GBMaps.h"
 
 using namespace std;
 
 int main() {
     Game* game = new Game();
 
+    // PART 1
+    /*
     cout << "\n======================== VERIFIYING GAME SETUP ========================" << endl;
     cout << "Verifying the number of players..." << endl;
     cout << "Players: " << game->getPlayers()->size() << endl;
@@ -42,4 +46,18 @@ int main() {
     cout << "There are actually: " << endl;
     cout << game->getDeck()->getHarvestTileDeck()->size() << " harvest tiles left, and " << endl;
     cout << game->getDeck()->getBuildingDeck()->size() << " building tiles left." << endl;
+    system("pause");
+    */
+
+    // PART 2
+    /*
+    // PART 2.1: Player with smallest ID will begin
+    cout << endl << "TURN ORDER:" << endl;
+    for (std::vector<Player*>::iterator it = game->getPlayers()->begin(); it != game->getPlayers()->end(); ++it)
+        cout << "Player " << *(*it)->getName() << " ("  << *(*it)->getId() << ")..." << endl;
+    cout << endl;
+    */
+    system("pause");
+    game->run();
+    system("pause");
 }

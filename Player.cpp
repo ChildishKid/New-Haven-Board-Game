@@ -4,15 +4,15 @@
 
 using namespace std;
 
-
 Player::Player(Deck* deck, ResourceCounter* rc, GBMaps* gboard) {
 	this->playersHand = new Hand(deck,rc);
 	this->playersVGMap = new VGMap();
 	this->gboard = gboard;
 }
 
-Player::Player(string n) {
+Player::Player(string n, int i) {
 	this->name = new string(n);
+	this->id = new int(i);
 }
 
 Player::Player(){
@@ -110,4 +110,8 @@ void Player::setPlayersVGMap(VGMap* map) {
 
 void Player::setPlayersHand(Hand* h) {
 	playersHand = h;
+}
+
+bool Player::sortById(Player* one, Player* two) {
+	return *one->getId() < *two->getId();
 }

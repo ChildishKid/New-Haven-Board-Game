@@ -13,10 +13,11 @@ class Player {
 		VGMap* playersVGMap;
 		GBMaps* gboard;
 		string* name;
+		int* id;
 
 	public:
 		Player();
-		Player(string name);
+		Player(string name, int id);
 		Player(Deck* deck, ResourceCounter* rc, GBMaps* gboard);
 		void placeHarvestTile(int x, int y); //place tile on specific coordinates
 		void drawBuilding();  //add object of Building that has been drawn to players Hand
@@ -31,4 +32,7 @@ class Player {
 		Hand* getPlayersHand() { return playersHand; };
 		GBMaps* getGBoard() { return gboard; };
 		string* getName() { return name; };
+		int* getId() { return id; };
+
+		static bool sortById(Player* one, Player* two);
 };
