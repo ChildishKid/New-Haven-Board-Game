@@ -165,9 +165,8 @@ void Game::displayGameBoard() const {
 		}
 
 		// Create vertical border lines and coordinate system, and display table to console
-		cout << xcoordinates << endl;
 		cout << topBotBorder << endl;
-		for (int i = 0; i < gbMap->getHeight(); i++) {
+		for (int i = gbMap->getHeight() - 1; i >= 0; i--) {
 
 			string row1 = " " + to_string(i) + " |";
 			string row2 = "   |";
@@ -190,10 +189,11 @@ void Game::displayGameBoard() const {
 
 			cout << row1 << endl;
 			cout << row2 << endl;
-			if (i != gbMap->getHeight() - 1)
+			if (i != 0)
 				cout << inBetweenBorder << endl;
 		}
 		cout << topBotBorder << endl;
+		cout << xcoordinates << endl;
 	}
 
 	// Display for board of player size 4
@@ -224,9 +224,8 @@ void Game::displayGameBoard() const {
 		}
 
 		// Create vertical border lines and coordinate system, and display table to console
-		cout << xcoordinates << endl;
 		cout << topBotBorder << endl;
-		for (int i = 0; i < gbMap->getHeight(); i++) {
+		for (int i = gbMap->getHeight() - 1; i >= 0; i--) {
 
 			string row1, row2;
 			if (i == 0 || i == gbMap->getHeight() - 1) {
@@ -265,12 +264,13 @@ void Game::displayGameBoard() const {
 			cout << row1 << endl;
 			cout << row2 << endl;
 
-			if (i == 0 || i == gbMap->getHeight() - 2)
+			if (i == 1 || i == gbMap->getHeight() - 1)
 				cout << secondAndBeforeLastBorder << endl;
-			else if (i != gbMap->getHeight() - 1)
+			else if (i != 0)
 				cout << inBetweenDashes << endl;
 		}
 		cout << topBotBorder << endl;
+		cout << xcoordinates << endl;
 	}
 
 	// Display Resource Track
