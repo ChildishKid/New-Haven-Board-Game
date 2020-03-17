@@ -61,7 +61,6 @@ void VGMap::Circle::addAdj(Circle* obj) {
 	adjacent->push_back(obj);
 }
 
-
 int VGMap::Circle::getX() const {
 	return *x;
 }
@@ -86,8 +85,9 @@ Building* VGMap::Circle::getBuilding() const {
 	return building;
 }
 
-VGMap::VGMap(string player) {
-	playerName = new string(player);
+VGMap::VGMap(string name, int id) {
+	playerName = new string(name);
+	playerID = new int(id);
 	playerBoard = new map<pair<int, int>, Circle*>();
 	width = new int (5);
 	height = new int (6);
@@ -163,7 +163,11 @@ int VGMap::getHeight() {
 string VGMap::getPlayerName() {
 	return *playerName;
 }
-  
+ 
+int VGMap::getPlayerID() {
+	return *playerID;
+}
+
 void VGMap::setupBoard() {
 	
 	for (int i = 0; i < *width; i++) {

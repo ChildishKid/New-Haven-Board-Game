@@ -39,18 +39,20 @@ public:
 		Building* building;
 	};
 
-	VGMap(string player);
+	VGMap(string player, int id);
 	VGMap();
 	~VGMap();
 	Circle* getCircle(int x_value, int y_value) const;
 	int getWidth();
 	int getHeight();
 	string getPlayerName();
+	int getPlayerID();
 	
 
 private:
 	map<pair<int, int>, Circle*>* playerBoard;
 	string* playerName;
+	int* playerID;
 	int* width;
 	int* height;
 	void setupBoard();

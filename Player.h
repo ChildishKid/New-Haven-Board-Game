@@ -13,12 +13,14 @@ class Player {
 		VGMap* playersVGMap;
 		GBMaps* gboard;
 		string* name;
+		int* id;
 
 	public:
 		Player();
-		Player(string name);
+		Player(string name, int id, GBMaps* gboard);
 		Player(Deck* deck, ResourceCounter* rc, GBMaps* gboard);
 		void placeHarvestTile(int x, int y); //place tile on specific coordinates
+		void placeHarvestTile(int x, int y, HarvestTile* tile); //place tile on specific coordinates
 		void drawBuilding();  //add object of Building that has been drawn to players Hand
 		void drawHarvestTile(); //add object of HarvestTile that has been drawn to players Hand
 		map<string, int> resourceTracker(); //return map for all the resources
@@ -31,4 +33,7 @@ class Player {
 		Hand* getPlayersHand() { return playersHand; };
 		GBMaps* getGBoard() { return gboard; };
 		string* getName() { return name; };
+		int* getId() { return id; };
+
+		static bool sortById(Player* one, Player* two);
 };

@@ -8,6 +8,7 @@ void VGMapLoader::save(VGMap* gameboard, string fileName) {
 	ofstream output(fileName);
 
 	output << gameboard->getPlayerName() << endl;
+	output << gameboard->getPlayerID() << endl;
 
 	for (int i = 0; i < gameboard->getWidth(); i++) {
 		for (int j = 0; j < gameboard->getHeight(); j++) {
@@ -30,12 +31,15 @@ VGMap* VGMapLoader::load(string fileName) {
 	
 	try {
 		ifstream inputStream(fileName);
-
 		string input;
+
 		inputStream >> input;
 		string playerName = input;
 
-		VGMap* gameboard = new VGMap(playerName);
+		inputStream >> input;
+		int id = stoi(input);
+
+		VGMap* gameboard = new VGMap(playerName, id);
 
 		for (int i = 0; i < gameboard->getWidth(); i++) {
 			for (int j = 0; j < gameboard->getHeight(); j++) {
