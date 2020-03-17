@@ -10,9 +10,10 @@ Player::Player(Deck* deck, ResourceCounter* rc, GBMaps* gboard) {
 	this->gboard = gboard;
 }
 
-Player::Player(string n, int i) {
+Player::Player(string n, int i, GBMaps* gboard) {
 	this->name = new string(n);
 	this->id = new int(i);
+	this->gboard = gboard;
 }
 
 Player::Player(){
@@ -20,6 +21,7 @@ Player::Player(){
 }
 
 void Player::placeHarvestTile(int x, int y){ 
+	
 	vector<HarvestTile*>* available = this->getPlayersHand()->getHarvestTiles();
 	cout << "Here are Harvest Tiles available for you:" << endl << endl;
 	for (int i = 0; i < available->size(); i++) {
@@ -56,6 +58,16 @@ void Player::placeHarvestTile(int x, int y){
 	target->setTopRight(GBMaps::Node(chosen->getTopRightNode()));
 	target->setStatus(true);
 
+}
+
+void Player::placeHarvestTile(int x, int y, HarvestTile* tile) {
+
+	GBMaps::Square* target = this->getGBoard()->getSquare(x, y);
+	target->setStatus(true);
+	target->getTopLeft()->setType(tile->getTopLeftNode());
+	target->getTopRight()->setType(tile->getTopRightNode());
+	target->getBottomLeft()->setType(tile->getBottomLeftNode());
+	target->getBottomRight()->setType(tile->getBottomRightNode());
 }
 
 void Player::drawBuilding() {

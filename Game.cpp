@@ -49,7 +49,7 @@ void Game::createPlayers() {
 		cin >> name;
 		cout << "Please enter the ID of player " << i + 1 << ": ";
 		cin >> id;
-		Player* player = new Player(name, id);
+		Player* player = new Player(name, id, gbMap);
 
 		cout << "Creating " << name << "'s empty hand..." << endl;
 		Hand* hand = new Hand();
@@ -507,6 +507,40 @@ void Game::pickHarvestTile(Player* player) {
 		}
 	}
 
+	// Give option to rotate it
+	system("CLS");
+	displayGameBoard();
+	displayPlayerHand(player);
+	cout << "Would you like to rotate it clockwise?" << endl;
+	while (true) {
+		try {
+			cout << "(Y/N): ";
+
+			string input;
+			cin.clear();
+			cin >> input;
+
+			if (input != "Y" && input != "N" && input != "y" && input != "n")
+				throw 0;
+
+			if (input == "Y" || input == "y") {
+				player->getPlayersHand()->getHarvestTiles()->at(pick)->rotateTile();
+				throw 1;
+			}
+			else
+				break;
+		}
+		catch (int e) {
+			system("CLS");
+			displayGameBoard();
+			displayPlayerHand(player);
+			if (e == 0)
+				cout << "Error: Invalid input!" << endl;
+			cout << "Would you like to rotate it clockwise?" << endl;
+			continue;
+		}
+	}
+
 	// Decide location to put them in:
 	system("CLS");
 	displayGameBoard();
@@ -515,7 +549,7 @@ void Game::pickHarvestTile(Player* player) {
 		try {
 			// Decide on location to put it on
 			int x, y;
-			cout << endl << "Where would you like to place it?" << endl;
+			cout << "Where would you like to place it?" << endl;
 			cout << "X = ";
 			cin.clear();
 			cin >> x;
@@ -539,18 +573,14 @@ void Game::pickHarvestTile(Player* player) {
 
 			if (gbMap->getSquare(x, y)->getStatus() == true)
 				throw 1;
-
+			
 			GBMaps::Square* square = gbMap->getSquare(x, y);
 			vector<HarvestTile*>::iterator it = player->getPlayersHand()->getHarvestTiles()->begin();
 			for (int i = 0; i < pick; i++)
 				it++;
 			HarvestTile* tile = *it;
-			square->setStatus(true);
-			square->getTopLeft()->setType(tile->getTopLeftNode());
-			square->getTopRight()->setType(tile->getTopRightNode());
-			square->getBottomLeft()->setType(tile->getBottomLeftNode());
-			square->getBottomRight()->setType(tile->getBottomRightNode());
 
+			player->placeHarvestTile(x, y, tile);
 
 			player->getPlayersHand()->getHarvestTiles()->erase(it);
 			break;
