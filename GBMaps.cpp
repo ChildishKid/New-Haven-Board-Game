@@ -339,7 +339,7 @@ void GBMaps::setNumberOfPlayers(int players) {
 int GBMaps::getNumberOfEmptySlots() {
 	
 	int emptySlots = 0;
-	begin();
+	iterate = begin();
 	while (iterate != end()) {
 		if (iterate->second->getStatus() == 0) {
 			emptySlots++;

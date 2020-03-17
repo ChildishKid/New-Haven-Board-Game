@@ -444,7 +444,7 @@ void Game::displayPlayerHand(Player* player) const {
 	cout << topBotBorder << endl << endl;
 }
 
-void Game::pickHarvestTile(Player* player) {
+pair<int,int> Game::pickHarvestTile(Player* player) {
 	// Give option to see village board
 	while (true) {
 		try {
@@ -583,7 +583,7 @@ void Game::pickHarvestTile(Player* player) {
 			player->placeHarvestTile(x, y, tile);
 
 			player->getPlayersHand()->getHarvestTiles()->erase(it);
-			break;
+			return make_pair(x,y);
 
 		}
 		catch (int e) {
@@ -597,6 +597,22 @@ void Game::pickHarvestTile(Player* player) {
 			continue;
 		}
 	}
+}
+
+void Game::calculateResources(Player* player, pair<int,int> p) {
+
+	ResourceCounter rc = ResourceCounter(gbMap);
+	map<Type, int*>* collectedResources = rc.calculateCollectedResources(p.first, p.second);
+	sheepResourceMarker = (*collectedResources)[Type::Sheep];
+	stoneResourceMarker = (*collectedResources)[Type::Stone];
+	timberResourceMarker = (*collectedResources)[Type::Timber];
+	wheatResourceMarker = (*collectedResources)[Type::Wheat];
+
+	cout << "Number of Sheep: " << *sheepResourceMarker << endl;
+	cout << "Number of Stone: " << *stoneResourceMarker << endl;
+	cout << "Number of Timber: " << *timberResourceMarker << endl;
+	cout << "Number of Wheat: " << *wheatResourceMarker << endl;
+
 }
 
 string Game::typePrefix(Type type) const {
@@ -621,7 +637,7 @@ void Game::run() {
 		Player* player = (*it);
 
 		// 1. Place Harvest Tile
-		pickHarvestTile(player);
+		pair<int,int> p = pickHarvestTile(player);
 
 		system("CLS");
 		displayGameBoard();
@@ -629,6 +645,9 @@ void Game::run() {
 		system("pause");
 
 		// 2. Calculate Gathered Resources
+
+		calculateResources(player, p);
+		system("pause");
 
 		// 3. Place Building Tile(s)
 
@@ -643,6 +662,9 @@ void Game::run() {
 		// Draw Harvest Tiles
 
 		it++;
+
+		if (it == players->end())
+			it = players->begin();
 	}
 
 	// 6. Calculate Total Scores
