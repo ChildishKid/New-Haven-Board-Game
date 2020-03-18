@@ -2,18 +2,18 @@
 #include <iostream>
 #include "Score.h"
 
+
 using namespace std;
 
-Player::Player(Deck* deck, ResourceCounter* rc, GBMaps* gboard) {
-	this->playersHand = new Hand(deck,rc);
-	this->playersVGMap = new VGMap();
-	this->gboard = gboard;
-}
 
 Player::Player(string n, int i, GBMaps* gboard) {
 	this->name = new string(n);
 	this->id = new int(i);
 	this->gboard = gboard;
+	this->hasBuilt->insert(pair<Type, bool>(Type::Wheat, false));
+	this->hasBuilt->insert(pair<Type, bool>(Type::Stone, false));
+	this->hasBuilt->insert(pair<Type, bool>(Type::Sheep, false));
+	this->hasBuilt->insert(pair<Type, bool>(Type::Timber, false));
 }
 
 Player::Player(){
@@ -90,6 +90,13 @@ map<string, int> Player::resourceTracker() {
 }
 
 void Player::buildVillage(int x, int y) {
+	while (this->playersVGMap->getCircle(x, y)->getStatus() == true) {
+		cout << "This location is already in use. Please select new one:\n";
+		cout << "X = ";
+		cin >> x;
+		cout << "\nY = ";
+		cin >> y;
+	}
 	vector<Building*>* available = this->getPlayersHand()->getBuildings();
 	cout << "Here are Buildings available for you:" << endl << endl;
 	for (int i = 0; i < available->size(); i++) {
@@ -100,11 +107,18 @@ void Player::buildVillage(int x, int y) {
 	int option;
 	cin >> option;
 
+	while (this->hasBuilt->find(*(available->at(option)->getType()))->second == true) {
+		cout << "This type has been built already. Please select new location adjecent to it:\n";
+		cout << "X = ";
+		cin >> x;
+		cout << "\nY = ";
+		cin >> y;
+	}
 	cout << "Choose your cost:";
 	int cost;
 	cin >> cost;
 	
-	if (cost < *(available->at(option)->getCost())) {
+	if (cost != *(available->at(option)->getCost())) {
 		available->at(option)->setActualCost(&cost);
 	}
 	this->getVGMap()->getCircle(x, y)->setBuilding(available->at(option));

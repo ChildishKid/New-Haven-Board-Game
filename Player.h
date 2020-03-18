@@ -14,6 +14,7 @@ class Player {
 		GBMaps* gboard;
 		string* name;
 		int* id;
+		map<Type, bool>* hasBuilt;
 
 	public:
 		Player();

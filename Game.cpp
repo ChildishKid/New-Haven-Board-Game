@@ -651,6 +651,7 @@ void Game::run() {
 
 		// 3. Place Building Tile(s)
 
+		
 		// 4. Rotation to Share
 
 		// 5. Draw Building Tiles
