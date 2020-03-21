@@ -91,6 +91,7 @@ VGMap::VGMap(string name, int id) {
 	playerBoard = new map<pair<int, int>, Circle*>();
 	width = new int (5);
 	height = new int (6);
+	iterate = playerBoard->begin();
 	setupBoard();
 }
 
@@ -99,6 +100,7 @@ VGMap::VGMap() {
 	playerBoard = new map<pair<int, int>, Circle*>();
 	width = new int(5);
 	height = new int (6);
+	iterate = playerBoard->begin();
 
 	for (int i = 0; i < *width; i++) {
 		for (int j = 0; j < *height; j++) {
@@ -166,6 +168,28 @@ string VGMap::getPlayerName() {
  
 int VGMap::getPlayerID() {
 	return *playerID;
+}
+
+int VGMap::getNumberOfEmptySlots() {
+
+	int emptySlots = 0;
+	iterate = begin();
+	while (iterate != end()) {
+		if (iterate->second->getStatus() == 0) {
+			emptySlots++;
+		}
+		iterate++;
+	}
+
+	return emptySlots;
+}
+
+map<pair<int, int>, VGMap::Circle*>::iterator VGMap::begin() {
+	return (*playerBoard).begin();
+}
+
+map<pair<int, int>, VGMap::Circle*>::iterator VGMap::end() {
+	return (*playerBoard).end();
 }
 
 void VGMap::setupBoard() {

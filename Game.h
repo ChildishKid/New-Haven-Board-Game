@@ -45,4 +45,6 @@ class Game {
         pair<int,int> pickHarvestTile(Player* player);
 
 		void calculateResources(Player* player, pair<int,int> p);
+		void calculateScores();
+		void displayWinner();
 };

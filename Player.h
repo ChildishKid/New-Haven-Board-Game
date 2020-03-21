@@ -14,6 +14,7 @@ class Player {
 		GBMaps* gboard;
 		string* name;
 		int* id;
+		int* finalScore;
 
 	public:
 		Player();
@@ -28,12 +29,14 @@ class Player {
 		map<Type, int*>* calculateResources(int x, int y);
 		void setPlayersVGMap(VGMap* map);
 		void setPlayersHand(Hand* h);
+		void setPlayersScore(int* score);
 
 		VGMap* getVGMap() { return playersVGMap; }
 		Hand* getPlayersHand() { return playersHand; };
 		GBMaps* getGBoard() { return gboard; };
 		string* getName() { return name; };
 		int* getId() { return id; };
+		int* getScore() { return finalScore; };
 
 		static bool sortById(Player* one, Player* two);
 };

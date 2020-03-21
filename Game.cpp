@@ -615,6 +615,91 @@ void Game::calculateResources(Player* player, pair<int,int> p) {
 
 }
 
+void Game::calculateScores() {
+	cout << "===== Final Scores =====" << endl;
+
+	vector<Player*>::iterator it = players->begin();
+
+	for (it = players->begin(); it != players->end(); it++) {
+		Player* player = (*it);
+		Score* count = new Score(player->getVGMap());
+		player->setPlayersScore(new int(count->calculateScore()));
+
+		cout << player->getName() << "'s score: " << player->getScore() << endl;
+
+		delete count;
+	}
+}
+
+void Game::displayWinner() {
+	vector<Player*>::iterator it = players->begin();
+	
+	Player* winner = NULL;
+	vector<Player*> tie;
+
+	for (it = players->begin(); it != players->end(); it++) {
+		Player* player = (*it);
+		if (winner == NULL) {
+			winner = player;
+			continue;
+		}
+
+		if (winner->getScore() < player->getScore()) {
+			winner = player;
+			continue;
+		}
+
+		if (winner->getScore() == player->getScore()) {
+			if (winner->getVGMap()->getNumberOfEmptySlots() > player->getVGMap()->getNumberOfEmptySlots()) {
+				winner = player;
+				continue;
+			}
+			if (winner->getVGMap()->getNumberOfEmptySlots() == player->getVGMap()->getNumberOfEmptySlots()) {
+				if (winner->getPlayersHand()->getBuildings()->size() > player->getPlayersHand()->getBuildings()->size()) {
+					winner = player;
+					continue;
+				}
+				if (winner->getPlayersHand()->getBuildings()->size() == player->getPlayersHand()->getBuildings()->size()) {
+					if (tie.size() > 0) {
+						tie.push_back(player);
+						continue;
+					}
+					tie.push_back(winner);
+					tie.push_back(player);
+					winner = player;
+					continue;
+				}
+
+			}
+
+		}
+
+	}
+
+	if (tie.size() > 0) {
+		if (tie.front()->getScore() == winner->getScore()) {
+			cout << "The Winners are: " << endl;
+
+			vector<Player*>::iterator tieIt = tie.begin();
+
+			for (tieIt = tie.begin(); tieIt != tie.end(); tieIt++) {
+				Player* winners = (*tieIt);
+				cout << winners->getName() << endl;
+			}
+			
+			cout << "Congratulations!" << endl;
+		}
+		else {
+			cout << "The Winner is: " << winner->getName() << "! Congratulations!" << endl;
+		}
+	}
+	else {
+		cout << "The Winner is: " << winner->getName() << "! Congratulations!" << endl;
+	}
+
+
+}
+
 string Game::typePrefix(Type type) const {
 	if (type == Type::Wheat)
 		return "Wh";
@@ -668,6 +753,14 @@ void Game::run() {
 	}
 
 	// 6. Calculate Total Scores
+	system("CLS");
+	calculateScores();
 
 	// 7. Determine Winner
+
+	displayWinner();
+	system("pause");
+
+
+
 }
