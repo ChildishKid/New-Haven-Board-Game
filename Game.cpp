@@ -165,9 +165,8 @@ void Game::displayGameBoard() const {
 		}
 
 		// Create vertical border lines and coordinate system, and display table to console
-		cout << xcoordinates << endl;
 		cout << topBotBorder << endl;
-		for (int i = 0; i < gbMap->getHeight(); i++) {
+		for (int i = gbMap->getHeight() - 1; i >= 0; i--) {
 
 			string row1 = " " + to_string(i) + " |";
 			string row2 = "   |";
@@ -190,10 +189,11 @@ void Game::displayGameBoard() const {
 
 			cout << row1 << endl;
 			cout << row2 << endl;
-			if (i != gbMap->getHeight() - 1)
+			if (i != 0)
 				cout << inBetweenBorder << endl;
 		}
 		cout << topBotBorder << endl;
+		cout << xcoordinates << endl;
 	}
 
 	// Display for board of player size 4
@@ -224,9 +224,8 @@ void Game::displayGameBoard() const {
 		}
 
 		// Create vertical border lines and coordinate system, and display table to console
-		cout << xcoordinates << endl;
 		cout << topBotBorder << endl;
-		for (int i = 0; i < gbMap->getHeight(); i++) {
+		for (int i = gbMap->getHeight() - 1; i >= 0; i--) {
 
 			string row1, row2;
 			if (i == 0 || i == gbMap->getHeight() - 1) {
@@ -265,12 +264,13 @@ void Game::displayGameBoard() const {
 			cout << row1 << endl;
 			cout << row2 << endl;
 
-			if (i == 0 || i == gbMap->getHeight() - 2)
+			if (i == 1 || i == gbMap->getHeight() - 1)
 				cout << secondAndBeforeLastBorder << endl;
-			else if (i != gbMap->getHeight() - 1)
+			else if (i != 0)
 				cout << inBetweenDashes << endl;
 		}
 		cout << topBotBorder << endl;
+		cout << xcoordinates << endl;
 	}
 
 	// Display Resource Track
@@ -615,6 +615,91 @@ void Game::calculateResources(Player* player, pair<int,int> p) {
 
 }
 
+void Game::calculateScores() {
+	cout << "===== Final Scores =====" << endl;
+
+	vector<Player*>::iterator it = players->begin();
+
+	for (it = players->begin(); it != players->end(); it++) {
+		Player* player = (*it);
+		Score* count = new Score(player->getVGMap());
+		player->setPlayersScore(new int(count->calculateScore()));
+
+		cout << player->getName() << "'s score: " << player->getScore() << endl;
+
+		delete count;
+	}
+}
+
+void Game::displayWinner() {
+	vector<Player*>::iterator it = players->begin();
+	
+	Player* winner = NULL;
+	vector<Player*> tie;
+
+	for (it = players->begin(); it != players->end(); it++) {
+		Player* player = (*it);
+		if (winner == NULL) {
+			winner = player;
+			continue;
+		}
+
+		if (winner->getScore() < player->getScore()) {
+			winner = player;
+			continue;
+		}
+
+		if (winner->getScore() == player->getScore()) {
+			if (winner->getVGMap()->getNumberOfEmptySlots() > player->getVGMap()->getNumberOfEmptySlots()) {
+				winner = player;
+				continue;
+			}
+			if (winner->getVGMap()->getNumberOfEmptySlots() == player->getVGMap()->getNumberOfEmptySlots()) {
+				if (winner->getPlayersHand()->getBuildings()->size() > player->getPlayersHand()->getBuildings()->size()) {
+					winner = player;
+					continue;
+				}
+				if (winner->getPlayersHand()->getBuildings()->size() == player->getPlayersHand()->getBuildings()->size()) {
+					if (tie.size() > 0) {
+						tie.push_back(player);
+						continue;
+					}
+					tie.push_back(winner);
+					tie.push_back(player);
+					winner = player;
+					continue;
+				}
+
+			}
+
+		}
+
+	}
+
+	if (tie.size() > 0) {
+		if (tie.front()->getScore() == winner->getScore()) {
+			cout << "The Winners are: " << endl;
+
+			vector<Player*>::iterator tieIt = tie.begin();
+
+			for (tieIt = tie.begin(); tieIt != tie.end(); tieIt++) {
+				Player* winners = (*tieIt);
+				cout << winners->getName() << endl;
+			}
+			
+			cout << "Congratulations!" << endl;
+		}
+		else {
+			cout << "The Winner is: " << winner->getName() << "! Congratulations!" << endl;
+		}
+	}
+	else {
+		cout << "The Winner is: " << winner->getName() << "! Congratulations!" << endl;
+	}
+
+
+}
+
 string Game::typePrefix(Type type) const {
 	if (type == Type::Wheat)
 		return "Wh";
@@ -669,6 +754,14 @@ void Game::run() {
 	}
 
 	// 6. Calculate Total Scores
+	system("CLS");
+	calculateScores();
 
 	// 7. Determine Winner
+
+	displayWinner();
+	system("pause");
+
+
+
 }

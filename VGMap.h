@@ -47,6 +47,11 @@ public:
 	int getHeight();
 	string getPlayerName();
 	int getPlayerID();
+	int getNumberOfEmptySlots();
+
+	map<pair<int, int>, Circle*>::iterator iterate;
+	map<pair<int, int>, Circle*>::iterator begin();
+	map<pair<int, int>, Circle*>::iterator end();
 	
 
 private:

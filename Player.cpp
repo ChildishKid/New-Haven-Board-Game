@@ -138,6 +138,9 @@ void Player::setPlayersHand(Hand* h) {
 	playersHand = h;
 }
 
+void Player::setPlayersScore(int* score) {
+	finalScore = score;
+}
 bool Player::sortById(Player* one, Player* two) {
 	return *one->getId() < *two->getId();
 }
