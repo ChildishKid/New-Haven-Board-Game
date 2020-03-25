@@ -40,6 +40,7 @@ class Game {
         int* wheatResourceMarker;
 
         void displayGameBoard() const;
+        void displayBuidlingPool() const;
         void displayVillageBoard(Player* player) const;
         void displayPlayerHand(Player* player) const;
         pair<int,int> pickHarvestTile(Player* player);

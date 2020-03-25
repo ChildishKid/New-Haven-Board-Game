@@ -106,6 +106,16 @@ void Player::buildVillage(map<Type, int>* resources) {
 		cin >> x;
 		cout << "\nY = ";
 		cin >> y;
+		
+		//check if space exists
+		while (this->playersVGMap->getHeight()<=y || this->playersVGMap->getWidth() <= y) {
+			cout << "This location doesn't exist. Please select new one:\n";
+			cout << "X = ";
+			cin >> x;
+			cout << "\nY = ";
+			cin >> y;
+		}
+
 		//check if space is empty
 		while (this->playersVGMap->getCircle(x, y)->getStatus() == true) {
 			cout << "This location is already in use. Please select new one:\n";
@@ -132,8 +142,9 @@ void Player::buildVillage(map<Type, int>* resources) {
 			cout << "\nY = ";
 			cin >> y;
 		}
-		int cost = -1;
-		while (cost > resources->find(*(available->at(option)->getType()))->second || cost < 1) {
+		bool invalid_cost = true;
+		int cost;
+		do {
 			cout << "Choose your cost:";
 
 			cin >> cost;
@@ -141,11 +152,13 @@ void Player::buildVillage(map<Type, int>* resources) {
 
 			if (cost > resources->find(*(available->at(option)->getType()))->second || cost < 1) {
 				cout << "You don't have enough resources, please try again: \n";
+				
 			}
 			else {
 				resources->find(*(available->at(option)->getType()))->second -= cost;
+				invalid_cost = false;
 			}
-		}
+		} while (invalid_cost);
 		if (cost != *(available->at(option)->getCost())) {
 			available->at(option)->setActualCost(&cost);
 		}

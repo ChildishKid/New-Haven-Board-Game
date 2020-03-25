@@ -282,7 +282,12 @@ void Game::displayGameBoard() const {
 		<< endl << endl;
 
 	// Display Building Pool
-	cout << "   BUILDING POOL: " << endl;
+	displayBuidlingPool();
+}
+
+void Game::displayBuidlingPool() const {
+	// Display Building Pool
+	cout << "   SHARED BUILDING POOL: " << endl;
 
 	string topBotBorder = "   ";
 	for (int i = 0; i < (buildingPool->size() * 6 + buildingPool->size() + 1); i++) {
@@ -308,8 +313,7 @@ void Game::displayGameBoard() const {
 	}
 	cout << row << endl;
 	cout << topBotBorder << endl;
-}
-
+};
 
 void Game::displayVillageBoard(Player* player) const {
 	cout << endl << "====== " << *player->getName() << "'s VILLAGE BOARD ======" << endl;
@@ -415,7 +419,7 @@ void Game::displayPlayerHand(Player* player) const {
 	cout << topBotBorder << endl;
 
 	// Display Building Tiles in hand
-	cout << endl << "   BUILDING POOL: " << endl;
+	cout << endl << "   PERSONAL BUILDING POOL: " << endl;
 
 	topBotBorder = "   ";
 	for (int i = 0; i < (player->getPlayersHand()->getBuildings()->size() * 6 + player->getPlayersHand()->getBuildings()->size() + 1); i++) {
@@ -750,7 +754,7 @@ void Game::run() {
 		//copy of iterator+1
 		auto rotationit = next(it, 1);
 		//rotate while resources still left or until full rotation is done
-		while (getWheatResourceMarker() + getStoneResourceMarker() + getSheepResourceMarker() + getTimberResourceMarker() != 0 || rotationit != it) {
+		while (getWheatResourceMarker() + getStoneResourceMarker() + getSheepResourceMarker() + getTimberResourceMarker() != 0 && rotationit != it) {
 			Player* newplayer = (*rotationit);
 			std::system("CLS");
 			displayVillageBoard(player);
@@ -763,8 +767,8 @@ void Game::run() {
 			displayVillageBoard(player);
 			std::system("pause");
 			rotationit++;
-			if (it == players->end())
-				it = players->begin();
+			if (rotationit == players->end())
+				rotationit = players->begin();
 		}
 
 		// 5. Draw Building Tiles
@@ -781,7 +785,14 @@ void Game::run() {
 
 		// Note: First one must be from Building Pool
 		if (draw_buildings > 0) {
-
+			displayBuidlingPool();
+			int building_chosen;
+			cout << "Choose one of the buildings from the pool" << endl;
+			cin >> building_chosen;
+			player->getPlayersHand()->getBuildings()->push_back(getBuildingPool()->at(building_chosen));
+			auto bpit = getBuildingPool()->begin();
+			advance(bpit, building_chosen);
+			getBuildingPool()->erase(bpit);
 			draw_buildings--;
 		}
 
@@ -792,8 +803,13 @@ void Game::run() {
 		}
 
 		// Place all resources markets to 0
+		setSheepResourceMarker(0);
+		setStoneResourceMarker(0);
+		setTimberResourceMarker(0);
+		setWheatResourceMarker(0);
 
 		// Draw Harvest Tiles
+		player->drawHarvestTile();
 
 		it++;
 
