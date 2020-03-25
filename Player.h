@@ -1,10 +1,10 @@
 #pragma once
 #include <string>
 #include <vector>
-#include <map>
 #include "Resources.h"
 #include "GBMaps.h"
 #include "VGMap.h"
+
 
 
 class Player {
@@ -26,7 +26,7 @@ class Player {
 		void drawBuilding();  //add object of Building that has been drawn to players Hand
 		void drawHarvestTile(); //add object of HarvestTile that has been drawn to players Hand
 		map<string, int> resourceTracker(); //return map for all the resources
-		void buildVillage(int x, int y); //build village on specific coordinates
+		void buildVillage(map<Type, int>* resources); //build village on specific coordinates
 		map<Type, int*>* calculateResources(int x, int y);
 		void setPlayersVGMap(VGMap* map);
 		void setPlayersHand(Hand* h);

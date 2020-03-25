@@ -85,6 +85,16 @@ Building* VGMap::Circle::getBuilding() const {
 	return building;
 }
 
+bool VGMap::Circle::validateCircle(Type build) {
+	vector<Circle*> adj = this->getAdj();
+	for (int i = 0; i < adj.size(); ++i) {
+		if (*(adj.at(i)->getBuilding()->getType()) == build) {
+			return true;
+		}
+	}
+	return false;
+}
+
 VGMap::VGMap(string name, int id) {
 	playerName = new string(name);
 	playerID = new int(id);

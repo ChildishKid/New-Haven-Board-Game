@@ -29,7 +29,7 @@ public:
 		bool getStatus() const;
 		vector<Circle*> getAdj() const;
 		Building* getBuilding() const;
-
+		bool validateCircle(Type build);
 	private: 
 		int* x;
 		int* y;
