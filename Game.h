@@ -44,7 +44,7 @@ class Game {
         void displayVillageBoard(Player* player) const;
         void displayPlayerHand(Player* player) const;
         pair<int,int> pickHarvestTile(Player* player);
-        Building pickBuildingTile(Player* player);
+        Building* pickBuildingTile(Player* player);
 
 		void calculateResources(Player* player, pair<int,int> p);
 		void calculateScores();

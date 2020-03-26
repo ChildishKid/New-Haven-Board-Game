@@ -171,6 +171,18 @@ void Player::buildVillage(map<Type, int>* resources) {
 	}
 }
 
+void Player::buildVillage(int x, int y, int cost, int pick, string option) {
+	
+	getVGMap()->getCircle(x, y)->setBuilding(getPlayersHand()->getBuildings()->at(pick));
+	getVGMap()->getCircle(x, y)->setStatus(true);
+
+	if (option == "Down") {
+			getVGMap()->getCircle(x, y)->getBuilding()->setActualCost(new int(cost));
+	}
+
+	getPlayersHand()->getBuildings()->erase(getPlayersHand()->getBuildings()->begin() + pick);
+}
+
 map<Type, int*>* Player::calculateResources(int x, int y) {
 	return this->getPlayersHand()->getResourceCounter()->calculateCollectedResources(x, y);
 }
