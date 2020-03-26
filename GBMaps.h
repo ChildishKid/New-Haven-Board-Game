@@ -46,7 +46,6 @@ public:
 		int getSize() const;
 		bool getStatus() const;
 
-
 	private:
 		Node * topLeft;
 		Node* topRight;
@@ -88,4 +87,5 @@ private:
 	int* numberOfPlayers;
 	void setUpBoard();
 	void setUpAdjacencies();
+	void placeInitialResources(int x_value, int y_value);
 };

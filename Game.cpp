@@ -30,13 +30,16 @@ void Game::setupGBMap() {
 
 	cout << "Setting up the correct GBMap..." << endl;
 	if (numOfPlayers == 2) {
-		Game::gbMap = GBMapLoader::load("TwoPlayersGBMap.txt");
+		// Game::gbMap = GBMapLoader::load("TwoPlayersGBMap.txt");
+		gbMap = new GBMaps(2);
 	}
 	else  if (numOfPlayers == 3) {
-		Game::gbMap = GBMapLoader::load("ThreePlayersGBMap.txt");
+		// Game::gbMap = GBMapLoader::load("ThreePlayersGBMap.txt");
+		gbMap = new GBMaps(3);
 	}
 	else {
-		Game::gbMap = GBMapLoader::load("FourPlayersGBMap.txt");
+		// Game::gbMap = GBMapLoader::load("FourPlayersGBMap.txt");
+		gbMap = new GBMaps(4);
 	}
 };
 
@@ -335,11 +338,10 @@ void Game::displayVillageBoard(Player* player) const {
 	}
 
 	// Create vertical border lines and coordinate std::system, and display table to console
-	cout << xcoordinates << endl;
 	cout << topBotBorder << endl;
 	for (int i = 0; i < vgMap->getHeight(); i++) {
 
-		string row1 = " " + to_string(i) + " |";
+		string row1 = " " + to_string(vgMap->getHeight() - 1 - i) + " |";
 
 		for (int j = 0; j < vgMap->getWidth(); j++) {
 
@@ -372,6 +374,7 @@ void Game::displayVillageBoard(Player* player) const {
 			cout << inBetweenBorder << endl;
 	}
 	cout << topBotBorder << endl;
+	cout << xcoordinates << endl;
 }
 
 void Game::displayPlayerHand(Player* player) const {
@@ -604,6 +607,46 @@ pair<int,int> Game::pickHarvestTile(Player* player) {
 	}
 }
 
+Building Game::pickBuildingTile(Player* player) {
+	// Give option to see village board
+		while (true) {
+			try {
+				std::system("CLS");
+				displayGameBoard();
+				displayPlayerHand(player);
+
+				cout << "What would you like to do?" << endl;
+				cout << "\t1- See Village Board." << endl;
+				cout << "\t2- Place Harvest Tile." << endl;
+				cout << "Option: ";
+
+				int input;
+				cin.clear();
+				cin >> input;
+
+				if (input != 1 && input != 2)
+					throw 0;
+
+				if (input == 1) {
+					std::system("CLS");
+					displayVillageBoard(player);
+					displayPlayerHand(player);
+					std::system("pause");
+					continue;
+				}
+
+				break;
+			}
+			catch (int e) {
+				continue;
+			}
+		}
+
+	// Determine if enough resources to build anything
+	vector<Building*>* buildings = player->getPlayersHand()->getBuildings();
+
+}
+
 void Game::calculateResources(Player* player, pair<int,int> p) {
 
 	ResourceCounter rc = ResourceCounter(gbMap);
@@ -612,12 +655,6 @@ void Game::calculateResources(Player* player, pair<int,int> p) {
 	stoneResourceMarker = (*collectedResources)[Type::Stone];
 	timberResourceMarker = (*collectedResources)[Type::Timber];
 	wheatResourceMarker = (*collectedResources)[Type::Wheat];
-
-	cout << "Number of Sheep: " << *sheepResourceMarker << endl;
-	cout << "Number of Stone: " << *stoneResourceMarker << endl;
-	cout << "Number of Timber: " << *timberResourceMarker << endl;
-	cout << "Number of Wheat: " << *wheatResourceMarker << endl;
-
 }
 
 void Game::calculateScores() {
@@ -727,17 +764,13 @@ void Game::run() {
 		Player* player = (*it);
 
 		// 1. Place Harvest Tile
-		pair<int,int> p = pickHarvestTile(player);
+		pair<int,int> harvestTile = pickHarvestTile(player);
 
+		// 2. Calculate Gathered Resources
+		calculateResources(player, harvestTile);
 		std::system("CLS");
 		displayGameBoard();
 		displayPlayerHand(player);
-		std::system("pause");
-
-		// 2. Calculate Gathered Resources
-
-		calculateResources(player, p);
-		std::system("pause");
 
 		// 3. Place Building
 		displayVillageBoard(player);
@@ -751,7 +784,7 @@ void Game::run() {
 		std::system("pause");
 		
 		// 4. Rotation to Share
-		//copy of iterator+1
+		// copy of iterator+1
 		auto rotationit = next(it, 1);
 		//rotate while resources still left or until full rotation is done
 		while (getWheatResourceMarker() + getStoneResourceMarker() + getSheepResourceMarker() + getTimberResourceMarker() != 0 && rotationit != it) {
