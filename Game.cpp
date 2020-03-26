@@ -15,6 +15,7 @@ Game::Game() {
 	initializeBuildingPool();
 	createPlayers();
 	initializeResources();
+	shipmentTile = false;
 	sort(players->begin(), players->end(), Player::sortById);
 };
 
@@ -382,7 +383,11 @@ void Game::displayPlayerHand(Player* player) const {
 	cout << endl << "====== " << *player->getName() << "'s HAND ======" << endl;
 
 	// Display Harvest Tiles in hand
-	cout << endl << "   HARVEST TILES: " << endl;
+
+	if (player->getPlayersHand()->getShipmentTile() != NULL)
+		cout << endl << "   HARVEST TILES: (+SHIPMENT TILE)" << endl;
+	else
+		cout << endl << "   HARVEST TILES: " << endl;
 
 	string topBotBorder = "   ";
 	string inBetweenBorder = "   ";
@@ -460,16 +465,22 @@ pair<int, int> Game::pickHarvestTile(Player* player) {
 	displayGameBoard();
 	displayPlayerHand(player);
 	displayVillageBoard(player);
-	cout << "Which harvest tile would you like to pick?" << endl;
+
 	int pick;
 	while (true) {
 		try {
+			if (player->getPlayersHand()->getShipmentTile() != NULL)
+				cout << "Which harvest tile would you like to pick? (Enter 99 to use Shipment Tile)" << endl;
+			else
+				cout << "Which harvest tile would you like to pick?" << endl;
 			cout << "Option: ";
 
 			cin.clear();
 			cin >> pick;
 
-			if (cin.fail() || pick < 0 || pick >= player->getPlayersHand()->getHarvestTiles()->size())
+
+			if (cin.fail() || pick < 0 || (pick >= player->getPlayersHand()->getHarvestTiles()->size() && pick != 99)
+				|| (player->getPlayersHand()->getShipmentTile() == NULL && pick == 99))
 				throw 0;
 
 			break;
@@ -478,109 +489,319 @@ pair<int, int> Game::pickHarvestTile(Player* player) {
 			std::system("CLS");
 			displayGameBoard();
 			displayPlayerHand(player);
-			cout << "Error: Out of range or invalid input!" << endl;
-			cout << "Which harvest tile would you like to pick?" << endl;
-			continue;
-		}
-	}
-
-	// Give option to rotate it
-	std::system("CLS");
-	displayGameBoard();
-	displayPlayerHand(player);
-	displayVillageBoard(player);
-	cout << "Would you like to rotate it clockwise?" << endl;
-	while (true) {
-		try {
-			cout << "(Y/N): ";
-
-			string input;
-			cin.clear();
-			cin >> input;
-
-			if (cin.fail() || input != "Y" && input != "N" && input != "y" && input != "n")
-				throw 0;
-
-			if (input == "Y" || input == "y") {
-				player->getPlayersHand()->getHarvestTiles()->at(pick)->rotateTile();
-				throw 1;
-			}
-			else
-				break;
-		}
-		catch (int e) {
-			std::system("CLS");
-			displayGameBoard();
-			displayPlayerHand(player);
 			displayVillageBoard(player);
-			if (e == 0)
-				cout << "Error: Invalid input!" << endl;
-			cout << "Would you like to rotate it clockwise?" << endl;
+			cout << "Error: Out of range or invalid input!" << endl;
 			continue;
 		}
 	}
 
-	// Decide location to put them in:
-	std::system("CLS");
-	displayGameBoard();
-	displayPlayerHand(player);
-	displayVillageBoard(player);
-	while (true) {
-		try {
-			// Decide on location to put it on
-			int x, y;
-			cout << "Where would you like to place it?" << endl;
-			cout << "X = ";
-			cin.clear();
-			cin >> x;
-			if (cin.fail() || x < 0 || x >= gbMap->getWidth())
-				throw 0;
+	if (pick != 99) {
+		// Give option to rotate it
+		std::system("CLS");
+		displayGameBoard();
+		displayPlayerHand(player);
+		displayVillageBoard(player);
+		cout << "Would you like to rotate it clockwise?" << endl;
+		while (true) {
+			try {
+				cout << "(Y/N): ";
 
-			cout << "Y = ";
-			cin.clear();
-			cin >> y;
-			if (cin.fail() || y < 0 || y >= gbMap->getHeight())
-				throw 0;
+				string input;
+				cin.clear();
+				cin >> input;
 
-			if (gbMap->getNumberOfPlayers() == 4) {
-				if ((x == 0 && y == 0)
-					|| (x == 0 && y == gbMap->getWidth() - 1)
-					|| (x == gbMap->getHeight() - 1 && y == 0)
-					|| (x == gbMap->getHeight() - 1 && y == gbMap->getWidth() - 1)) {
+				if (cin.fail() || input != "Y" && input != "N" && input != "y" && input != "n")
+					throw 0;
+
+				if (input == "Y" || input == "y") {
+					player->getPlayersHand()->getHarvestTiles()->at(pick)->rotateTile();
 					throw 1;
 				}
+				else
+					break;
 			}
-
-			if (gbMap->getSquare(x, y)->getStatus() == true)
-				throw 1;
-
-			GBMaps::Square* square = gbMap->getSquare(x, y);
-			vector<HarvestTile*>::iterator it = player->getPlayersHand()->getHarvestTiles()->begin();
-			for (int i = 0; i < pick; i++)
-				it++;
-			HarvestTile* tile = *it;
-
-			player->placeHarvestTile(x, y, tile);
-
-			player->getPlayersHand()->getHarvestTiles()->erase(it);
-			return make_pair(x, y);
-
+			catch (int e) {
+				std::system("CLS");
+				displayGameBoard();
+				displayPlayerHand(player);
+				displayVillageBoard(player);
+				if (e == 0)
+					cout << "Error: Invalid input!" << endl;
+				cout << "Would you like to rotate it clockwise?" << endl;
+				continue;
+			}
 		}
-		catch (int e) {
-			std::system("CLS");
-			displayGameBoard();
-			displayPlayerHand(player);
-			displayVillageBoard(player);
-			if (e == 0)
-				cout << "Error: Out of range or invalid input!" << endl;
-			else if (e == 1)
-				cout << "Error: Tile cannot be placed at specified location!" << endl;
-			continue;
+
+		// Decide location to put them in:
+		std::system("CLS");
+		displayGameBoard();
+		displayPlayerHand(player);
+		displayVillageBoard(player);
+		while (true) {
+			try {
+				// Decide on location to put it on
+				int x, y;
+				cout << "Where would you like to place it?" << endl;
+				cout << "X = ";
+				cin.clear();
+				cin >> x;
+				if (cin.fail() || x < 0 || x >= gbMap->getWidth())
+					throw 0;
+
+				cout << "Y = ";
+				cin.clear();
+				cin >> y;
+				if (cin.fail() || y < 0 || y >= gbMap->getHeight())
+					throw 0;
+
+				if (gbMap->getNumberOfPlayers() == 4) {
+					if ((x == 0 && y == 0)
+						|| (x == 0 && y == gbMap->getWidth() - 1)
+						|| (x == gbMap->getHeight() - 1 && y == 0)
+						|| (x == gbMap->getHeight() - 1 && y == gbMap->getWidth() - 1)) {
+						throw 1;
+					}
+				}
+
+				if (gbMap->getSquare(x, y)->getStatus() == true)
+					throw 1;
+
+				GBMaps::Square* square = gbMap->getSquare(x, y);
+				vector<HarvestTile*>::iterator it = player->getPlayersHand()->getHarvestTiles()->begin();
+				for (int i = 0; i < pick; i++)
+					it++;
+				HarvestTile* tile = *it;
+
+				player->placeHarvestTile(x, y, tile);
+
+				player->getPlayersHand()->getHarvestTiles()->erase(it);
+				return make_pair(x, y);
+
+			}
+			catch (int e) {
+				std::system("CLS");
+				displayGameBoard();
+				displayPlayerHand(player);
+				displayVillageBoard(player);
+				if (e == 0)
+					cout << "Error: Out of range or invalid input!" << endl;
+				else if (e == 1)
+					cout << "Error: Tile cannot be placed at specified location!" << endl;
+				continue;
+			}
+		}
+	}
+	else {
+		// Choose four types:
+		Type *TL, *TR, *BL, *BR;
+
+		std::system("CLS");
+		displayGameBoard();
+		displayPlayerHand(player);
+		displayVillageBoard(player);
+		while (true) {
+			try {
+				cout << "Pick Top Left Resource: (Sheep/Stone/Timber/Wheat)" << endl;
+				cout << "Option: ";
+
+				string input;
+				cin.clear();
+				cin >> input;
+
+				if (cin.fail() || (input != "Sheep" && input != "Stone" && input != "Timber" && input != "Wheat"))
+					throw 0;
+
+				if (input == "Sheep")
+					TL = new Type(Type::Sheep);
+				else if (input == "Stone")
+					TL = new Type(Type::Stone);
+				else if (input == "Timber")
+					TL = new Type(Type::Timber);
+				else
+					TL = new Type(Type::Wheat);
+
+				break;
+			}
+			catch (int e) {
+				std::system("CLS");
+				displayGameBoard();
+				displayPlayerHand(player);
+				displayVillageBoard(player);
+				if (e == 0)
+					cout << "Error: Invalid input!" << endl;
+				continue;
+			}
+		}
+
+		std::system("CLS");
+		displayGameBoard();
+		displayPlayerHand(player);
+		displayVillageBoard(player);
+		while (true) {
+			try {
+				cout << "Pick Top Right Resource: (Sheep/Stone/Timber/Wheat)" << endl;
+				cout << "Option: ";
+
+				string input;
+				cin.clear();
+				cin >> input;
+
+				if (cin.fail() || (input != "Sheep" && input != "Stone" && input != "Timber" && input != "Wheat"))
+					throw 0;
+
+				if (input == "Sheep")
+					TR = new Type(Type::Sheep);
+				else if (input == "Stone")
+					TR = new Type(Type::Stone);
+				else if (input == "Timber")
+					TR = new Type(Type::Timber);
+				else
+					TR = new Type(Type::Wheat);
+
+				break;
+			}
+			catch (int e) {
+				std::system("CLS");
+				displayGameBoard();
+				displayPlayerHand(player);
+				displayVillageBoard(player);
+				if (e == 0)
+					cout << "Error: Invalid input!" << endl;
+				continue;
+			}
+		}
+
+		std::system("CLS");
+		displayGameBoard();
+		displayPlayerHand(player);
+		displayVillageBoard(player);
+		while (true) {
+			try {
+				cout << "Pick Bottom Left Resource: (Sheep/Stone/Timber/Wheat)" << endl;
+				cout << "Option: ";
+
+				string input;
+				cin.clear();
+				cin >> input;
+
+				if (cin.fail() || (input != "Sheep" && input != "Stone" && input != "Timber" && input != "Wheat"))
+					throw 0;
+
+				if (input == "Sheep")
+					BL = new Type(Type::Sheep);
+				else if (input == "Stone")
+					BL = new Type(Type::Stone);
+				else if (input == "Timber")
+					BL = new Type(Type::Timber);
+				else
+					BL = new Type(Type::Wheat);
+
+				break;
+			}
+			catch (int e) {
+				std::system("CLS");
+				displayGameBoard();
+				displayPlayerHand(player);
+				displayVillageBoard(player);
+				if (e == 0)
+					cout << "Error: Invalid input!" << endl;
+				continue;
+			}
+		}
+
+		std::system("CLS");
+		displayGameBoard();
+		displayPlayerHand(player);
+		displayVillageBoard(player);
+		while (true) {
+			try {
+				cout << "Pick Bottom Right Resource: (Sheep/Stone/Timber/Wheat)" << endl;
+				cout << "Option: ";
+
+				string input;
+				cin.clear();
+				cin >> input;
+
+				if (cin.fail() || (input != "Sheep" && input != "Stone" && input != "Timber" && input != "Wheat"))
+					throw 0;
+
+				if (input == "Sheep")
+					BR = new Type(Type::Sheep);
+				else if (input == "Stone")
+					BR = new Type(Type::Stone);
+				else if (input == "Timber")
+					BR = new Type(Type::Timber);
+				else
+					BR = new Type(Type::Wheat);
+
+				break;
+			}
+			catch (int e) {
+				std::system("CLS");
+				displayGameBoard();
+				displayPlayerHand(player);
+				displayVillageBoard(player);
+				if (e == 0)
+					cout << "Error: Invalid input!" << endl;
+				continue;
+			}
+		}
+
+		// Decide location to put them in:
+		std::system("CLS");
+		displayGameBoard();
+		displayPlayerHand(player);
+		displayVillageBoard(player);
+		while (true) {
+			try {
+				// Decide on location to put it on
+				int x, y;
+				cout << "Where would you like to place it?" << endl;
+				cout << "X = ";
+				cin.clear();
+				cin >> x;
+				if (cin.fail() || x < 0 || x >= gbMap->getWidth())
+					throw 0;
+
+				cout << "Y = ";
+				cin.clear();
+				cin >> y;
+				if (cin.fail() || y < 0 || y >= gbMap->getHeight())
+					throw 0;
+
+				if (gbMap->getNumberOfPlayers() == 4) {
+					if ((x == 0 && y == 0)
+						|| (x == 0 && y == gbMap->getWidth() - 1)
+						|| (x == gbMap->getHeight() - 1 && y == 0)
+						|| (x == gbMap->getHeight() - 1 && y == gbMap->getWidth() - 1)) {
+						throw 1;
+					}
+				}
+
+				if (gbMap->getSquare(x, y)->getStatus() == true)
+					throw 1;
+
+				player->placeHarvestTile(x, y, new HarvestTile(TL, TR, BL, BR));
+				shipmentTile = true;
+				return make_pair(x, y);
+
+			}
+			catch (int e) {
+				std::system("CLS");
+				displayGameBoard();
+				displayPlayerHand(player);
+				displayVillageBoard(player);
+				if (e == 0)
+					cout << "Error: Out of range or invalid input!" << endl;
+				else if (e == 1)
+					cout << "Error: Tile cannot be placed at specified location!" << endl;
+				continue;
+			}
 		}
 	}
 }
 
-Building* Game::pickBuildingTile(Player* player) {
+bool Game::pickBuildingTile(Player* player) {
 
 	// Determine if enough resources to build anything
 	std::system("CLS");
@@ -736,13 +957,13 @@ loop:
 						else
 							*timberResourceMarker -= cost;
 
-						return player->getVGMap()->getCircle(x, y)->getBuilding();
+						return true;
 					}
 				}
 
 			}
 			else
-				return NULL;
+				return false;
 		}
 		catch (int e) {
 			std::system("CLS");
@@ -895,8 +1116,7 @@ void Game::run() {
 		vector<Player*>::iterator sharing = it;
 		int count = 0;
 		while (count != players->size()) {
-			Building* placed = pickBuildingTile((*sharing));
-			if (placed == NULL) {
+			if (!pickBuildingTile(*sharing)) {
 				sharing++;
 				if (sharing == players->end())
 					sharing = players->begin();
@@ -979,6 +1199,17 @@ void Game::run() {
 
 		// Draw Harvest Tiles
 		player->drawHarvestTile();
+
+		// Check to see if shipment tile has been used
+		if (shipmentTile) {
+			shipmentTile = false;
+			gbMap->getSquare(harvestTile.first, harvestTile.second)->setBottomLeft(player->getPlayersHand()->getShipmentTile()->getBottomLeftNode());
+			gbMap->getSquare(harvestTile.first, harvestTile.second)->setBottomRight(player->getPlayersHand()->getShipmentTile()->getBottomRightNode());
+			gbMap->getSquare(harvestTile.first, harvestTile.second)->setTopLeft(player->getPlayersHand()->getShipmentTile()->getTopLeftNode());
+			gbMap->getSquare(harvestTile.first, harvestTile.second)->setTopRight(player->getPlayersHand()->getShipmentTile()->getTopRightNode());
+			delete(player->getPlayersHand()->getShipmentTile());
+			player->getPlayersHand()->setShipmentTile(NULL);
+		}
 
 		it++;
 
