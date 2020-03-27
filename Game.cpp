@@ -31,16 +31,16 @@ void Game::setupGBMap() {
 
 	cout << "Setting up the correct GBMap..." << endl;
 	if (numOfPlayers == 2) {
-		// Game::gbMap = GBMapLoader::load("TwoPlayersGBMap.txt");
-		gbMap = new GBMaps(2);
+		 Game::gbMap = GBMapLoader::load("TwoPlayersGBMap.txt");
+		//gbMap = new GBMaps(2);
 	}
 	else  if (numOfPlayers == 3) {
-		// Game::gbMap = GBMapLoader::load("ThreePlayersGBMap.txt");
-		gbMap = new GBMaps(3);
+		 Game::gbMap = GBMapLoader::load("ThreePlayersGBMap.txt");
+		//gbMap = new GBMaps(3);
 	}
 	else {
-		// Game::gbMap = GBMapLoader::load("FourPlayersGBMap.txt");
-		gbMap = new GBMaps(4);
+		 Game::gbMap = GBMapLoader::load("FourPlayersGBMap.txt");
+		//gbMap = new GBMaps(4);
 	}
 };
 
