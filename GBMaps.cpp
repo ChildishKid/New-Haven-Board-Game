@@ -365,23 +365,23 @@ void GBMaps::placeInitialResources(int x_value, int y_value) {
 	(*gameBoard)[{x_value, y_value}]->setTopLeft(new Type(Type::Stone));
 	(*gameBoard)[{x_value, y_value}]->setTopRight(new Type(Type::Sheep));
 	(*gameBoard)[{x_value, y_value}]->setBottomLeft(new Type(Type::Timber));
-	(*gameBoard)[{x_value, y_value}]->setBottomLeft(new Type(Type::Timber));
+	(*gameBoard)[{x_value, y_value}]->setBottomRight(new Type(Type::Timber));
 
 	(*gameBoard)[{x_value + 4, y_value}]->setStatus(true);
 	(*gameBoard)[{x_value + 4, y_value}]->setTopLeft(new Type(Type::Wheat));
 	(*gameBoard)[{x_value + 4, y_value}]->setTopRight(new Type(Type::Sheep));
 	(*gameBoard)[{x_value + 4, y_value}]->setBottomLeft(new Type(Type::Wheat));
-	(*gameBoard)[{x_value + 4, y_value}]->setBottomLeft(new Type(Type::Timber));
+	(*gameBoard)[{x_value + 4, y_value}]->setBottomRight(new Type(Type::Timber));
 
 	(*gameBoard)[{x_value, y_value + 4}]->setStatus(true);
 	(*gameBoard)[{x_value, y_value + 4}]->setTopLeft(new Type(Type::Sheep));
 	(*gameBoard)[{x_value, y_value + 4}]->setTopRight(new Type(Type::Stone));
 	(*gameBoard)[{x_value, y_value + 4}]->setBottomLeft(new Type(Type::Sheep));
-	(*gameBoard)[{x_value, y_value + 4}]->setBottomLeft(new Type(Type::Wheat));
+	(*gameBoard)[{x_value, y_value + 4}]->setBottomRight(new Type(Type::Wheat));
 
 	(*gameBoard)[{x_value + 4, y_value + 4}]->setStatus(true);
 	(*gameBoard)[{x_value + 4, y_value + 4}]->setTopLeft(new Type(Type::Stone));
 	(*gameBoard)[{x_value + 4, y_value + 4}]->setTopRight(new Type(Type::Stone));
 	(*gameBoard)[{x_value + 4, y_value + 4}]->setBottomLeft(new Type(Type::Timber));
-	(*gameBoard)[{x_value + 4, y_value + 4}]->setBottomLeft(new Type(Type::Wheat));
+	(*gameBoard)[{x_value + 4, y_value + 4}]->setBottomRight(new Type(Type::Wheat));
 }
