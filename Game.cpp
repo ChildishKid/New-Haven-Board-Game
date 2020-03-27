@@ -796,7 +796,16 @@ loop:
 					else {
 						player->buildVillage(x, y, cost, pick, option);
 
-						return player->getVGMap()->getCircle(x, y)->getBuilding();
+						if (resourceType == Type::Sheep)
+							*sheepResourceMarker -= cost;
+						else if (resourceType == Type::Stone)
+							*stoneResourceMarker -= cost;
+						else if (resourceType == Type::Wheat)
+							*wheatResourceMarker -= cost;
+						else
+							*timberResourceMarker -= cost;
+
+						return true;
 					}
 				}
 				else if (option == "Up") {
@@ -1095,6 +1104,11 @@ void Game::run() {
 			gbMap->getSquare(harvestTile.first, harvestTile.second)->setTopRight(player->getPlayersHand()->getShipmentTile()->getTopRightNode());
 			delete(player->getPlayersHand()->getShipmentTile());
 			player->getPlayersHand()->setShipmentTile(NULL);
+		}
+		
+		// Replenish shared building pool
+		while (buildingPool->size() != 5) {
+			buildingPool->push_back(static_cast<Building*>(deck->draw(ResourceType::Building)));
 		}
 
 		it++;
