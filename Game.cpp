@@ -592,8 +592,8 @@ pair<int, int> Game::pickHarvestTile(Player* player) {
 		}
 	}
 	else {
-		// Choose four types:
-		Type *TL, *TR, *BL, *BR;
+		// Choose types:
+		Type* type;
 
 		std::system("CLS");
 		displayGameBoard();
@@ -601,7 +601,7 @@ pair<int, int> Game::pickHarvestTile(Player* player) {
 		displayVillageBoard(player);
 		while (true) {
 			try {
-				cout << "Pick Top Left Resource: (Sheep/Stone/Timber/Wheat)" << endl;
+				cout << "Pick Resource: (Sheep/Stone/Timber/Wheat)" << endl;
 				cout << "Option: ";
 
 				string input;
@@ -612,127 +612,13 @@ pair<int, int> Game::pickHarvestTile(Player* player) {
 					throw 0;
 
 				if (input == "Sheep")
-					TL = new Type(Type::Sheep);
+					type = new Type(Type::Sheep);
 				else if (input == "Stone")
-					TL = new Type(Type::Stone);
+					type = new Type(Type::Stone);
 				else if (input == "Timber")
-					TL = new Type(Type::Timber);
+					type = new Type(Type::Timber);
 				else
-					TL = new Type(Type::Wheat);
-
-				break;
-			}
-			catch (int e) {
-				std::system("CLS");
-				displayGameBoard();
-				displayPlayerHand(player);
-				displayVillageBoard(player);
-				if (e == 0)
-					cout << "Error: Invalid input!" << endl;
-				continue;
-			}
-		}
-
-		std::system("CLS");
-		displayGameBoard();
-		displayPlayerHand(player);
-		displayVillageBoard(player);
-		while (true) {
-			try {
-				cout << "Pick Top Right Resource: (Sheep/Stone/Timber/Wheat)" << endl;
-				cout << "Option: ";
-
-				string input;
-				cin.clear();
-				cin >> input;
-
-				if (cin.fail() || (input != "Sheep" && input != "Stone" && input != "Timber" && input != "Wheat"))
-					throw 0;
-
-				if (input == "Sheep")
-					TR = new Type(Type::Sheep);
-				else if (input == "Stone")
-					TR = new Type(Type::Stone);
-				else if (input == "Timber")
-					TR = new Type(Type::Timber);
-				else
-					TR = new Type(Type::Wheat);
-
-				break;
-			}
-			catch (int e) {
-				std::system("CLS");
-				displayGameBoard();
-				displayPlayerHand(player);
-				displayVillageBoard(player);
-				if (e == 0)
-					cout << "Error: Invalid input!" << endl;
-				continue;
-			}
-		}
-
-		std::system("CLS");
-		displayGameBoard();
-		displayPlayerHand(player);
-		displayVillageBoard(player);
-		while (true) {
-			try {
-				cout << "Pick Bottom Left Resource: (Sheep/Stone/Timber/Wheat)" << endl;
-				cout << "Option: ";
-
-				string input;
-				cin.clear();
-				cin >> input;
-
-				if (cin.fail() || (input != "Sheep" && input != "Stone" && input != "Timber" && input != "Wheat"))
-					throw 0;
-
-				if (input == "Sheep")
-					BL = new Type(Type::Sheep);
-				else if (input == "Stone")
-					BL = new Type(Type::Stone);
-				else if (input == "Timber")
-					BL = new Type(Type::Timber);
-				else
-					BL = new Type(Type::Wheat);
-
-				break;
-			}
-			catch (int e) {
-				std::system("CLS");
-				displayGameBoard();
-				displayPlayerHand(player);
-				displayVillageBoard(player);
-				if (e == 0)
-					cout << "Error: Invalid input!" << endl;
-				continue;
-			}
-		}
-
-		std::system("CLS");
-		displayGameBoard();
-		displayPlayerHand(player);
-		displayVillageBoard(player);
-		while (true) {
-			try {
-				cout << "Pick Bottom Right Resource: (Sheep/Stone/Timber/Wheat)" << endl;
-				cout << "Option: ";
-
-				string input;
-				cin.clear();
-				cin >> input;
-
-				if (cin.fail() || (input != "Sheep" && input != "Stone" && input != "Timber" && input != "Wheat"))
-					throw 0;
-
-				if (input == "Sheep")
-					BR = new Type(Type::Sheep);
-				else if (input == "Stone")
-					BR = new Type(Type::Stone);
-				else if (input == "Timber")
-					BR = new Type(Type::Timber);
-				else
-					BR = new Type(Type::Wheat);
+					type = new Type(Type::Wheat);
 
 				break;
 			}
@@ -781,7 +667,7 @@ pair<int, int> Game::pickHarvestTile(Player* player) {
 				if (gbMap->getSquare(x, y)->getStatus() == true)
 					throw 1;
 
-				player->placeHarvestTile(x, y, new HarvestTile(TL, TR, BL, BR));
+				player->placeHarvestTile(x, y, new HarvestTile(type, type, type, type));
 				shipmentTile = true;
 				return make_pair(x, y);
 
