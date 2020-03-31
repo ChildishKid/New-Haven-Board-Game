@@ -38,9 +38,16 @@ class Game {
         int* stoneResourceMarker;
         int* timberResourceMarker;
         int* wheatResourceMarker;
+        bool shipmentTile;
 
         void displayGameBoard() const;
+        void displayBuidlingPool() const;
         void displayVillageBoard(Player* player) const;
         void displayPlayerHand(Player* player) const;
-        void pickHarvestTile(Player* player);
+        pair<int,int> pickHarvestTile(Player* player);
+        bool pickBuildingTile(Player* player);
+
+		void calculateResources(Player* player, pair<int,int> p);
+		void calculateScores();
+		void displayWinner();
 };

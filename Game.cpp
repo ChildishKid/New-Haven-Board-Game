@@ -15,6 +15,7 @@ Game::Game() {
 	initializeBuildingPool();
 	createPlayers();
 	initializeResources();
+	shipmentTile = false;
 	sort(players->begin(), players->end(), Player::sortById);
 };
 
@@ -30,13 +31,16 @@ void Game::setupGBMap() {
 
 	cout << "Setting up the correct GBMap..." << endl;
 	if (numOfPlayers == 2) {
-		Game::gbMap = GBMapLoader::load("TwoPlayersGBMap.txt");
+		 Game::gbMap = GBMapLoader::load("TwoPlayersGBMap.txt");
+		//gbMap = new GBMaps(2);
 	}
 	else  if (numOfPlayers == 3) {
-		Game::gbMap = GBMapLoader::load("ThreePlayersGBMap.txt");
+		 Game::gbMap = GBMapLoader::load("ThreePlayersGBMap.txt");
+		//gbMap = new GBMaps(3);
 	}
 	else {
-		Game::gbMap = GBMapLoader::load("FourPlayersGBMap.txt");
+		 Game::gbMap = GBMapLoader::load("FourPlayersGBMap.txt");
+		//gbMap = new GBMaps(4);
 	}
 };
 
@@ -156,7 +160,7 @@ void Game::displayGameBoard() const {
 			inBetweenBorder += "-";
 		}
 
-		// Create horizontal coordinate system
+		// Create horizontal coordinate std::system
 		string xcoordinates = "";
 		for (int i = 0; i < gbMap->getWidth(); i++) {
 			for (int j = 0; j < 7; j++)
@@ -164,10 +168,9 @@ void Game::displayGameBoard() const {
 			xcoordinates += to_string(i);
 		}
 
-		// Create vertical border lines and coordinate system, and display table to console
-		cout << xcoordinates << endl;
+		// Create vertical border lines and coordinate std::system, and display table to console
 		cout << topBotBorder << endl;
-		for (int i = 0; i < gbMap->getHeight(); i++) {
+		for (int i = gbMap->getHeight() - 1; i >= 0; i--) {
 
 			string row1 = " " + to_string(i) + " |";
 			string row2 = "   |";
@@ -190,10 +193,11 @@ void Game::displayGameBoard() const {
 
 			cout << row1 << endl;
 			cout << row2 << endl;
-			if (i != gbMap->getHeight() - 1)
+			if (i != 0)
 				cout << inBetweenBorder << endl;
 		}
 		cout << topBotBorder << endl;
+		cout << xcoordinates << endl;
 	}
 
 	// Display for board of player size 4
@@ -215,7 +219,7 @@ void Game::displayGameBoard() const {
 			inBetweenDashes += "-";
 		}
 
-		// Create horizontal coordinate system
+		// Create horizontal coordinate std::system
 		string xcoordinates = "";
 		for (int i = 0; i < gbMap->getWidth(); i++) {
 			for (int j = 0; j < 7; j++)
@@ -223,10 +227,9 @@ void Game::displayGameBoard() const {
 			xcoordinates += to_string(i);
 		}
 
-		// Create vertical border lines and coordinate system, and display table to console
-		cout << xcoordinates << endl;
+		// Create vertical border lines and coordinate std::system, and display table to console
 		cout << topBotBorder << endl;
-		for (int i = 0; i < gbMap->getHeight(); i++) {
+		for (int i = gbMap->getHeight() - 1; i >= 0; i--) {
 
 			string row1, row2;
 			if (i == 0 || i == gbMap->getHeight() - 1) {
@@ -265,12 +268,13 @@ void Game::displayGameBoard() const {
 			cout << row1 << endl;
 			cout << row2 << endl;
 
-			if (i == 0 || i == gbMap->getHeight() - 2)
+			if (i == 1 || i == gbMap->getHeight() - 1)
 				cout << secondAndBeforeLastBorder << endl;
-			else if (i != gbMap->getHeight() - 1)
+			else if (i != 0)
 				cout << inBetweenDashes << endl;
 		}
 		cout << topBotBorder << endl;
+		cout << xcoordinates << endl;
 	}
 
 	// Display Resource Track
@@ -282,7 +286,12 @@ void Game::displayGameBoard() const {
 		<< endl << endl;
 
 	// Display Building Pool
-	cout << "   BUILDING POOL: " << endl;
+	displayBuidlingPool();
+}
+
+void Game::displayBuidlingPool() const {
+	// Display Building Pool
+	cout << "   SHARED BUILDING POOL: " << endl;
 
 	string topBotBorder = "   ";
 	for (int i = 0; i < (buildingPool->size() * 6 + buildingPool->size() + 1); i++) {
@@ -308,7 +317,7 @@ void Game::displayGameBoard() const {
 	}
 	cout << row << endl;
 	cout << topBotBorder << endl;
-}
+};
 
 void Game::displayVillageBoard(Player* player) const {
 	cout << endl << "====== " << *player->getName() << "'s VILLAGE BOARD ======" << endl;
@@ -321,7 +330,7 @@ void Game::displayVillageBoard(Player* player) const {
 		inBetweenBorder += "-";
 	}
 
-	// Create horizontal coordinate system
+	// Create horizontal coordinate std::system
 	string xcoordinates = "";
 	for (int i = 0; i < vgMap->getWidth(); i++) {
 		for (int j = 0; j < 8; j++)
@@ -329,12 +338,11 @@ void Game::displayVillageBoard(Player* player) const {
 		xcoordinates += to_string(i);
 	}
 
-	// Create vertical border lines and coordinate system, and display table to console
-	cout << xcoordinates << endl;
+	// Create vertical border lines and coordinate std::system, and display table to console
 	cout << topBotBorder << endl;
 	for (int i = 0; i < vgMap->getHeight(); i++) {
 
-		string row1 = " " + to_string(i) + " |";
+		string row1 = " " + to_string(vgMap->getHeight() - 1 - i) + " |";
 
 		for (int j = 0; j < vgMap->getWidth(); j++) {
 
@@ -349,7 +357,7 @@ void Game::displayVillageBoard(Player* player) const {
 				string cost, flip, resource;
 
 				// if actual cost is greater than 0, this means the building was flipped
-				if (vgMap->getCircle(x, y)->getBuilding()->getActualCost() > 0)
+				if (*vgMap->getCircle(x, y)->getBuilding()->getActualCost() != 0)
 					flip = "D";
 				else
 					flip = "U";
@@ -367,13 +375,19 @@ void Game::displayVillageBoard(Player* player) const {
 			cout << inBetweenBorder << endl;
 	}
 	cout << topBotBorder << endl;
+	cout << xcoordinates << endl;
+	cout << endl;
 }
 
 void Game::displayPlayerHand(Player* player) const {
 	cout << endl << "====== " << *player->getName() << "'s HAND ======" << endl;
 
 	// Display Harvest Tiles in hand
-	cout << endl << "   HARVEST TILES: " << endl;
+
+	if (player->getPlayersHand()->getShipmentTile() != NULL)
+		cout << endl << "   HARVEST TILES: (+SHIPMENT TILE)" << endl;
+	else
+		cout << endl << "   HARVEST TILES: " << endl;
 
 	string topBotBorder = "   ";
 	string inBetweenBorder = "   ";
@@ -382,7 +396,7 @@ void Game::displayPlayerHand(Player* player) const {
 		inBetweenBorder += "-";
 	}
 
-	// Create horizontal coordinate system
+	// Create horizontal coordinate std::system
 	string xcoordinates = "";
 	for (int i = 0; i < player->getPlayersHand()->getHarvestTiles()->size(); i++) {
 		for (int j = 0; j < 7; j++)
@@ -390,7 +404,7 @@ void Game::displayPlayerHand(Player* player) const {
 		xcoordinates += to_string(i);
 	}
 
-	// Create vertical border lines and coordinate system, and display table to console
+	// Create vertical border lines and coordinate std::system, and display table to console
 	cout << xcoordinates << endl;
 	cout << topBotBorder << endl;
 
@@ -414,7 +428,7 @@ void Game::displayPlayerHand(Player* player) const {
 	cout << topBotBorder << endl;
 
 	// Display Building Tiles in hand
-	cout << endl << "   BUILDING POOL: " << endl;
+	cout << endl << "   PERSONAL BUILDING POOL: " << endl;
 
 	topBotBorder = "   ";
 	for (int i = 0; i < (player->getPlayersHand()->getBuildings()->size() * 6 + player->getPlayersHand()->getBuildings()->size() + 1); i++) {
@@ -444,159 +458,525 @@ void Game::displayPlayerHand(Player* player) const {
 	cout << topBotBorder << endl << endl;
 }
 
-void Game::pickHarvestTile(Player* player) {
-	// Give option to see village board
-	while (true) {
-		try {
-			system("CLS");
-			displayGameBoard();
-			displayPlayerHand(player);
-
-			cout << "What would you like to do?" << endl;
-			cout << "\t1- See Village Board." << endl;
-			cout << "\t2- Place Harvest Tile." << endl;
-			cout << "Option: ";
-
-			int input;
-			cin.clear();
-			cin >> input;
-
-			if (input != 1 && input != 2)
-				throw 0;
-
-			if (input == 1) {
-				system("CLS");
-				displayVillageBoard(player);
-				displayPlayerHand(player);
-				system("pause");
-				continue;
-			}
-
-			break;
-		}
-		catch (int e) {
-			continue;
-		}
-	}
+pair<int, int> Game::pickHarvestTile(Player* player) {
 
 	// Pick harvest tile
-	system("CLS");
+	std::system("CLS");
 	displayGameBoard();
 	displayPlayerHand(player);
-	cout << "Which harvest tile would you like to pick?" << endl;
+	displayVillageBoard(player);
+
 	int pick;
 	while (true) {
 		try {
+			if (player->getPlayersHand()->getShipmentTile() != NULL)
+				cout << "Which harvest tile would you like to pick? (Enter 99 to use Shipment Tile)" << endl;
+			else
+				cout << "Which harvest tile would you like to pick?" << endl;
 			cout << "Option: ";
 
 			cin.clear();
 			cin >> pick;
 
-			if (pick < 0 || pick >= player->getPlayersHand()->getHarvestTiles()->size())
+
+			if (cin.fail() || pick < 0 || (pick >= player->getPlayersHand()->getHarvestTiles()->size() && pick != 99)
+				|| (player->getPlayersHand()->getShipmentTile() == NULL && pick == 99))
 				throw 0;
 
 			break;
 		}
 		catch (int e) {
-			system("CLS");
+			std::system("CLS");
 			displayGameBoard();
 			displayPlayerHand(player);
+			displayVillageBoard(player);
 			cout << "Error: Out of range or invalid input!" << endl;
-			cout << "Which harvest tile would you like to pick?" << endl;
 			continue;
 		}
 	}
 
-	// Give option to rotate it
-	system("CLS");
+	if (pick != 99) {
+		// Give option to rotate it
+		std::system("CLS");
+		displayGameBoard();
+		displayPlayerHand(player);
+		displayVillageBoard(player);
+		cout << "Would you like to rotate it clockwise?" << endl;
+		while (true) {
+			try {
+				cout << "(Y/N): ";
+
+				string input;
+				cin.clear();
+				cin >> input;
+
+				if (cin.fail() || input != "Y" && input != "N" && input != "y" && input != "n")
+					throw 0;
+
+				if (input == "Y" || input == "y") {
+					player->getPlayersHand()->getHarvestTiles()->at(pick)->rotateTile();
+					throw 1;
+				}
+				else
+					break;
+			}
+			catch (int e) {
+				std::system("CLS");
+				displayGameBoard();
+				displayPlayerHand(player);
+				displayVillageBoard(player);
+				if (e == 0)
+					cout << "Error: Invalid input!" << endl;
+				cout << "Would you like to rotate it clockwise?" << endl;
+				continue;
+			}
+		}
+
+		// Decide location to put them in:
+		std::system("CLS");
+		displayGameBoard();
+		displayPlayerHand(player);
+		displayVillageBoard(player);
+		while (true) {
+			try {
+				// Decide on location to put it on
+				int x, y;
+				cout << "Where would you like to place it?" << endl;
+				cout << "X = ";
+				cin.clear();
+				cin >> x;
+				if (cin.fail() || x < 0 || x >= gbMap->getWidth())
+					throw 0;
+
+				cout << "Y = ";
+				cin.clear();
+				cin >> y;
+				if (cin.fail() || y < 0 || y >= gbMap->getHeight())
+					throw 0;
+
+				if (gbMap->getNumberOfPlayers() == 4) {
+					if ((x == 0 && y == 0)
+						|| (x == 0 && y == gbMap->getWidth() - 1)
+						|| (x == gbMap->getHeight() - 1 && y == 0)
+						|| (x == gbMap->getHeight() - 1 && y == gbMap->getWidth() - 1)) {
+						throw 1;
+					}
+				}
+
+				if (gbMap->getSquare(x, y)->getStatus() == true)
+					throw 1;
+
+				GBMaps::Square* square = gbMap->getSquare(x, y);
+				vector<HarvestTile*>::iterator it = player->getPlayersHand()->getHarvestTiles()->begin();
+				for (int i = 0; i < pick; i++)
+					it++;
+				HarvestTile* tile = *it;
+
+				player->placeHarvestTile(x, y, tile);
+
+				player->getPlayersHand()->getHarvestTiles()->erase(it);
+				return make_pair(x, y);
+
+			}
+			catch (int e) {
+				std::system("CLS");
+				displayGameBoard();
+				displayPlayerHand(player);
+				displayVillageBoard(player);
+				if (e == 0)
+					cout << "Error: Out of range or invalid input!" << endl;
+				else if (e == 1)
+					cout << "Error: Tile cannot be placed at specified location!" << endl;
+				continue;
+			}
+		}
+	}
+	else {
+		// Choose types:
+		Type* type;
+
+		std::system("CLS");
+		displayGameBoard();
+		displayPlayerHand(player);
+		displayVillageBoard(player);
+		while (true) {
+			try {
+				cout << "Pick Resource: (Sheep/Stone/Timber/Wheat)" << endl;
+				cout << "Option: ";
+
+				string input;
+				cin.clear();
+				cin >> input;
+
+				if (cin.fail() || (input != "Sheep" && input != "Stone" && input != "Timber" && input != "Wheat"))
+					throw 0;
+
+				if (input == "Sheep")
+					type = new Type(Type::Sheep);
+				else if (input == "Stone")
+					type = new Type(Type::Stone);
+				else if (input == "Timber")
+					type = new Type(Type::Timber);
+				else
+					type = new Type(Type::Wheat);
+
+				break;
+			}
+			catch (int e) {
+				std::system("CLS");
+				displayGameBoard();
+				displayPlayerHand(player);
+				displayVillageBoard(player);
+				if (e == 0)
+					cout << "Error: Invalid input!" << endl;
+				continue;
+			}
+		}
+
+		// Decide location to put them in:
+		std::system("CLS");
+		displayGameBoard();
+		displayPlayerHand(player);
+		displayVillageBoard(player);
+		while (true) {
+			try {
+				// Decide on location to put it on
+				int x, y;
+				cout << "Where would you like to place it?" << endl;
+				cout << "X = ";
+				cin.clear();
+				cin >> x;
+				if (cin.fail() || x < 0 || x >= gbMap->getWidth())
+					throw 0;
+
+				cout << "Y = ";
+				cin.clear();
+				cin >> y;
+				if (cin.fail() || y < 0 || y >= gbMap->getHeight())
+					throw 0;
+
+				if (gbMap->getNumberOfPlayers() == 4) {
+					if ((x == 0 && y == 0)
+						|| (x == 0 && y == gbMap->getWidth() - 1)
+						|| (x == gbMap->getHeight() - 1 && y == 0)
+						|| (x == gbMap->getHeight() - 1 && y == gbMap->getWidth() - 1)) {
+						throw 1;
+					}
+				}
+
+				if (gbMap->getSquare(x, y)->getStatus() == true)
+					throw 1;
+
+				player->placeHarvestTile(x, y, new HarvestTile(type, type, type, type));
+				shipmentTile = true;
+				return make_pair(x, y);
+
+			}
+			catch (int e) {
+				std::system("CLS");
+				displayGameBoard();
+				displayPlayerHand(player);
+				displayVillageBoard(player);
+				if (e == 0)
+					cout << "Error: Out of range or invalid input!" << endl;
+				else if (e == 1)
+					cout << "Error: Tile cannot be placed at specified location!" << endl;
+				continue;
+			}
+		}
+	}
+}
+
+bool Game::pickBuildingTile(Player* player) {
+
+	// Determine if enough resources to build anything
+	std::system("CLS");
 	displayGameBoard();
 	displayPlayerHand(player);
-	cout << "Would you like to rotate it clockwise?" << endl;
+	displayVillageBoard(player);
+
+loop:
 	while (true) {
 		try {
+			cout << "Would you like to build a Building?" << endl;
 			cout << "(Y/N): ";
 
 			string input;
 			cin.clear();
 			cin >> input;
 
-			if (input != "Y" && input != "N" && input != "y" && input != "n")
+			if (cin.fail() || input != "Y" && input != "N" && input != "y" && input != "n")
 				throw 0;
 
 			if (input == "Y" || input == "y") {
-				player->getPlayersHand()->getHarvestTiles()->at(pick)->rotateTile();
-				throw 1;
+
+				// Choose which building to place
+				std::system("CLS");
+				displayGameBoard();
+				displayPlayerHand(player);
+				displayVillageBoard(player);
+
+				int pick;
+				cout << "Which building tile would you like to pick?" << endl;
+				cout << "Option: ";
+
+				cin.clear();
+				cin >> pick;
+
+				if (cin.fail() || pick < 0 || pick >= player->getPlayersHand()->getBuildings()->size())
+					throw 0;
+
+				// Decided whether face up or face down.
+				std::system("CLS");
+				displayGameBoard();
+				displayPlayerHand(player);
+				displayVillageBoard(player);
+				string option;
+				cout << "Would you like to build it face-up or face-down?" << endl;
+				cout << "(U/D): ";
+
+				string input;
+				cin.clear();
+				cin >> input;
+
+				if (cin.fail() || input != "U" && input != "u" && input != "D" && input != "d")
+					throw 0;
+				else if (input == "U" || input == "u")
+					option = "Up";
+				else
+					option = "Down";
+
+				// Choose location to put building tile onto
+				std::system("CLS");
+				displayGameBoard();
+				displayPlayerHand(player);
+				displayVillageBoard(player);
+				int x, y;
+				cout << "Where would you like to place it?" << endl;
+				cout << "X = ";
+				cin.clear();
+				cin >> x;
+				if (cin.fail() || x < 0 || x >= player->getVGMap()->getWidth())
+					throw 0;
+
+				cout << "Y = ";
+				cin.clear();
+				cin >> y;
+				if (cin.fail() || y < 0 || y >= player->getVGMap()->getHeight())
+					throw 0;
+
+				if (player->getVGMap()->getCircle(x, y)->getStatus() == true)
+					throw 1;
+
+				bool firstPlacement = player->hasBuilt->find(*(player->getPlayersHand()->getBuildings()->at(pick)->getType()))->second == false;
+				if (!firstPlacement)
+					throw 2;
+
+				// Try to place tile
+				if (option == "Down") {
+					int cost = player->getVGMap()->getCircle(x, y)->getCost();
+					Type resourceType = *player->getPlayersHand()->getBuildings()->at(pick)->getType();
+					int resourceAmount;
+					if (resourceType == Type::Sheep)
+						resourceAmount = *sheepResourceMarker;
+					else if (resourceType == Type::Stone)
+						resourceAmount = *stoneResourceMarker;
+					else if (resourceType == Type::Wheat)
+						resourceAmount = *wheatResourceMarker;
+					else
+						resourceAmount = *timberResourceMarker;
+
+					if (resourceAmount <= 0 || cost > resourceAmount) {
+						std::system("CLS");
+						displayGameBoard();
+						displayPlayerHand(player);
+						displayVillageBoard(player);
+						throw 3;
+					}
+					else {
+						player->buildVillage(x, y, cost, pick, option);
+
+						if (resourceType == Type::Sheep)
+							*sheepResourceMarker -= cost;
+						else if (resourceType == Type::Stone)
+							*stoneResourceMarker -= cost;
+						else if (resourceType == Type::Wheat)
+							*wheatResourceMarker -= cost;
+						else
+							*timberResourceMarker -= cost;
+
+						return true;
+					}
+				}
+				else if (option == "Up") {
+					int cost = player->getVGMap()->getCircle(x, y)->getCost();
+
+					// Make sure that it can be placed at the right spot
+					if (cost != *player->getPlayersHand()->getBuildings()->at(pick)->getCost()) {
+
+						std::system("CLS");
+						displayGameBoard();
+						displayPlayerHand(player);
+						displayVillageBoard(player);
+						throw 4;
+					}
+
+					Type resourceType = *player->getPlayersHand()->getBuildings()->at(pick)->getType();
+					int resourceAmount;
+
+					if (resourceType == Type::Sheep)
+						resourceAmount = *sheepResourceMarker;
+					else if (resourceType == Type::Stone)
+						resourceAmount = *stoneResourceMarker;
+					else if (resourceType == Type::Wheat)
+						resourceAmount = *wheatResourceMarker;
+					else
+						resourceAmount = *timberResourceMarker;
+
+					if (resourceAmount <= 0 || cost > resourceAmount) {
+						std::system("CLS");
+						displayGameBoard();
+						displayPlayerHand(player);
+						displayVillageBoard(player);
+						throw 3;
+					}
+					else {
+						player->buildVillage(x, y, cost, pick, option);
+
+						if (resourceType == Type::Sheep)
+							*sheepResourceMarker -= cost;
+						else if (resourceType == Type::Stone)
+							*stoneResourceMarker -= cost;
+						else if (resourceType == Type::Wheat)
+							*wheatResourceMarker -= cost;
+						else
+							*timberResourceMarker -= cost;
+
+						return true;
+					}
+				}
+
 			}
 			else
-				break;
+				return false;
 		}
 		catch (int e) {
-			system("CLS");
+			std::system("CLS");
 			displayGameBoard();
 			displayPlayerHand(player);
-			if (e == 0)
-				cout << "Error: Invalid input!" << endl;
-			cout << "Would you like to rotate it clockwise?" << endl;
-			continue;
-		}
-	}
+			displayVillageBoard(player);
 
-	// Decide location to put them in:
-	system("CLS");
-	displayGameBoard();
-	displayPlayerHand(player);
-	while (true) {
-		try {
-			// Decide on location to put it on
-			int x, y;
-			cout << "Where would you like to place it?" << endl;
-			cout << "X = ";
-			cin.clear();
-			cin >> x;
-			if (x < 0 || x >= gbMap->getWidth())
-				throw 0;
-
-			cout << "Y = ";
-			cin.clear();
-			cin >> y;
-			if (y < 0 || y >= gbMap->getHeight())
-				throw 0;
-
-			if (gbMap->getNumberOfPlayers() == 4) {
-				if ((x == 0 && y == 0)
-					|| (x == 0 && y == gbMap->getWidth() - 1)
-					|| (x == gbMap->getHeight() - 1 && y == 0)
-					|| (x == gbMap->getHeight() - 1 && y == gbMap->getWidth() - 1)) {
-					throw 1;
-				}
-			}
-
-			if (gbMap->getSquare(x, y)->getStatus() == true)
-				throw 1;
-			
-			GBMaps::Square* square = gbMap->getSquare(x, y);
-			vector<HarvestTile*>::iterator it = player->getPlayersHand()->getHarvestTiles()->begin();
-			for (int i = 0; i < pick; i++)
-				it++;
-			HarvestTile* tile = *it;
-
-			player->placeHarvestTile(x, y, tile);
-
-			player->getPlayersHand()->getHarvestTiles()->erase(it);
-			break;
-
-		}
-		catch (int e) {
-			system("CLS");
-			displayGameBoard();
-			displayPlayerHand(player);
 			if (e == 0)
 				cout << "Error: Out of range or invalid input!" << endl;
 			else if (e == 1)
-				cout << "Error: Tile cannot be placed at specified location!" << endl;
+				cout << "Error: Tile cannot be placed at specified location! Already occupied..." << endl;
+			else if (e == 2)
+				cout << "Error: Tile cannot be placed at specified location! Must place adjancent to resource type..." << endl;
+			else if (e == 3)
+				cout << "Error: Tile cannot be placed at specified location! Not enough resources..." << endl;
+			else if (e == 4)
+				cout << "Error: Tile cannot be placed at specified location! Cost must be matching..." << endl;
 			continue;
 		}
 	}
+
+
+
+}
+
+void Game::calculateResources(Player* player, pair<int, int> p) {
+
+	ResourceCounter rc = ResourceCounter(gbMap);
+	map<Type, int*>* collectedResources = rc.calculateCollectedResources(p.first, p.second);
+	sheepResourceMarker = (*collectedResources)[Type::Sheep];
+	stoneResourceMarker = (*collectedResources)[Type::Stone];
+	timberResourceMarker = (*collectedResources)[Type::Timber];
+	wheatResourceMarker = (*collectedResources)[Type::Wheat];
+}
+
+void Game::calculateScores() {
+	cout << "===== Final Scores =====" << endl;
+
+	vector<Player*>::iterator it = players->begin();
+
+	for (it = players->begin(); it != players->end(); it++) {
+		Player* player = (*it);
+		Score* count = new Score(player->getVGMap());
+		player->setPlayersScore(new int(count->calculateScore()));
+
+		cout << player->getName() << "'s score: " << player->getScore() << endl;
+
+		delete count;
+	}
+}
+
+void Game::displayWinner() {
+	vector<Player*>::iterator it = players->begin();
+
+	Player* winner = NULL;
+	vector<Player*> tie;
+
+	for (it = players->begin(); it != players->end(); it++) {
+		Player* player = (*it);
+		if (winner == NULL) {
+			winner = player;
+			continue;
+		}
+
+		if (winner->getScore() < player->getScore()) {
+			winner = player;
+			continue;
+		}
+
+		if (winner->getScore() == player->getScore()) {
+			if (winner->getVGMap()->getNumberOfEmptySlots() > player->getVGMap()->getNumberOfEmptySlots()) {
+				winner = player;
+				continue;
+			}
+			if (winner->getVGMap()->getNumberOfEmptySlots() == player->getVGMap()->getNumberOfEmptySlots()) {
+				if (winner->getPlayersHand()->getBuildings()->size() > player->getPlayersHand()->getBuildings()->size()) {
+					winner = player;
+					continue;
+				}
+				if (winner->getPlayersHand()->getBuildings()->size() == player->getPlayersHand()->getBuildings()->size()) {
+					if (tie.size() > 0) {
+						tie.push_back(player);
+						continue;
+					}
+					tie.push_back(winner);
+					tie.push_back(player);
+					winner = player;
+					continue;
+				}
+
+			}
+
+		}
+
+	}
+
+	if (tie.size() > 0) {
+		if (tie.front()->getScore() == winner->getScore()) {
+			cout << "The Winners are: " << endl;
+
+			vector<Player*>::iterator tieIt = tie.begin();
+
+			for (tieIt = tie.begin(); tieIt != tie.end(); tieIt++) {
+				Player* winners = (*tieIt);
+				cout << winners->getName() << endl;
+			}
+
+			cout << "Congratulations!" << endl;
+		}
+		else {
+			cout << "The Winner is: " << winner->getName() << "! Congratulations!" << endl;
+		}
+	}
+	else {
+		cout << "The Winner is: " << winner->getName() << "! Congratulations!" << endl;
+	}
+
+
 }
 
 string Game::typePrefix(Type type) const {
@@ -621,31 +1001,131 @@ void Game::run() {
 		Player* player = (*it);
 
 		// 1. Place Harvest Tile
-		pickHarvestTile(player);
-
-		system("CLS");
-		displayGameBoard();
-		displayPlayerHand(player);
-		system("pause");
+		pair<int, int> harvestTile = pickHarvestTile(player);
 
 		// 2. Calculate Gathered Resources
+		calculateResources(player, harvestTile);
 
-		// 3. Place Building Tile(s)
-
+		// 3. Place Building
 		// 4. Rotation to Share
+		vector<Player*>::iterator sharing = it;
+		int count = 0;
+		while (count != players->size()) {
+			if (!pickBuildingTile(*sharing)) {
+				sharing++;
+				if (sharing == players->end())
+					sharing = players->begin();
+				count++;
+			}
+		}
+
 
 		// 5. Draw Building Tiles
+		int draw_buildings = 0;
+		if (getWheatResourceMarker() == 0)
+			draw_buildings++;
+		if (getStoneResourceMarker() == 0)
+			draw_buildings++;
+		if (getSheepResourceMarker() == 0)
+			draw_buildings++;
+		if (getTimberResourceMarker() == 0)
+			draw_buildings++;
+
 		// Note: First one must be from Building Pool
+		if (draw_buildings > 0) {
+
+			std::system("CLS");
+			displayGameBoard();
+			displayPlayerHand(player);
+			displayVillageBoard(player);
+
+			int input;
+			while (true) {
+				try {
+
+					cout << "Choose one of the buildings from the SHARED BUILDING POOL" << endl;
+					cout << "Option: ";
+
+					cin.clear();
+					cin >> input;
+
+					if (cin.fail()) {
+						throw 0;
+					}
+
+					if (input < 0 || input >= buildingPool->size())
+						throw 1;
+
+					break;
+				}
+				catch (int e) {
+					std::system("CLS");
+					displayGameBoard();
+					displayPlayerHand(player);
+					displayVillageBoard(player);
+					if (e == 0) {
+						cout << "Error: Invalid input!" << endl;
+					}
+					else if (e == 1) {
+						cout << "Error: Out of range!" << endl;
+					}
+					continue;
+				}
+			}
+
+			player->getPlayersHand()->getBuildings()->push_back(getBuildingPool()->at(input));
+			auto bpit = getBuildingPool()->begin();
+			advance(bpit, input);
+			getBuildingPool()->erase(bpit);
+			draw_buildings--;
+		}
+
 		// Note: Amount to draw is equal to all resource markers that are 0
+		while (draw_buildings > 0) {
+			player->drawBuilding();
+			draw_buildings--;
+		}
 
 		// Place all resources markets to 0
+		setSheepResourceMarker(0);
+		setStoneResourceMarker(0);
+		setTimberResourceMarker(0);
+		setWheatResourceMarker(0);
 
 		// Draw Harvest Tiles
+		player->drawHarvestTile();
+
+		// Check to see if shipment tile has been used
+		if (shipmentTile) {
+			shipmentTile = false;
+			gbMap->getSquare(harvestTile.first, harvestTile.second)->setBottomLeft(player->getPlayersHand()->getShipmentTile()->getBottomLeftNode());
+			gbMap->getSquare(harvestTile.first, harvestTile.second)->setBottomRight(player->getPlayersHand()->getShipmentTile()->getBottomRightNode());
+			gbMap->getSquare(harvestTile.first, harvestTile.second)->setTopLeft(player->getPlayersHand()->getShipmentTile()->getTopLeftNode());
+			gbMap->getSquare(harvestTile.first, harvestTile.second)->setTopRight(player->getPlayersHand()->getShipmentTile()->getTopRightNode());
+			delete(player->getPlayersHand()->getShipmentTile());
+			player->getPlayersHand()->setShipmentTile(NULL);
+		}
+		
+		// Replenish shared building pool
+		while (buildingPool->size() != 5) {
+			buildingPool->push_back(static_cast<Building*>(deck->draw(ResourceType::Building)));
+		}
 
 		it++;
+
+		if (it == players->end())
+			it = players->begin();
 	}
 
 	// 6. Calculate Total Scores
+	std::system("CLS");
+	calculateScores();
 
 	// 7. Determine Winner
+
+	displayWinner();
+	std::system("pause");
+
+
+
 }

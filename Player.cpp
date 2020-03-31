@@ -1,19 +1,21 @@
 #include "Player.h"
 #include <iostream>
 #include "Score.h"
+#include "Resources.h"
 
 using namespace std;
 
-Player::Player(Deck* deck, ResourceCounter* rc, GBMaps* gboard) {
-	this->playersHand = new Hand(deck,rc);
-	this->playersVGMap = new VGMap();
-	this->gboard = gboard;
-}
 
 Player::Player(string n, int i, GBMaps* gboard) {
 	this->name = new string(n);
 	this->id = new int(i);
 	this->gboard = gboard;
+	this->hasBuilt = new map<Type, bool>;
+	this->hasBuilt->insert(pair<Type, bool>(Type::Wheat, false));
+	this->hasBuilt->insert(pair<Type, bool>(Type::Stone, false));
+	this->hasBuilt->insert(pair<Type, bool>(Type::Timber, false));
+	this->hasBuilt->insert(pair<Type, bool>(Type::Sheep, false));
+
 }
 
 Player::Player(){
@@ -89,27 +91,96 @@ map<string, int> Player::resourceTracker() {
 	return container;
 }
 
-void Player::buildVillage(int x, int y) {
-	vector<Building*>* available = this->getPlayersHand()->getBuildings();
-	cout << "Here are Buildings available for you:" << endl << endl;
-	for (int i = 0; i < available->size(); i++) {
-		cout << "Option " << i << " :" << endl;
-		cout << *(available->at(i)->getType()) << " " << *(available->at(i)->getCost()) << endl << endl;
-	}
-	cout << "Choose your option:";
-	int option;
-	cin >> option;
+void Player::buildVillage(map<Type, int>* resources) {
+	string reply;
+	cout << "Do you want to build a village?(Y/N)" << endl;
+	cin >> reply;
 
-	cout << "Choose your cost:";
-	int cost;
-	cin >> cost;
-	
-	if (cost < *(available->at(option)->getCost())) {
-		available->at(option)->setActualCost(&cost);
+	if (reply == "Y" || reply == "y") {
+
+		//ask for location
+		int x;
+		int y;
+		cout << "Where do you want to place new Village:\n";
+		cout << "X = ";
+		cin >> x;
+		cout << "\nY = ";
+		cin >> y;
+		
+		//check if space exists
+		while (this->playersVGMap->getHeight()<=y || this->playersVGMap->getWidth() <= y) {
+			cout << "This location doesn't exist. Please select new one:\n";
+			cout << "X = ";
+			cin >> x;
+			cout << "\nY = ";
+			cin >> y;
+		}
+
+		//check if space is empty
+		while (this->playersVGMap->getCircle(x, y)->getStatus() == true) {
+			cout << "This location is already in use. Please select new one:\n";
+			cout << "X = ";
+			cin >> x;
+			cout << "\nY = ";
+			cin >> y;
+		}
+
+		//ask what building user wants to use
+		vector<Building*>* available = this->getPlayersHand()->getBuildings();
+		cout << "Choose your building number:";
+		int option;
+		cin >> option;
+
+		//check if its the first placement of this type
+		bool firstplacement = this->hasBuilt->find(*(available->at(option)->getType()))->second == false;
+
+		//check if its no the first placement of this type and its not next to same type building
+		while (!firstplacement && !this->getVGMap()->getCircle(x, y)->validateCircle(*(available->at(option)->getType()))) {
+			cout << "This type has been built already somewhere else. Please select new location adjecent to it:\n";
+			cout << "X = ";
+			cin >> x;
+			cout << "\nY = ";
+			cin >> y;
+		}
+		bool invalid_cost = true;
+		int cost;
+		do {
+			cout << "Choose your cost:";
+
+			cin >> cost;
+
+
+			if (cost > resources->find(*(available->at(option)->getType()))->second || cost < 1) {
+				cout << "You don't have enough resources, please try again: \n";
+				
+			}
+			else {
+				resources->find(*(available->at(option)->getType()))->second -= cost;
+				invalid_cost = false;
+			}
+		} while (invalid_cost);
+		if (cost != *(available->at(option)->getCost())) {
+			available->at(option)->setActualCost(&cost);
+		}
+		this->getVGMap()->getCircle(x, y)->setBuilding(available->at(option));
+		this->getVGMap()->getCircle(x, y)->setCost(cost);
+		this->getVGMap()->getCircle(x, y)->setStatus(true);
+
+		//erase building from available
+		this->getPlayersHand()->getBuildings()->erase(this->getPlayersHand()->getBuildings()->begin() + option);
 	}
-	this->getVGMap()->getCircle(x, y)->setBuilding(available->at(option));
-	this->getVGMap()->getCircle(x, y)->setCost(cost);
-	this->getVGMap()->getCircle(x, y)->setStatus(true);
+}
+
+void Player::buildVillage(int x, int y, int cost, int pick, string option) {
+	
+	getVGMap()->getCircle(x, y)->setBuilding(getPlayersHand()->getBuildings()->at(pick));
+	getVGMap()->getCircle(x, y)->setStatus(true);
+
+	if (option == "Down") {
+			getVGMap()->getCircle(x, y)->getBuilding()->setActualCost(new int(cost));
+	}
+
+	getPlayersHand()->getBuildings()->erase(getPlayersHand()->getBuildings()->begin() + pick);
 }
 
 map<Type, int*>* Player::calculateResources(int x, int y) {
@@ -124,6 +195,9 @@ void Player::setPlayersHand(Hand* h) {
 	playersHand = h;
 }
 
+void Player::setPlayersScore(int* score) {
+	finalScore = score;
+}
 bool Player::sortById(Player* one, Player* two) {
 	return *one->getId() < *two->getId();
 }

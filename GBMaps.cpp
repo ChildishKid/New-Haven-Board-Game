@@ -152,6 +152,14 @@ GBMaps::GBMaps(int numOfPlayers) {
 	gameBoard = new map<pair<int, int>, Square*>();	
 	setUpBoard();
 	setUpAdjacencies();
+
+	if (*numberOfPlayers == 2)
+		placeInitialResources(0, 0);
+	else if (*numberOfPlayers == 3) 
+		placeInitialResources(0, 1);
+	else 
+		placeInitialResources(1, 1);
+
 	iterate = gameBoard->begin();
 }
 
@@ -161,6 +169,7 @@ GBMaps::GBMaps() {
 	gameBoard = new map<pair<int, int>, Square*>();
 	setUpBoard();
 	setUpAdjacencies();
+	placeInitialResources(0, 0);
 	iterate = gameBoard->begin();
 }
 
@@ -339,7 +348,7 @@ void GBMaps::setNumberOfPlayers(int players) {
 int GBMaps::getNumberOfEmptySlots() {
 	
 	int emptySlots = 0;
-	begin();
+	iterate = begin();
 	while (iterate != end()) {
 		if (iterate->second->getStatus() == 0) {
 			emptySlots++;
@@ -348,4 +357,31 @@ int GBMaps::getNumberOfEmptySlots() {
 	}
 
 	return emptySlots;
+}
+
+void GBMaps::placeInitialResources(int x_value, int y_value) {
+
+	(*gameBoard)[{x_value, y_value}]->setStatus(true);
+	(*gameBoard)[{x_value, y_value}]->setTopLeft(new Type(Type::Stone));
+	(*gameBoard)[{x_value, y_value}]->setTopRight(new Type(Type::Sheep));
+	(*gameBoard)[{x_value, y_value}]->setBottomLeft(new Type(Type::Timber));
+	(*gameBoard)[{x_value, y_value}]->setBottomRight(new Type(Type::Timber));
+
+	(*gameBoard)[{x_value + 4, y_value}]->setStatus(true);
+	(*gameBoard)[{x_value + 4, y_value}]->setTopLeft(new Type(Type::Wheat));
+	(*gameBoard)[{x_value + 4, y_value}]->setTopRight(new Type(Type::Sheep));
+	(*gameBoard)[{x_value + 4, y_value}]->setBottomLeft(new Type(Type::Wheat));
+	(*gameBoard)[{x_value + 4, y_value}]->setBottomRight(new Type(Type::Timber));
+
+	(*gameBoard)[{x_value, y_value + 4}]->setStatus(true);
+	(*gameBoard)[{x_value, y_value + 4}]->setTopLeft(new Type(Type::Sheep));
+	(*gameBoard)[{x_value, y_value + 4}]->setTopRight(new Type(Type::Stone));
+	(*gameBoard)[{x_value, y_value + 4}]->setBottomLeft(new Type(Type::Sheep));
+	(*gameBoard)[{x_value, y_value + 4}]->setBottomRight(new Type(Type::Wheat));
+
+	(*gameBoard)[{x_value + 4, y_value + 4}]->setStatus(true);
+	(*gameBoard)[{x_value + 4, y_value + 4}]->setTopLeft(new Type(Type::Stone));
+	(*gameBoard)[{x_value + 4, y_value + 4}]->setTopRight(new Type(Type::Stone));
+	(*gameBoard)[{x_value + 4, y_value + 4}]->setBottomLeft(new Type(Type::Timber));
+	(*gameBoard)[{x_value + 4, y_value + 4}]->setBottomRight(new Type(Type::Wheat));
 }
