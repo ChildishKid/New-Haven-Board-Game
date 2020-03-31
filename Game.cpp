@@ -904,7 +904,7 @@ void Game::calculateScores() {
 		Score* count = new Score(player->getVGMap());
 		player->setPlayersScore(new int(count->calculateScore()));
 
-		cout << player->getName() << "'s score: " << player->getScore() << endl;
+		cout << *player->getName() << "'s score: " << *player->getScore() << endl;
 
 		delete count;
 	}
@@ -916,28 +916,38 @@ void Game::displayWinner() {
 	Player* winner = NULL;
 	vector<Player*> tie;
 
+	cout << " " << endl;
+
 	for (it = players->begin(); it != players->end(); it++) {
 		Player* player = (*it);
+
+		//First time through the loop
 		if (winner == NULL) {
 			winner = player;
 			continue;
 		}
 
-		if (winner->getScore() < player->getScore()) {
+		//Compare if current iteration is higher than the winner
+		if (*winner->getScore() < *player->getScore()) {
 			winner = player;
 			continue;
 		}
 
-		if (winner->getScore() == player->getScore()) {
+		//if two players have the same score, go into tie breakers
+		if (*winner->getScore() == *player->getScore()) {
+			//Winner has less empty spaces on their VGMap
 			if (winner->getVGMap()->getNumberOfEmptySlots() > player->getVGMap()->getNumberOfEmptySlots()) {
 				winner = player;
 				continue;
 			}
+			//Winner and player have same amount of empty slots
 			if (winner->getVGMap()->getNumberOfEmptySlots() == player->getVGMap()->getNumberOfEmptySlots()) {
+				//Check who has less buildings in their hand
 				if (winner->getPlayersHand()->getBuildings()->size() > player->getPlayersHand()->getBuildings()->size()) {
 					winner = player;
 					continue;
 				}
+				//There is a tie
 				if (winner->getPlayersHand()->getBuildings()->size() == player->getPlayersHand()->getBuildings()->size()) {
 					if (tie.size() > 0) {
 						tie.push_back(player);
@@ -956,24 +966,24 @@ void Game::displayWinner() {
 	}
 
 	if (tie.size() > 0) {
-		if (tie.front()->getScore() == winner->getScore()) {
+		if (*tie.front()->getScore() == *winner->getScore()) {
 			cout << "The Winners are: " << endl;
 
 			vector<Player*>::iterator tieIt = tie.begin();
 
 			for (tieIt = tie.begin(); tieIt != tie.end(); tieIt++) {
 				Player* winners = (*tieIt);
-				cout << winners->getName() << endl;
+				cout << *winners->getName() << endl;
 			}
 
 			cout << "Congratulations!" << endl;
 		}
 		else {
-			cout << "The Winner is: " << winner->getName() << "! Congratulations!" << endl;
+			cout << "The Winner is: " << *winner->getName() << "! Congratulations!" << endl;
 		}
 	}
 	else {
-		cout << "The Winner is: " << winner->getName() << "! Congratulations!" << endl;
+		cout << "The Winner is: " << *winner->getName() << "! Congratulations!" << endl;
 	}
 
 
@@ -1110,6 +1120,10 @@ void Game::run() {
 		while (buildingPool->size() != 5) {
 			buildingPool->push_back(static_cast<Building*>(deck->draw(ResourceType::Building)));
 		}
+
+		//VGMap save function
+
+		//VGMapLoader::save(player->getVGMap(), "VGMapTest.txt");
 
 		it++;
 

@@ -23,6 +23,14 @@ class Game {
         Deck* getDeck() const;
 
         void run();
+
+		void displayGameBoard() const;
+		void displayBuidlingPool() const;
+		void displayVillageBoard(Player* player) const;
+		void displayPlayerHand(Player* player) const;
+
+		void calculateScores();
+		void displayWinner();
     
     private:
         void setupGBMap();
@@ -40,14 +48,10 @@ class Game {
         int* wheatResourceMarker;
         bool shipmentTile;
 
-        void displayGameBoard() const;
-        void displayBuidlingPool() const;
-        void displayVillageBoard(Player* player) const;
-        void displayPlayerHand(Player* player) const;
+
         pair<int,int> pickHarvestTile(Player* player);
         bool pickBuildingTile(Player* player);
 
 		void calculateResources(Player* player, pair<int,int> p);
-		void calculateScores();
-		void displayWinner();
+
 };
