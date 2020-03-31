@@ -232,3 +232,31 @@ void VGMap::setupBoard() {
 		}
 	}
 }
+
+bool VGMap::validateTypeAdjacency(int x, int y, Type type) {
+	map<pair<int, int>, Circle*>::iterator it = begin();
+
+	while (it != end()) {
+		if (it->second->getBuilding() == NULL) {
+			it++;
+			continue;
+		}
+
+		if (*(it->second->getBuilding()->getType()) == type)
+			goto past;
+		it++;
+	}
+	return true;
+
+past:
+	vector<Circle*> adj = getCircle(x, y)->getAdj();
+	for (int i = 0; i < adj.size(); i++) {
+		if (adj.at(i)->getBuilding() == NULL)
+			continue;
+
+		if (*(adj.at(i)->getBuilding()->getType()) == type)
+			return true;
+	}
+	return false;
+
+}

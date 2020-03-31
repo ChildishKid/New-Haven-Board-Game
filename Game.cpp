@@ -767,10 +767,16 @@ loop:
 
 				if (player->getVGMap()->getCircle(x, y)->getStatus() == true)
 					throw 1;
-
+				/*
 				bool firstPlacement = player->hasBuilt->find(*(player->getPlayersHand()->getBuildings()->at(pick)->getType()))->second == false;
-				if (!firstPlacement)
+
+				if (!firstPlacement && player->getVGMap()->getCircle(x, y)->validateCircle(*((player->getPlayersHand()->getBuildings()->at(pick)->getType()))))
 					throw 2;
+				*/
+
+				if (!player->getVGMap()->validateTypeAdjacency(x, y, *(player->getPlayersHand()->getBuildings()->at(pick)->getType()))) {
+					throw 2;
+				}
 
 				// Try to place tile
 				if (option == "Down") {

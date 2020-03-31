@@ -13,7 +13,7 @@ int main() {
 	cout << "Please enter your name: " << endl;
 	cin >> name;
 
-	VGMap* VG = new VGMap(name);
+	VGMap* VG = new VGMap(name, 0);
 
 
 	for (int i = 0; i < VG->getWidth(); i++) {
