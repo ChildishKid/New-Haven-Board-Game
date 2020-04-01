@@ -1,4 +1,5 @@
 #pragma once
+
 #include <string>
 #include <vector>
 #include <map>
@@ -9,7 +10,9 @@ using namespace std;
 class ResourceCounter {
 
     public:
-        ResourceCounter(GBMaps* gBMap);    
+        ResourceCounter(GBMaps* gBMap);
+        ResourceCounter();
+        ~ResourceCounter();
         GBMaps* getGBMap();
         map<Type, int*>* calculateCollectedResources(int x_value, int y_value);
 
@@ -22,6 +25,7 @@ class ResourceCounter {
 class Score {
     public:
         Score(VGMap* vGMap);
+        Score();
         ~Score();
 
         VGMap* getVGMap();

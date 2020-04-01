@@ -5,12 +5,22 @@
 #include <stdlib.h>
 #include "Score.h"
 #include <iostream>
+
 using namespace std;
 
-
+// === CLASS RESOURCECOUNTER ===
 ResourceCounter::ResourceCounter(GBMaps* gameMap) {
     gbMap = gameMap;
 };
+
+ResourceCounter::ResourceCounter() {
+    gbMap = new GBMaps();
+}
+
+ResourceCounter::~ResourceCounter() {
+    delete gbMap;
+    gbMap = NULL;
+}
 
 GBMaps* ResourceCounter::getGBMap() {
     return gbMap;
@@ -260,13 +270,20 @@ void ResourceCounter::calculateCollectedResources2(int x_value, int y_value, Typ
     } 
 };
 
+// === CLASS SCORE ===
 Score::Score(VGMap* v) {
     vgMap = v;
 };
 
+Score::Score() {
+    vgMap = new VGMap();
+}
+
 Score::~Score() {
+    /*
     delete vgMap;
     vgMap = NULL;
+    */
 }
 
 VGMap* Score::getVGMap() {
@@ -277,7 +294,7 @@ int Score::calculateScore() {
     int score;
     int totalScore = 0;
     bool doubled;
-
+    
     // Calculate score from columns
     for (int i = 0; i < getVGMap()->getWidth(); i++) {
         doubled = true;
@@ -326,6 +343,6 @@ int Score::calculateScore() {
             }
 		}
 	}
-
+    
     return totalScore;
 };

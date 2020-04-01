@@ -2,6 +2,7 @@
 #include <algorithm>
 #include "Game.h"
 #include "VGMapLoader.h"
+#include "Display.h"
 
 int main() {
 
@@ -21,15 +22,15 @@ int main() {
 		Player* player1 = players->at(0);
 		cout << "Loading " << *player1->getName() << "'s VGMap " << endl;
 		player1->setPlayersVGMap(VGMapLoader::load("VGMapTest1.txt"));
-		game->displayVillageBoard(player1);
+		Display::displayVillageBoard(player1);
 		cout << " " << endl;
 		Player* player2 = players->at(1);
 		cout << "Loading " << *player2->getName() << "'s VGMap " << endl;
 		player2->setPlayersVGMap(VGMapLoader::load("VGMapTest2.txt"));
-		game->displayVillageBoard(player2);
+		Display::displayVillageBoard(player2);
 		
 		game->calculateScores();
-		game->displayWinner();
+		Display::displayWinner(game->getPlayers());
 	}
 	else if (players->size() == 3) {
 		//Load test maps for three players
@@ -37,19 +38,19 @@ int main() {
 		Player* player1 = players->at(0);
 		cout << "Loading " << *player1->getName() << "'s VGMap " << endl;
 		player1->setPlayersVGMap(VGMapLoader::load("VGMapTest1.txt"));
-		game->displayVillageBoard(player1);
+		Display::displayVillageBoard(player1);
 		cout << " " << endl;
 		Player* player2 = players->at(1);
 		cout << "Loading " << *player2->getName() << "'s VGMap " << endl;
 		player2->setPlayersVGMap(VGMapLoader::load("VGMapTest2.txt"));
-		game->displayVillageBoard(player2);
+		Display::displayVillageBoard(player2);
 		Player* player3 = players->at(2);
 		cout << "Loading " << *player3->getName() << "'s VGMap " << endl;
 		player3->setPlayersVGMap(VGMapLoader::load("VGMapTest3.txt"));
-		game->displayVillageBoard(player3);
+		Display::displayVillageBoard(player3);
 
 		game->calculateScores();
-		game->displayWinner();
+		Display::displayWinner(game->getPlayers());
 	}
 	else {
 
@@ -58,23 +59,23 @@ int main() {
 		Player* player1 = players->at(0);
 		cout << "Loading " << *player1->getName() << "'s VGMap " << endl;
 		player1->setPlayersVGMap(VGMapLoader::load("VGMapTest1.txt"));
-		game->displayVillageBoard(player1);
+		Display::displayVillageBoard(player1);
 		cout << " " << endl;
 		Player* player2 = players->at(1);
 		cout << "Loading " << *player2->getName() << "'s VGMap " << endl;
 		player2->setPlayersVGMap(VGMapLoader::load("VGMapTest2.txt"));
-		game->displayVillageBoard(player2);
+		Display::displayVillageBoard(player2);
 		Player* player3 = players->at(2);
 		cout << "Loading " << *player3->getName() << "'s VGMap " << endl;
 		player3->setPlayersVGMap(VGMapLoader::load("VGMapTest3.txt"));
-		game->displayVillageBoard(player3);
+		Display::displayVillageBoard(player3);
 		Player* player4 = players->at(3);
 		cout << "Loading " << *player4->getName() << "'s VGMap " << endl;
 		player4->setPlayersVGMap(VGMapLoader::load("VGMapTest3.txt"));
-		game->displayVillageBoard(player4);
+		Display::displayVillageBoard(player4);
 
 		game->calculateScores();
-		game->displayWinner();
+		Display::displayWinner(game->getPlayers());
 
 	}
 

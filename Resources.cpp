@@ -9,12 +9,28 @@
 
 using namespace std;
 
+// === CLASS BUILDING === 
 Building::Building(Type* t, int* c) {
     type = t;
     cost = c;
-    actualCost = new int();
-    *actualCost = 0;
+    actualCost = new int(0);
 };
+
+Building::Building() {
+    type = new Type(Type::None);
+    cost = new int(0);
+    actualCost = new int(0);
+}
+
+Building::~Building() {
+    delete type;
+    delete cost;
+    delete actualCost;
+
+    type = NULL;
+    cost = NULL;
+    actualCost = NULL;
+}
 
 void Building::setActualCost(int* ac) {
     actualCost = ac;
@@ -26,7 +42,7 @@ int* Building::getCost() { return cost; }
 
 int* Building::getActualCost() { return actualCost; }
 
-
+// === CLASS HARVESTTILE === 
 HarvestTile::HarvestTile(Type* tln, Type* trn, Type* bln, Type* brn) {
     topLeftNode = tln;
     topRightNode = trn;
@@ -34,9 +50,31 @@ HarvestTile::HarvestTile(Type* tln, Type* trn, Type* bln, Type* brn) {
     bottomRightNode = brn;
 };
 
+HarvestTile::HarvestTile() {
+    topLeftNode = new Type(Type::None);
+    topRightNode = new Type(Type::None);
+    bottomLeftNode = new Type(Type::None);
+    bottomRightNode = new Type(Type::None);
+}
+
+HarvestTile::~HarvestTile() {
+    delete topLeftNode;
+    delete topRightNode;
+    delete bottomLeftNode;
+    delete bottomRightNode;
+
+    topLeftNode = NULL;
+    topRightNode = NULL;
+    bottomLeftNode = NULL;
+    bottomRightNode = NULL;
+}
+
 Type* HarvestTile::getTopLeftNode() { return topLeftNode; }
+
 Type* HarvestTile::getTopRightNode() { return topRightNode; }
+
 Type* HarvestTile::getBottomLeftNode() { return bottomLeftNode; }
+
 Type* HarvestTile::getBottomRightNode() { return bottomRightNode; }
 
 void HarvestTile::rotateTile() //rotates harvest tile
@@ -167,12 +205,26 @@ vector<HarvestTile*>* Deck::generateHarvestTiles() {
     return harvestTilevector;
 }
 
+// === CLASS DECK
 Deck::Deck() {
     srand(time(NULL)); // This is to make ran() random.
-    buildingDeck = new vector<Building*>();
     buildingDeck = generateBuildings();
-    harvestTileDeck = new vector<HarvestTile*>();
     harvestTileDeck = generateHarvestTiles();
+}
+
+Deck::~Deck() {
+    /*
+    for (int i = 0; i < buildingDeck->size(); i++)
+        delete(buildingDeck->at(i));
+
+    for (int i = 0; i < harvestTileDeck->size(); i++)
+        delete(harvestTileDeck->at(i));
+
+    */
+    delete(buildingDeck);
+    delete(harvestTileDeck);
+    buildingDeck = NULL;
+    harvestTileDeck = NULL;
 }
 
 Resource* Deck::draw(ResourceType resourceType) {
@@ -195,8 +247,10 @@ Resource* Deck::draw(ResourceType resourceType) {
 }
 
 vector<Building*>* Deck::getBuildingDeck() { return buildingDeck; }
+
 vector<HarvestTile*>* Deck::getHarvestTileDeck() { return harvestTileDeck; }
 
+// === CLASS HAND===
 Hand::Hand() {
     sheepResourceMarker = new int(0);
     stoneResourceMarker = new int(0);
@@ -204,6 +258,9 @@ Hand::Hand() {
     wheatResourceMarker = new int(0);
     buildings = new vector<Building*>();
     harvestTiles = new vector<HarvestTile*>();
+    deck = new Deck();
+    resourceCounter = new ResourceCounter();
+    shipmentTile = new HarvestTile();
 }
 
 Hand::Hand(Deck* d, ResourceCounter* rc) {
@@ -216,6 +273,40 @@ Hand::Hand(Deck* d, ResourceCounter* rc) {
     buildings = new vector<Building*>();
     harvestTiles = new vector<HarvestTile*>();
     initialize();
+}
+
+Hand::~Hand() {
+    /*
+    for (int i = 0; i < buildings->size(); i++) {
+        delete(buildings->at(i));
+        buildings->at(i) = NULL;
+    }
+
+    for (int i = 0; i < harvestTiles->size(); i++) {
+        delete(harvestTiles->at(i));
+        harvestTiles->at(i) = NULL;
+    }
+    */
+
+    delete deck;
+    delete resourceCounter;
+    delete sheepResourceMarker;
+    delete stoneResourceMarker;
+    delete timberResourceMarker;
+    delete wheatResourceMarker;
+    delete buildings;
+    delete harvestTiles;
+    delete shipmentTile;
+
+    deck = NULL;
+    resourceCounter = NULL;
+    sheepResourceMarker = NULL;
+    stoneResourceMarker = NULL;
+    timberResourceMarker = NULL;
+    wheatResourceMarker = NULL;
+    buildings = NULL;
+    harvestTiles = NULL;
+    shipmentTile = NULL;
 }
 
 void Hand::initialize() {
@@ -250,10 +341,15 @@ void Hand::exchange() {
 }
 
 int* Hand::getSheepResourceMarker() { return sheepResourceMarker; }
+
 int* Hand::getStoneResourceMarker() { return stoneResourceMarker; }
+
 int* Hand::getTimberResourceMarker() { return timberResourceMarker; }
+
 int* Hand::getWheatResourceMarker() { return wheatResourceMarker; }
+
 vector<Building*>* Hand::getBuildings() { return buildings; }
+
 vector<HarvestTile*>* Hand::getHarvestTiles() { return harvestTiles; }
 
 void Hand::setShipmentTile(HarvestTile* st) {
@@ -265,5 +361,6 @@ HarvestTile* Hand::getShipmentTile() const {
 }
 
 void Hand::setDeck(Deck* d) {
+    delete deck;
     deck = d;
 }

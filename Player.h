@@ -1,4 +1,5 @@
 #pragma once
+
 #include <string>
 #include <vector>
 #include "Resources.h"
@@ -21,7 +22,7 @@ class Player {
 
 		Player();
 		Player(string name, int id, GBMaps* gboard);
-		Player(Deck* deck, ResourceCounter* rc, GBMaps* gboard);
+		~Player();
 
 		void placeHarvestTile(int x, int y); //place tile on specific coordinates
 		void placeHarvestTile(int x, int y, HarvestTile* tile); //place tile on specific coordinates

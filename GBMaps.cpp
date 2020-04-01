@@ -174,11 +174,13 @@ GBMaps::GBMaps() {
 }
 
 GBMaps::~GBMaps() {
+	
 	iterate = gameBoard->begin();
 	for (; iterate != end(); ++iterate) {
 		delete(iterate->second);
 		iterate->second = NULL;
 	}
+	
 
 	delete gameBoard;
 	delete height;

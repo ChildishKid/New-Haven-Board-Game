@@ -49,7 +49,6 @@ public:
 	int getPlayerID();
 	int getNumberOfEmptySlots();
 	bool validateTypeAdjacency(int x, int y, Type type);
-
 	map<pair<int, int>, Circle*>::iterator iterate;
 	map<pair<int, int>, Circle*>::iterator begin();
 	map<pair<int, int>, Circle*>::iterator end();
