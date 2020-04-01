@@ -22,6 +22,8 @@ class ResourceCounter {
 class Score {
     public:
         Score(VGMap* vGMap);
+        ~Score();
+
         VGMap* getVGMap();
         int calculateScore();
 

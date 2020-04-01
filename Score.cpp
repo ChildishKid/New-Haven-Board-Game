@@ -264,6 +264,11 @@ Score::Score(VGMap* v) {
     vgMap = v;
 };
 
+Score::~Score() {
+    delete vgMap;
+    vgMap = NULL;
+}
+
 VGMap* Score::getVGMap() {
     return vgMap; 
 };

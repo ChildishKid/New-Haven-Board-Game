@@ -50,8 +50,6 @@ GBMaps* GBMapLoader::load(string fileName) {
 				inputStream >> input;
 				int y = stoi(input);
 
-				cout << x << endl;
-				cout << y << endl;
 				if (x != i || y != j) {
 					cout << "yes" << endl;
 					throw 0;
