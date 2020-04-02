@@ -56,11 +56,9 @@ map<Type, int*>* ResourceCounter::calculateCollectedResources(int x_value, int y
                 collectedResources, visitedNodes);
         }
     }
-    *collectedResources;
 
     // 2) Find adjcant nodes of top right node
-    // 2.1) Check if square to right of top right node exists
-
+    // 2.a) Check if square to right of top right node exists
     if (getGBMap()->squareToRightExists(x_value, y_value)) {
         // If top left node of square to the right has not been visited, visit it
         if (find(visitedNodes->begin(), visitedNodes->end(), getGBMap()->getSquare(x_value + 1, y_value)->getTopLeft()) == visitedNodes->end()) {
