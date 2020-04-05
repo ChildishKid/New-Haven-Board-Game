@@ -1,4 +1,5 @@
 #pragma once
+
 #include <string>
 #include <vector>
 #include <map>
@@ -16,7 +17,7 @@ public:
 		void setType(Type* type);
 
 	private:
-		Type * type;
+		Type* type;
 		friend bool operator==(const GBMaps::Node &lhs, const GBMaps::Node &rhs);
 		friend bool operator!=(const GBMaps::Node &lhs, const GBMaps::Node &rhs);
 	};

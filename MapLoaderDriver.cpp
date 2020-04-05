@@ -8,36 +8,38 @@ using namespace std;
 
 int main() {
 	string fileName = "BoardGameSave.txt";
-
+	/*
 	// Create board of player size 3;
 	cout << "=== CREATING NEW BOARD GAME OF 3 PLAYERS ===" << endl;
-	GBMaps* gameBoardOriginal = new GBMaps(3);
+	GBMaps* gameBoardOriginal = new GBMaps(4);
 	cout << "DONE!" << endl << endl;
 
 	cout << "=== SETTING RESOURCES ON FIRST SQUARE ===" << endl;
-	gameBoardOriginal->getSquare(0, 0)->setBottomLeft(new Type(Type::Wheat));
-	gameBoardOriginal->getSquare(0, 0)->setBottomRight(new Type(Type::Stone));
-	gameBoardOriginal->getSquare(0, 0)->setTopLeft(new Type(Type::Sheep));
-	gameBoardOriginal->getSquare(0, 0)->setTopRight(new Type(Type::Timber));
-	cout << "Top Left: " << gameBoardOriginal->getSquare(0, 0)->getTopLeft()->getType() << endl;
-	cout << "Top Right: " << gameBoardOriginal->getSquare(0, 0)->getTopRight()->getType() << endl;
-	cout << "Bottom Left: " << gameBoardOriginal->getSquare(0, 0)->getBottomLeft()->getType() << endl;
-	cout << "Bottom Right: " << gameBoardOriginal->getSquare(0, 0)->getBottomRight()->getType() << endl;
+	gameBoardOriginal->getSquare(1, 1)->setBottomLeft(new Type(Type::Wheat));
+	gameBoardOriginal->getSquare(1, 1)->setBottomRight(new Type(Type::Stone));
+	gameBoardOriginal->getSquare(1, 1)->setTopLeft(new Type(Type::Sheep));
+	gameBoardOriginal->getSquare(1, 1)->setTopRight(new Type(Type::Timber));
+	cout << "Top Left: " << gameBoardOriginal->getSquare(1, 1)->getTopLeft()->getType() << endl;
+	cout << "Top Right: " << gameBoardOriginal->getSquare(1, 1)->getTopRight()->getType() << endl;
+	cout << "Bottom Left: " << gameBoardOriginal->getSquare(1, 1)->getBottomLeft()->getType() << endl;
+	cout << "Bottom Right: " << gameBoardOriginal->getSquare(1, 1)->getBottomRight()->getType() << endl;
 	cout << endl;
 
 	cout << "=== SAVE AND LOAD GAME BOARD ===" << endl;
 	GBMapLoader::save(gameBoardOriginal, fileName);
+	system("pause");
+	*/
 	GBMaps* gameBoardReplace = GBMapLoader::load(fileName);
 	cout << "DONE!" << endl << endl;
 
 	cout << "=== DISPLAY RESOURCES ON FIRST SQUARE ===" << endl;
-	cout << "Top Left: " << gameBoardReplace->getSquare(0, 0)->getTopLeft()->getType() << endl;
-	cout << "Top Right: " << gameBoardReplace->getSquare(0, 0)->getTopRight()->getType() << endl;
-	cout << "Bottom Left: " << gameBoardReplace->getSquare(0, 0)->getBottomLeft()->getType() << endl;
-	cout << "Bottom Right: " << gameBoardReplace->getSquare(0, 0)->getBottomRight()->getType() << endl;
+	cout << "Top Left: " << gameBoardReplace->getSquare(1, 1)->getTopLeft()->getType() << endl;
+	cout << "Top Right: " << gameBoardReplace->getSquare(1, 1)->getTopRight()->getType() << endl;
+	cout << "Bottom Left: " << gameBoardReplace->getSquare(1, 1)->getBottomLeft()->getType() << endl;
+	cout << "Bottom Right: " << gameBoardReplace->getSquare(1, 1)->getBottomRight()->getType() << endl;
 	cout << endl;
 
-	
+	/*
 	//Creating new Village Board
 
 	cout << "=== CREATING VILLAGE BOARD ===" << endl;
@@ -74,6 +76,6 @@ int main() {
 	cout << "circle 2,3 is type: " << *gameboard2->getCircle(2, 3)->getBuilding()->getType() << endl;
 	cout << "circle 3,4 is type: " << *gameboard2->getCircle(3, 4)->getBuilding()->getType() << endl;
 	cout << "Loading successful" << endl;
-	
+	*/
 	system("pause");
 }

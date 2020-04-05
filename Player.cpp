@@ -5,7 +5,6 @@
 
 using namespace std;
 
-
 Player::Player(string n, int i, GBMaps* gboard) {
 	this->name = new string(n);
 	this->id = new int(i);
@@ -15,11 +14,41 @@ Player::Player(string n, int i, GBMaps* gboard) {
 	this->hasBuilt->insert(pair<Type, bool>(Type::Stone, false));
 	this->hasBuilt->insert(pair<Type, bool>(Type::Timber, false));
 	this->hasBuilt->insert(pair<Type, bool>(Type::Sheep, false));
-
+	this->playersHand = new Hand();
+	this->finalScore = new int(0);
+	this->playersVGMap = new VGMap();
 }
 
 Player::Player(){
+	this->name = new string("");
+	this->id = new int(0);
+	this->gboard = new GBMaps();
+	this->hasBuilt = new map<Type, bool>;
+	this->hasBuilt->insert(pair<Type, bool>(Type::Wheat, false));
+	this->hasBuilt->insert(pair<Type, bool>(Type::Stone, false));
+	this->hasBuilt->insert(pair<Type, bool>(Type::Timber, false));
+	this->hasBuilt->insert(pair<Type, bool>(Type::Sheep, false));
+	this->playersHand = new Hand();
+	this->finalScore = new int(0);
+	this->playersVGMap = new VGMap();
+}
 
+Player::~Player() {
+	delete(name);
+	delete(id);
+	delete(gboard);
+	delete(hasBuilt);
+	delete(playersHand);
+	delete(finalScore);
+	delete(playersVGMap);
+
+	name = NULL;
+	id = NULL;
+	gboard = NULL;
+	hasBuilt = NULL;
+	playersHand = NULL;
+	finalScore = NULL;
+	playersVGMap = NULL;
 }
 
 void Player::placeHarvestTile(int x, int y){ 
@@ -188,16 +217,19 @@ map<Type, int*>* Player::calculateResources(int x, int y) {
 }
 
 void Player::setPlayersVGMap(VGMap* map) {
+	delete playersVGMap;
 	playersVGMap = map;
 }
 
 void Player::setPlayersHand(Hand* h) {
+	delete playersHand;
 	playersHand = h;
 }
 
 void Player::setPlayersScore(int* score) {
-	finalScore = score;
+	*finalScore = *score;
 }
+
 bool Player::sortById(Player* one, Player* two) {
 	return *one->getId() < *two->getId();
 }

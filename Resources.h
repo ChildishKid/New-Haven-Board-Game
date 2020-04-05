@@ -1,3 +1,4 @@
+#pragma once
 #include <vector>
 #include <stdlib.h>
 #include <iostream>
@@ -5,7 +6,6 @@
 #include <ctime>
 #include <map>
 #include <string>
-#pragma once
 
 using namespace std;
 
@@ -35,6 +35,8 @@ class Building : public Resource {
 
     public:
         Building(Type* t, int* c);
+        Building();
+        ~Building();
         void setActualCost(int* ac);
         Type* getType();
         int* getCost();
@@ -50,6 +52,8 @@ class HarvestTile : public Resource {
 
     public:
         HarvestTile(Type* tln, Type* trn, Type* bln, Type* brn);
+        HarvestTile();
+        ~HarvestTile();
         Type* getTopLeftNode();
         Type* getTopRightNode();
         Type* getBottomLeftNode();
@@ -71,11 +75,11 @@ class Deck {
 
     public:
         Deck();
+        ~Deck();
         Resource* draw(ResourceType ResourceType);
         vector<Building*>* getBuildingDeck();
         vector<HarvestTile*>* getHarvestTileDeck();
 };
-
 
 class Hand {
     private:
@@ -93,6 +97,7 @@ class Hand {
     public: 
         Hand();
         Hand(Deck* deck, ResourceCounter* rc);
+        ~Hand();
 
         void exchange();
 

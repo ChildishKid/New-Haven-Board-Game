@@ -33,53 +33,65 @@ GBMaps* GBMapLoader::load(string fileName) {
 
 		GBMaps* gameBoard = new GBMaps(numberOfPlayers);
 
-		// Set up size depending on number of players
-		int elements;
-		if (gameBoard->getNumberOfPlayers() == 2) {
-			elements = 25;
-		}
-		else if (gameBoard->getNumberOfPlayers() == 3) {
-			elements = 35;
-		}
-		else {
-			elements = 45;
-		}
-
 		// Load new square values onto map
-		for (int i = 0; i < elements; i++) {
-			inputStream >> input;
-			int x = stoi(input);
-			inputStream >> input;
-			int y = stoi(input);
-			GBMaps::Square* square = gameBoard->getSquare(x, y);
+		for (int i = 0; i < gameBoard->getWidth(); i++) {
+			for (int j = 0; j < gameBoard->getHeight(); j++) {
+				if (numberOfPlayers == 4) {
+					if ((i == 0 && j == 0)
+						|| (i == 0 && j == gameBoard->getHeight() - 1)
+						|| (i == gameBoard->getWidth() - 1 && j == 0)
+						|| (i == gameBoard->getWidth() - 1 && j == gameBoard->getHeight() - 1)) {
+						continue;
+					}
+				}
 
-			inputStream >> input;
-			bool status;
-			if (stoi(input)) {
-				status = true;
+				inputStream >> input;
+				int x = stoi(input);
+				inputStream >> input;
+				int y = stoi(input);
+
+				if (x != i || y != j) {
+					cout << "yes" << endl;
+					throw 0;
+				}
+
+				GBMaps::Square* square = gameBoard->getSquare(x, y);
+
+				inputStream >> input;
+				bool status;
+				if (stoi(input)) {
+					status = true;
+				}
+				else {
+					status = false;
+				}
+				square->setStatus(status);
+
+				Type resourceTL;
+				inputStream >> resourceTL;
+				Type resourceTR;
+				inputStream >> resourceTR;
+				Type resourceBL;
+				inputStream >> resourceBL;
+				Type resourceBR;
+				inputStream >> resourceBR;
+
+				square->getTopLeft()->setType(new Type(resourceTL));
+				square->getTopRight()->setType(new Type(resourceTR));
+				square->getBottomLeft()->setType(new Type(resourceBL));
+				square->getBottomRight()->setType(new Type(resourceBR));
 			}
-			else {
-				status = false;
-			}
-			square->setStatus(status);
-
-			Type resourceTL;
-			inputStream >> resourceTL;
-			Type resourceTR;
-			inputStream >> resourceTR;
-			Type resourceBL;
-			inputStream >> resourceBL;
-			Type resourceBR;
-			inputStream >> resourceBR;
-
-			square->getTopLeft()->setType(new Type(resourceTL));
-			square->getTopRight()->setType(new Type(resourceTR));
-			square->getBottomLeft()->setType(new Type(resourceBL));
-			square->getBottomRight()->setType(new Type(resourceBR));
 		}
 
 		inputStream.close();
 		return gameBoard;
+	}
+	catch (int e) {
+		if (e == 0) {
+			cout << "Corrupted file!" << endl;
+			system("pause");
+			exit(0);
+		}
 	}
 	catch (exception e) {
 		cout << "Invalid Save File!" << endl;

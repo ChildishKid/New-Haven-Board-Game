@@ -3,7 +3,6 @@
 #include<map>
 #include<vector>
 #include "VGMap.h"
-
 using namespace std;
 
 VGMap::Circle::Circle(int x_value, int y_value) {
@@ -16,9 +15,9 @@ VGMap::Circle::Circle(int x_value, int y_value) {
 }
 
 VGMap::Circle::Circle() {
-	x = 0;
-	y = 0;
-	cost = 0;
+	x = new int(0);
+	y = new int(0);
+	cost = new int(0);
 	status = new bool(false);
 	adjacent = new vector<Circle*>();
 	building = NULL;
@@ -101,8 +100,8 @@ VGMap::VGMap(string name, int id) {
 	playerBoard = new map<pair<int, int>, Circle*>();
 	width = new int (5);
 	height = new int (6);
-	iterate = playerBoard->begin();
 	setupBoard();
+	iterate = playerBoard->begin();
 }
 
 VGMap::VGMap() {
@@ -110,7 +109,6 @@ VGMap::VGMap() {
 	playerBoard = new map<pair<int, int>, Circle*>();
 	width = new int(5);
 	height = new int (6);
-	iterate = playerBoard->begin();
 
 	for (int i = 0; i < *width; i++) {
 		for (int j = 0; j < *height; j++) {
@@ -140,15 +138,18 @@ VGMap::VGMap() {
 		}
 	}
 	setupBoard();
+	iterate = playerBoard->begin();
 }
 
 VGMap::~VGMap() {
+	/*
 	for (int i = 0; i < *width; i++) {
 		for (int j = 0; j < *height; j++) {
 			delete (*playerBoard)[{i, j}];
 			(*playerBoard)[{i, j}] = NULL;
 		}
 	}
+	*/
 
 	delete playerBoard;
 	delete width;
@@ -185,7 +186,7 @@ int VGMap::getNumberOfEmptySlots() {
 	int emptySlots = 0;
 	iterate = begin();
 	while (iterate != end()) {
-		if (iterate->second->getStatus() == 0) {
+		if (iterate->second->getBuilding() == NULL) {
 			emptySlots++;
 		}
 		iterate++;
@@ -231,4 +232,32 @@ void VGMap::setupBoard() {
 
 		}
 	}
+}
+
+bool VGMap::validateTypeAdjacency(int x, int y, Type type) {
+	map<pair<int, int>, Circle*>::iterator it = begin();
+
+	while (it != end()) {
+		if (it->second->getBuilding() == NULL) {
+			it++;
+			continue;
+		}
+
+		if (*(it->second->getBuilding()->getType()) == type)
+			goto past;
+		it++;
+	}
+	return true;
+
+past:
+	vector<Circle*> adj = getCircle(x, y)->getAdj();
+	for (int i = 0; i < adj.size(); i++) {
+		if (adj.at(i)->getBuilding() == NULL)
+			continue;
+
+		if (*(adj.at(i)->getBuilding()->getType()) == type)
+			return true;
+	}
+	return false;
+
 }
