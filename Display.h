@@ -1,5 +1,5 @@
 #pragma once
-#include "Player.h";
+#include "Player.h"
 
 namespace Display {
 	void displayGameBoard(GBMaps* gbMap, map<Type, int>* resourceMarker);
