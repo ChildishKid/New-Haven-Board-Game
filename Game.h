@@ -1,5 +1,6 @@
 #pragma once
 #include <vector>
+#include <iostream>
 #include "GBMaps.h"
 #include "Score.h"
 #include "Player.h"
@@ -10,7 +11,7 @@ using namespace std;
 class ResourceMarkerObserver;
 class VillageBuildingObserver;
 
-class Game {
+class Game : public Observable {
     public:
         Game();
         ~Game();
@@ -22,7 +23,7 @@ class Game {
         vector<Player*>* getPlayers() const;
         vector<Building*>* getBuildingPool() const;
         Deck* getDeck() const;
-        map<Type, int> getResourceMarker() const;
+        friend std::ostream& operator<<(std::ostream& stream, const Game& game);
     
     private:
         GBMaps* gbMap;
@@ -32,8 +33,8 @@ class Game {
         map<Type, int>* resourceMarker;
         bool* shipmentTile;
         ResourceCounter* rc;
-        ResourceMarkerObserver* resourceMarkerObserver;
-        map<Player*, VillageBuildingObserver*>* villageBuildingObservers;
+        map<string, int>* villageBuildingCount; //maps player name to number of village buildings that player has played
+        Player* currentPlayer;
 
         void setupGBMap();
         void createPlayers();
@@ -42,6 +43,15 @@ class Game {
         pair<int, int> pickHarvestTile(Player* player);
         bool pickBuildingTile(Player* player);
         void calculateResources(Player* player, pair<int, int> p);
-
-
 };
+
+inline std::ostream& operator<<(std::ostream& stream, const Game& game) {
+    stream << *game.currentPlayer->getName() << " is currently playing. " << endl;
+    stream << *game.currentPlayer->getName() << " currently has " << (*game.villageBuildingCount)[*game.currentPlayer->getName()]  << " village buildings." << endl;
+    stream << "The resource markers are currently set as: " << endl;
+    cout << "Sheep: " << (*game.resourceMarker)[Type::Sheep] << endl;
+    cout << "Stone: " << (*game.resourceMarker)[Type::Stone] << endl;
+    cout << "Timber: " << (*game.resourceMarker)[Type::Timber] << endl;
+    cout << "Wheat: " << (*game.resourceMarker)[Type::Wheat] << endl;
+    return stream;
+}

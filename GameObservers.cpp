@@ -1,50 +1,50 @@
 #include "GameObservers.h"
+#include "Game.h"
 #include <iostream>
 #include <map>
 #include <string>
+#include <vector>
+using namespace std;
 
-ResourceMarkerObserver::ResourceMarkerObserver() {
-    resourceMarkers = new map<Type, int>();
-    (*resourceMarkers)[Type::Sheep] = 0;
-    (*resourceMarkers)[Type::Wheat] = 0;
-    (*resourceMarkers)[Type::Timber] = 0;
-    (*resourceMarkers)[Type::Stone] = 0;
+Observable::Observable() {
+    observers = new vector<IObserver*>();
+}
+
+void Observable::addObserver(IObserver* observer) {
+    observers->push_back(observer);
 };
 
-void ResourceMarkerObserver::update(map<Type, int>* rm, string* playerName, bool resourcesCollected) {
-    cout << "~~~~~~~~~~~ RESOURCE MARKER OBSERVER ~~~~~~~~~~~" << endl;
-    if (resourcesCollected) {
-        cout << *playerName << " has played a harvest tile." << endl;
-    } else {
-        cout << *playerName << " has built a village building." << endl;
+void Observable::removeObserver(IObserver* observer) {
+    for( std::vector<IObserver*>::iterator iter = observers->begin(); iter != observers->end(); ++iter ) {
+        if(*iter == observer) {
+            observers->erase(iter);
+            break;
+        }
     }
+}
 
-    cout << "The resource markers were previously set to: " << endl;
-    cout << "Sheep: " << (*resourceMarkers)[Type::Sheep] << endl;
-    cout << "Wheat: " << (*resourceMarkers)[Type::Wheat] << endl;
-    cout << "Timber: " << (*resourceMarkers)[Type::Timber] << endl;
-    cout << "Stone: " << (*resourceMarkers)[Type::Stone] << endl;
+void Observable::notify(string message) {
+    for( std::vector<IObserver*>::iterator iter = observers->begin(); iter != observers->end(); ++iter ) {
+        (*iter)->update(message);
+    }
+}
 
-    (*resourceMarkers)[Type::Sheep] = (*rm)[Type::Sheep];
-    (*resourceMarkers)[Type::Wheat] = (*rm)[Type::Wheat];
-    (*resourceMarkers)[Type::Timber] = (*rm)[Type::Timber];
-    (*resourceMarkers)[Type::Stone] = (*rm)[Type::Stone];
+void IObserver::setObservable(Observable* obs) {
+    observable = obs;
+}
 
-    cout << "The resource markers have now been set to: " << endl;
-    cout << "Sheep: " << (*resourceMarkers)[Type::Sheep] << endl;
-    cout << "Wheat: " << (*resourceMarkers)[Type::Wheat] << endl;
-    cout << "Timber: " << (*resourceMarkers)[Type::Timber] << endl;
-    cout << "Stone: " << (*resourceMarkers)[Type::Stone] << endl;
-    
-};
+Observable* IObserver::getObservable() const {
+    return observable;
+}
 
-VillageBuildingObserver::VillageBuildingObserver() {
-    villageBuildingCount = new int(0);
-};
+GameObserver::GameObserver(Game* obs) {
+    obs->addObserver(this);
+    setObservable(obs);
+}
 
-void VillageBuildingObserver::update(string* playerName) {
-    cout << "~~~~~~~~~~~ VILLAGE BUILDING OBSERVER ~~~~~~~~~~~" << endl;
-    cout << *playerName << " has played a village building." << endl;
-    *villageBuildingCount++;
-    cout << *playerName << " has now played " << *villageBuildingCount << " buildings." << endl;
-};
+void GameObserver::update(string message) {
+    cout << message << endl;
+    cout << "Observer has been updated. Here is the current state of the game: " << endl;
+    cout << *static_cast<Game*>(getObservable()) << endl;
+}
+
