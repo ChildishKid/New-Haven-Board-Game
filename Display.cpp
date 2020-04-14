@@ -1,4 +1,4 @@
-#include "Display.h";
+#include "Display.h"
 
 void Display::displayGameBoard(GBMaps* gbMap, map<Type, int>* resourceMarker) {
 	cout << "====== GAME BOARD ======" << endl << endl;

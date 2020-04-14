@@ -64,6 +64,7 @@ void Game::setupGBMap() {
 };
 
 void Game::createPlayers() {
+	villageBuildingCount = new map<string, int>();
 	string name;
 	int id;
 	players = new vector<Player*>();
@@ -97,6 +98,7 @@ void Game::createPlayers() {
 			static_cast<HarvestTile*>(deck->draw(ResourceType::HarvestTile)));
 
 		players->insert(players->begin(), player);
+		(*villageBuildingCount)[*player->getName()] = 0;
 	}
 };
 
@@ -137,7 +139,7 @@ Deck* Game::getDeck() const {
 pair<int, int> Game::pickHarvestTile(Player* player) {
 
 	// Pick harvest tile
-	std::system("CLS");
+	// std::system("CLS");
 	Display::displayGameBoard(gbMap, resourceMarker);
 	Display::displayBuidlingPool(buildingPool);
 	Display::displayPlayerHand(player);
@@ -163,7 +165,7 @@ pair<int, int> Game::pickHarvestTile(Player* player) {
 			break;
 		}
 		catch (int e) {
-			std::system("CLS");
+			// std::system("CLS");
 			Display::displayGameBoard(gbMap, resourceMarker);
 			Display::displayBuidlingPool(buildingPool);
 			Display::displayPlayerHand(player);
@@ -175,7 +177,7 @@ pair<int, int> Game::pickHarvestTile(Player* player) {
 
 	if (pick != 99) {
 		// Give option to rotate it
-		std::system("CLS");
+		// std::system("CLS");
 		Display::displayGameBoard(gbMap, resourceMarker);
 		Display::displayBuidlingPool(buildingPool);
 		Display::displayPlayerHand(player);
@@ -200,7 +202,7 @@ pair<int, int> Game::pickHarvestTile(Player* player) {
 					break;
 			}
 			catch (int e) {
-				std::system("CLS");
+				// std::system("CLS");
 				Display::displayGameBoard(gbMap, resourceMarker);
 				Display::displayBuidlingPool(buildingPool);
 				Display::displayPlayerHand(player);
@@ -213,7 +215,7 @@ pair<int, int> Game::pickHarvestTile(Player* player) {
 		}
 
 		// Decide location to put them in:
-		std::system("CLS");
+		// std::system("CLS");
 		Display::displayGameBoard(gbMap, resourceMarker);
 		Display::displayBuidlingPool(buildingPool);
 		Display::displayPlayerHand(player);
@@ -260,7 +262,7 @@ pair<int, int> Game::pickHarvestTile(Player* player) {
 
 			}
 			catch (int e) {
-				std::system("CLS");
+				// std::system("CLS");
 				Display::displayGameBoard(gbMap, resourceMarker);
 				Display::displayBuidlingPool(buildingPool);
 				Display::displayPlayerHand(player);
@@ -277,7 +279,7 @@ pair<int, int> Game::pickHarvestTile(Player* player) {
 		// Choose types:
 		Type* type;
 
-		std::system("CLS");
+		// std::system("CLS");
 		Display::displayGameBoard(gbMap, resourceMarker);
 		Display::displayBuidlingPool(buildingPool);
 		Display::displayPlayerHand(player);
@@ -306,7 +308,7 @@ pair<int, int> Game::pickHarvestTile(Player* player) {
 				break;
 			}
 			catch (int e) {
-				std::system("CLS");
+				// std::system("CLS");
 				Display::displayGameBoard(gbMap, resourceMarker);
 				Display::displayBuidlingPool(buildingPool);
 				Display::displayPlayerHand(player);
@@ -318,7 +320,7 @@ pair<int, int> Game::pickHarvestTile(Player* player) {
 		}
 
 		// Decide location to put them in:
-		std::system("CLS");
+		// std::system("CLS");
 		Display::displayGameBoard(gbMap, resourceMarker);
 		Display::displayBuidlingPool(buildingPool);
 		Display::displayPlayerHand(player);
@@ -358,7 +360,7 @@ pair<int, int> Game::pickHarvestTile(Player* player) {
 
 			}
 			catch (int e) {
-				std::system("CLS");
+				// std::system("CLS");
 				Display::displayGameBoard(gbMap, resourceMarker);
 				Display::displayBuidlingPool(buildingPool);
 				Display::displayPlayerHand(player);
@@ -376,7 +378,7 @@ pair<int, int> Game::pickHarvestTile(Player* player) {
 bool Game::pickBuildingTile(Player* player) {
 
 	// Determine if enough resources to build anything
-	std::system("CLS");
+	// std::system("CLS");
 	Display::displayGameBoard(gbMap, resourceMarker);
 	Display::displayBuidlingPool(buildingPool);
 	Display::displayPlayerHand(player);
@@ -398,7 +400,7 @@ loop:
 			if (input == "Y" || input == "y") {
 
 				// Choose which building to place
-				std::system("CLS");
+				// std::system("CLS");
 				Display::displayGameBoard(gbMap, resourceMarker);
 				Display::displayBuidlingPool(buildingPool);
 				Display::displayPlayerHand(player);
@@ -415,7 +417,7 @@ loop:
 					throw 0;
 
 				// Decided whether face up or face down.
-				std::system("CLS");
+				// std::system("CLS");
 				Display::displayGameBoard(gbMap, resourceMarker);
 				Display::displayBuidlingPool(buildingPool);
 				Display::displayPlayerHand(player);
@@ -436,7 +438,7 @@ loop:
 					option = "Down";
 
 				// Choose location to put building tile onto
-				std::system("CLS");
+				// std::system("CLS");
 				Display::displayGameBoard(gbMap, resourceMarker);
 				Display::displayBuidlingPool(buildingPool);
 				Display::displayPlayerHand(player);
@@ -475,7 +477,7 @@ loop:
 					int resourceAmount;
 					resourceAmount = (*resourceMarker)[resourceType];
 					if (resourceAmount <= 0 || cost > resourceAmount) {
-						std::system("CLS");
+						// std::system("CLS");
 						Display::displayGameBoard(gbMap, resourceMarker);
 						Display::displayBuidlingPool(buildingPool);
 						Display::displayPlayerHand(player);
@@ -484,7 +486,10 @@ loop:
 					}
 					else {
 						player->buildVillage(x, y, cost, pick, option);
+						(*villageBuildingCount)[*player->getName()] = (*villageBuildingCount)[*player->getName()] + 1;
+						notify(*player->getName() + " has built a village building.");
 						(*resourceMarker)[resourceType] -= cost;
+						notify("Resource markers have been updated accordingly.");
 						return true;
 					}
 				}
@@ -494,7 +499,7 @@ loop:
 					// Make sure that it can be placed at the right spot
 					if (cost != *player->getPlayersHand()->getBuildings()->at(pick)->getCost()) {
 
-						std::system("CLS");
+						// std::system("CLS");
 						Display::displayGameBoard(gbMap, resourceMarker);
 						Display::displayBuidlingPool(buildingPool);
 						Display::displayPlayerHand(player);
@@ -507,7 +512,7 @@ loop:
 					resourceAmount = (*resourceMarker)[resourceType];
 
 					if (resourceAmount <= 0 || cost > resourceAmount) {
-						std::system("CLS");
+						// std::system("CLS");
 						Display::displayGameBoard(gbMap, resourceMarker);
 						Display::displayBuidlingPool(buildingPool);
 						Display::displayPlayerHand(player);
@@ -516,7 +521,10 @@ loop:
 					}
 					else {
 						player->buildVillage(x, y, cost, pick, option);
+						(*villageBuildingCount)[*player->getName()] = (*villageBuildingCount)[*player->getName()] + 1;
+						notify(*player->getName() + " has built a village building.");
 						(*resourceMarker)[resourceType] -= cost;
+						notify("Resource markers have been updated accordingly.");
 						return true;
 					}
 				}
@@ -526,7 +534,7 @@ loop:
 				return false;
 		}
 		catch (int e) {
-			std::system("CLS");
+			// std::system("CLS");
 			Display::displayGameBoard(gbMap, resourceMarker);
 			Display::displayBuidlingPool(buildingPool);
 			Display::displayPlayerHand(player);
@@ -576,12 +584,16 @@ void Game::run() {
 
 	while (gbMap->getNumberOfEmptySlots() > 1) {
 		Player* player = (*it);
+		currentPlayer = player;
+		notify("It is now " + *player->getName() + "'s turn.");
 
-		// 1. Place Harvest Tile
+		// 1. Place Harvest Tile and notify observers
 		pair<int, int> harvestTile = pickHarvestTile(player);
+		notify(*player->getName() + " has played a harvest tile.");
 
 		// 2. Calculate Gathered Resources
 		calculateResources(player, harvestTile);
+		notify("The resources have been calculated.");
 
 		// 3. Place Building
 		// 4. Rotation to Share
@@ -611,7 +623,7 @@ void Game::run() {
 		// Note: First one must be from Building Pool
 		if (draw_buildings > 0) {
 
-			std::system("CLS");
+			// std::system("CLS");
 			Display::displayGameBoard(gbMap, resourceMarker);
 			Display::displayBuidlingPool(buildingPool);
 			Display::displayPlayerHand(player);
@@ -637,7 +649,7 @@ void Game::run() {
 					break;
 				}
 				catch (int e) {
-					std::system("CLS");
+					// std::system("CLS");
 					Display::displayGameBoard(gbMap, resourceMarker);
 					Display::displayBuidlingPool(buildingPool);
 					Display::displayPlayerHand(player);
@@ -696,10 +708,12 @@ void Game::run() {
 
 		if (it == players->end())
 			it = players->begin();
+		
+		notify(*player->getName() + " is at the end of his/her turn.");
 	}
 
 	// 6. Calculate Total Scores
-	std::system("CLS");
+	// std::system("CLS");
 	calculateScores();
 
 	// 7. Determine Winner
