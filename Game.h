@@ -22,6 +22,7 @@ class Game : public Observable {
         GBMaps* getGbMap() const;
         vector<Player*>* getPlayers() const;
         vector<Building*>* getBuildingPool() const;
+        map<Type, int>* getResourceMarker() const;
         Deck* getDeck() const;
         friend std::ostream& operator<<(std::ostream& stream, const Game& game);
     

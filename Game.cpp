@@ -136,15 +136,15 @@ Deck* Game::getDeck() const {
 	return deck;
 }
 
+map<Type, int>* Game::getResourceMarker() const {
+	return resourceMarker;
+}
+
 pair<int, int> Game::pickHarvestTile(Player* player) {
 
 	// Pick harvest tile
-	// std::system("CLS");
-	Display::displayGameBoard(gbMap, resourceMarker);
-	Display::displayBuidlingPool(buildingPool);
-	Display::displayPlayerHand(player);
-	Display::displayVillageBoard(player);
-
+	std::system("CLS");
+	notify(player, "It is " + *player->getName() + "'s turn!");
 	int pick;
 	while (true) {
 		try {
@@ -165,11 +165,8 @@ pair<int, int> Game::pickHarvestTile(Player* player) {
 			break;
 		}
 		catch (int e) {
-			// std::system("CLS");
-			Display::displayGameBoard(gbMap, resourceMarker);
-			Display::displayBuidlingPool(buildingPool);
-			Display::displayPlayerHand(player);
-			Display::displayVillageBoard(player);
+			std::system("CLS");
+			notify(player, "It is " + *player->getName() + "'s turn!");
 			cout << "Error: Out of range or invalid input!" << endl;
 			continue;
 		}
@@ -178,10 +175,14 @@ pair<int, int> Game::pickHarvestTile(Player* player) {
 	if (pick != 99) {
 		// Give option to rotate it
 		// std::system("CLS");
+		std::system("CLS");
+		/*
 		Display::displayGameBoard(gbMap, resourceMarker);
 		Display::displayBuidlingPool(buildingPool);
 		Display::displayPlayerHand(player);
 		Display::displayVillageBoard(player);
+		*/
+		notify(player, "Player " + *player->getName() + " has selected tile " + to_string(pick) + ".");
 		cout << "Would you like to rotate it clockwise?" << endl;
 		while (true) {
 			try {
@@ -202,11 +203,8 @@ pair<int, int> Game::pickHarvestTile(Player* player) {
 					break;
 			}
 			catch (int e) {
-				// std::system("CLS");
-				Display::displayGameBoard(gbMap, resourceMarker);
-				Display::displayBuidlingPool(buildingPool);
-				Display::displayPlayerHand(player);
-				Display::displayVillageBoard(player);
+				std::system("CLS");
+				notify(player, "Player " + *player->getName() + " has selected tile " + to_string(pick) + ".");
 				if (e == 0)
 					cout << "Error: Invalid input!" << endl;
 				cout << "Would you like to rotate it clockwise?" << endl;
@@ -215,11 +213,8 @@ pair<int, int> Game::pickHarvestTile(Player* player) {
 		}
 
 		// Decide location to put them in:
-		// std::system("CLS");
-		Display::displayGameBoard(gbMap, resourceMarker);
-		Display::displayBuidlingPool(buildingPool);
-		Display::displayPlayerHand(player);
-		Display::displayVillageBoard(player);
+		std::system("CLS");
+		notify(player, "Player " + *player->getName() + " has selected tile " + to_string(pick) + ".");
 		while (true) {
 			try {
 				// Decide on location to put it on
@@ -262,11 +257,8 @@ pair<int, int> Game::pickHarvestTile(Player* player) {
 
 			}
 			catch (int e) {
-				// std::system("CLS");
-				Display::displayGameBoard(gbMap, resourceMarker);
-				Display::displayBuidlingPool(buildingPool);
-				Display::displayPlayerHand(player);
-				Display::displayVillageBoard(player);
+				std::system("CLS");
+				notify(player, "Player " + *player->getName() + " has selected tile " + to_string(pick) + ".");
 				if (e == 0)
 					cout << "Error: Out of range or invalid input!" << endl;
 				else if (e == 1)
@@ -279,11 +271,8 @@ pair<int, int> Game::pickHarvestTile(Player* player) {
 		// Choose types:
 		Type* type;
 
-		// std::system("CLS");
-		Display::displayGameBoard(gbMap, resourceMarker);
-		Display::displayBuidlingPool(buildingPool);
-		Display::displayPlayerHand(player);
-		Display::displayVillageBoard(player);
+		std::system("CLS");
+		notify(player, "Player " + *player->getName() + " has selected tile " + to_string(pick) + ".");
 		while (true) {
 			try {
 				cout << "Pick Resource: (Sheep/Stone/Timber/Wheat)" << endl;
@@ -308,11 +297,8 @@ pair<int, int> Game::pickHarvestTile(Player* player) {
 				break;
 			}
 			catch (int e) {
-				// std::system("CLS");
-				Display::displayGameBoard(gbMap, resourceMarker);
-				Display::displayBuidlingPool(buildingPool);
-				Display::displayPlayerHand(player);
-				Display::displayVillageBoard(player);
+				std::system("CLS");
+				notify(player, "Player " + *player->getName() + " has selected tile " + to_string(pick) + ".");
 				if (e == 0)
 					cout << "Error: Invalid input!" << endl;
 				continue;
@@ -320,11 +306,8 @@ pair<int, int> Game::pickHarvestTile(Player* player) {
 		}
 
 		// Decide location to put them in:
-		// std::system("CLS");
-		Display::displayGameBoard(gbMap, resourceMarker);
-		Display::displayBuidlingPool(buildingPool);
-		Display::displayPlayerHand(player);
-		Display::displayVillageBoard(player);
+		std::system("CLS");
+		notify(player, "Player " + *player->getName() + " has selected tile " + to_string(pick) + ".");
 		while (true) {
 			try {
 				// Decide on location to put it on
@@ -360,11 +343,8 @@ pair<int, int> Game::pickHarvestTile(Player* player) {
 
 			}
 			catch (int e) {
-				// std::system("CLS");
-				Display::displayGameBoard(gbMap, resourceMarker);
-				Display::displayBuidlingPool(buildingPool);
-				Display::displayPlayerHand(player);
-				Display::displayVillageBoard(player);
+				std::system("CLS");
+				notify(player, "Player " + *player->getName() + " has selected tile " + to_string(pick) + ".");
 				if (e == 0)
 					cout << "Error: Out of range or invalid input!" << endl;
 				else if (e == 1)
@@ -378,11 +358,8 @@ pair<int, int> Game::pickHarvestTile(Player* player) {
 bool Game::pickBuildingTile(Player* player) {
 
 	// Determine if enough resources to build anything
-	// std::system("CLS");
-	Display::displayGameBoard(gbMap, resourceMarker);
-	Display::displayBuidlingPool(buildingPool);
-	Display::displayPlayerHand(player);
-	Display::displayVillageBoard(player);
+	std::system("CLS");
+	notify(player, "Player " + *player->getName() + " can place building tile! (if possible)");
 
 loop:
 	while (true) {
@@ -400,11 +377,8 @@ loop:
 			if (input == "Y" || input == "y") {
 
 				// Choose which building to place
-				// std::system("CLS");
-				Display::displayGameBoard(gbMap, resourceMarker);
-				Display::displayBuidlingPool(buildingPool);
-				Display::displayPlayerHand(player);
-				Display::displayVillageBoard(player);
+				std::system("CLS");
+				notify(player, "");
 
 				int pick;
 				cout << "Which building tile would you like to pick?" << endl;
@@ -417,11 +391,9 @@ loop:
 					throw 0;
 
 				// Decided whether face up or face down.
-				// std::system("CLS");
-				Display::displayGameBoard(gbMap, resourceMarker);
-				Display::displayBuidlingPool(buildingPool);
-				Display::displayPlayerHand(player);
-				Display::displayVillageBoard(player);
+				std::system("CLS");
+				notify(player, "Player " + *player->getName() + " has selected building " + to_string(pick) + ".");
+
 				string option;
 				cout << "Would you like to build it face-up or face-down?" << endl;
 				cout << "(U/D): ";
@@ -438,11 +410,8 @@ loop:
 					option = "Down";
 
 				// Choose location to put building tile onto
-				// std::system("CLS");
-				Display::displayGameBoard(gbMap, resourceMarker);
-				Display::displayBuidlingPool(buildingPool);
-				Display::displayPlayerHand(player);
-				Display::displayVillageBoard(player);
+				std::system("CLS");
+				notify(player, "Player " + *player->getName() + " has selected building " + to_string(pick) + ".");
 				int x, y;
 				cout << "Where would you like to place it?" << endl;
 				cout << "X = ";
@@ -477,19 +446,12 @@ loop:
 					int resourceAmount;
 					resourceAmount = (*resourceMarker)[resourceType];
 					if (resourceAmount <= 0 || cost > resourceAmount) {
-						// std::system("CLS");
-						Display::displayGameBoard(gbMap, resourceMarker);
-						Display::displayBuidlingPool(buildingPool);
-						Display::displayPlayerHand(player);
-						Display::displayVillageBoard(player);
 						throw 3;
 					}
 					else {
 						player->buildVillage(x, y, cost, pick, option);
 						(*villageBuildingCount)[*player->getName()] = (*villageBuildingCount)[*player->getName()] + 1;
-						notify(*player->getName() + " has built a village building.");
 						(*resourceMarker)[resourceType] -= cost;
-						notify("Resource markers have been updated accordingly.");
 						return true;
 					}
 				}
@@ -498,12 +460,6 @@ loop:
 
 					// Make sure that it can be placed at the right spot
 					if (cost != *player->getPlayersHand()->getBuildings()->at(pick)->getCost()) {
-
-						// std::system("CLS");
-						Display::displayGameBoard(gbMap, resourceMarker);
-						Display::displayBuidlingPool(buildingPool);
-						Display::displayPlayerHand(player);
-						Display::displayVillageBoard(player);
 						throw 4;
 					}
 
@@ -512,19 +468,12 @@ loop:
 					resourceAmount = (*resourceMarker)[resourceType];
 
 					if (resourceAmount <= 0 || cost > resourceAmount) {
-						// std::system("CLS");
-						Display::displayGameBoard(gbMap, resourceMarker);
-						Display::displayBuidlingPool(buildingPool);
-						Display::displayPlayerHand(player);
-						Display::displayVillageBoard(player);
 						throw 3;
 					}
 					else {
 						player->buildVillage(x, y, cost, pick, option);
 						(*villageBuildingCount)[*player->getName()] = (*villageBuildingCount)[*player->getName()] + 1;
-						notify(*player->getName() + " has built a village building.");
 						(*resourceMarker)[resourceType] -= cost;
-						notify("Resource markers have been updated accordingly.");
 						return true;
 					}
 				}
@@ -534,11 +483,8 @@ loop:
 				return false;
 		}
 		catch (int e) {
-			// std::system("CLS");
-			Display::displayGameBoard(gbMap, resourceMarker);
-			Display::displayBuidlingPool(buildingPool);
-			Display::displayPlayerHand(player);
-			Display::displayVillageBoard(player);
+			std::system("CLS");
+			notify(player, "Player " + *player->getName() + " has placed harvest tile!");
 
 			if (e == 0)
 				cout << "Error: Out of range or invalid input!" << endl;
@@ -585,15 +531,15 @@ void Game::run() {
 	while (gbMap->getNumberOfEmptySlots() > 1) {
 		Player* player = (*it);
 		currentPlayer = player;
-		notify("It is now " + *player->getName() + "'s turn.");
+		// notify("It is now " + *player->getName() + "'s turn.");
 
 		// 1. Place Harvest Tile and notify observers
 		pair<int, int> harvestTile = pickHarvestTile(player);
-		notify(*player->getName() + " has played a harvest tile.");
+		// notify(*player->getName() + " has played a harvest tile.");
 
 		// 2. Calculate Gathered Resources
 		calculateResources(player, harvestTile);
-		notify("The resources have been calculated.");
+		// notify("The resources have been calculated.");
 
 		// 3. Place Building
 		// 4. Rotation to Share
@@ -623,11 +569,8 @@ void Game::run() {
 		// Note: First one must be from Building Pool
 		if (draw_buildings > 0) {
 
-			// std::system("CLS");
-			Display::displayGameBoard(gbMap, resourceMarker);
-			Display::displayBuidlingPool(buildingPool);
-			Display::displayPlayerHand(player);
-			Display::displayVillageBoard(player);
+			std::system("CLS");
+			notify(player, "");
 
 			int input;
 			while (true) {
@@ -649,11 +592,8 @@ void Game::run() {
 					break;
 				}
 				catch (int e) {
-					// std::system("CLS");
-					Display::displayGameBoard(gbMap, resourceMarker);
-					Display::displayBuidlingPool(buildingPool);
-					Display::displayPlayerHand(player);
-					Display::displayVillageBoard(player);
+					std::system("CLS");
+					notify(player, "");
 					if (e == 0) {
 						cout << "Error: Invalid input!" << endl;
 					}
@@ -708,8 +648,6 @@ void Game::run() {
 
 		if (it == players->end())
 			it = players->begin();
-		
-		notify(*player->getName() + " is at the end of his/her turn.");
 	}
 
 	// 6. Calculate Total Scores

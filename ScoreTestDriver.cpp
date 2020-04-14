@@ -10,7 +10,9 @@ int main() {
 	cout << " " << endl;
 
 	Game* game = new Game();
-
+	GameStatisticsObserver* gsObserver = new GameStatisticsObserver(game);
+	GameObserver* gObserver = new GameObserver(game);
+	TurnObserver* tObserver = new TurnObserver(game);
 	vector<Player*>* players = game->getPlayers();
 
 	system("pause");
@@ -76,10 +78,18 @@ int main() {
 
 		game->calculateScores();
 		Display::displayWinner(game->getPlayers());
-
 	}
 
 	system("pause");
+
+	delete gsObserver;
+	delete gObserver;
+	delete tObserver;
+	delete game;
+	game = NULL;
+	gsObserver = NULL;
+	gObserver = NULL;
+	tObserver = NULL;
 
 	return 0;
 }
