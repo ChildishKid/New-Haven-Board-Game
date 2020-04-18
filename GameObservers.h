@@ -59,7 +59,7 @@ public:
 	GameStatisticsObserver(Game* game);
 	~GameStatisticsObserver();
 	void update(Player* player, string message);
-	void display();
+	void display(string message);
 private:
 	Game* subject;
 };

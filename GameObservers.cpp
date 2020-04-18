@@ -182,14 +182,6 @@ void GameObserver::display() {
 		cout << xcoordinates << endl;
 	}
 
-	// Display Resource Track
-	cout << endl << "   RESOURCE MARKERS: "
-		<< "Stone (" + to_string((*subject->getResourceMarker())[Type::Stone]) + "), "
-		<< "Timber (" + to_string((*subject->getResourceMarker())[Type::Timber]) + "), "
-		<< "Wheat (" + to_string((*subject->getResourceMarker())[Type::Wheat]) + "), "
-		<< "Sheep (" + to_string((*subject->getResourceMarker())[Type::Sheep]) + ")"
-		<< endl << endl;
-
 	// Display Building Pool
 	cout << "   SHARED BUILDING POOL: " << endl;
 
@@ -296,6 +288,14 @@ void TurnObserver::display(Player* player, string message) {
 
 	cout << endl << "====== " << *player->getName() << "'s HAND ======" << endl;
 
+	// Display Resource Track
+	cout << endl << "   RESOURCE MARKERS: "
+		<< "Stone (" + to_string((*subject->getResourceMarker())[Type::Stone]) + "), "
+		<< "Timber (" + to_string((*subject->getResourceMarker())[Type::Timber]) + "), "
+		<< "Wheat (" + to_string((*subject->getResourceMarker())[Type::Wheat]) + "), "
+		<< "Sheep (" + to_string((*subject->getResourceMarker())[Type::Sheep]) + ")"
+		<< endl;
+
 	// Display Harvest Tiles in hand
 	if (player->getPlayersHand()->getShipmentTile() != NULL)
 		cout << endl << "   HARVEST TILES: (+SHIPMENT TILE)" << endl;
@@ -389,10 +389,10 @@ GameStatisticsObserver::~GameStatisticsObserver() {
 }
 
 void GameStatisticsObserver::update(Player* player, string message) {
-	display();
+	display(message);
 }
 
-void GameStatisticsObserver::display() {
+void GameStatisticsObserver::display(string message) {
 	cout << endl << "====== GAME STATISTICS ======" << endl << endl;
 
 	for (int i = 0; i < subject->getPlayers()->size(); i++) {
@@ -404,6 +404,11 @@ void GameStatisticsObserver::display() {
 		cout << " and Score: " << *(subject->getPlayers()->at(i)->getScore()) << endl;
 	}
 	cout << endl;
+
+	if (message == "end") {
+		Display::displayWinner(subject->getPlayers());
+		cout << endl;
+	}
 }
 
 Observer::Observer() {

@@ -13,6 +13,8 @@ int main() {
 
     system("pause");
     game->run();
+    system("CLS");
+    gsObserver->display("end");
     system("pause");
     delete gsObserver;
     delete gObserver;

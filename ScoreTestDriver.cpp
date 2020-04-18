@@ -31,8 +31,11 @@ int main() {
 		player2->setPlayersVGMap(VGMapLoader::load("VGMapTest2.txt"));
 		Display::displayVillageBoard(player2);
 		
+		/*
 		game->calculateScores();
 		Display::displayWinner(game->getPlayers());
+		*/
+		gsObserver->display("end");
 	}
 	else if (players->size() == 3) {
 		//Load test maps for three players
@@ -51,8 +54,11 @@ int main() {
 		player3->setPlayersVGMap(VGMapLoader::load("VGMapTest3.txt"));
 		Display::displayVillageBoard(player3);
 
+		/*
 		game->calculateScores();
 		Display::displayWinner(game->getPlayers());
+		*/
+		gsObserver->display("end");
 	}
 	else {
 
@@ -76,8 +82,11 @@ int main() {
 		player4->setPlayersVGMap(VGMapLoader::load("VGMapTest3.txt"));
 		Display::displayVillageBoard(player4);
 
+		/*
 		game->calculateScores();
 		Display::displayWinner(game->getPlayers());
+		*/
+		gsObserver->display("end");
 	}
 
 	system("pause");

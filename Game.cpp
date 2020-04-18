@@ -452,6 +452,10 @@ loop:
 						player->buildVillage(x, y, cost, pick, option);
 						(*villageBuildingCount)[*player->getName()] = (*villageBuildingCount)[*player->getName()] + 1;
 						(*resourceMarker)[resourceType] -= cost;
+
+						std::system("CLS");
+						notify(player, "Player " + *player->getName() + " has placed a building tile for " + to_string(cost) + " " + Display::typePrefix(resourceType));
+						system("pause");
 						return true;
 					}
 				}
@@ -474,6 +478,11 @@ loop:
 						player->buildVillage(x, y, cost, pick, option);
 						(*villageBuildingCount)[*player->getName()] = (*villageBuildingCount)[*player->getName()] + 1;
 						(*resourceMarker)[resourceType] -= cost;
+
+						std::system("CLS");
+						notify(player, "Player " + *player->getName() + " has placed a building tile for " + to_string(cost) + " " + Display::typePrefix(resourceType));
+						system("pause");
+
 						return true;
 					}
 				}
@@ -484,7 +493,7 @@ loop:
 		}
 		catch (int e) {
 			std::system("CLS");
-			notify(player, "Player " + *player->getName() + " has placed harvest tile!");
+			notify(player, "Player " + *player->getName() + " can place building tile! (if possible)");
 
 			if (e == 0)
 				cout << "Error: Out of range or invalid input!" << endl;
@@ -514,7 +523,7 @@ void Game::calculateResources(Player* player, pair<int, int> p) {
 }
 
 void Game::calculateScores() {
-	cout << "===== Final Scores =====" << endl;
+	cout << "===== FINAL SCORES =====" << endl;
 
 	for (int i = 0 ; i < players->size(); i++) {
 		Score* count = new Score(players->at(i)->getVGMap());
@@ -539,7 +548,9 @@ void Game::run() {
 
 		// 2. Calculate Gathered Resources
 		calculateResources(player, harvestTile);
-		// notify("The resources have been calculated.");
+		std::system("CLS");
+		notify(player, "The resources have been calculated");
+		system("pause");
 
 		// 3. Place Building
 		// 4. Rotation to Share
@@ -649,12 +660,4 @@ void Game::run() {
 		if (it == players->end())
 			it = players->begin();
 	}
-
-	// 6. Calculate Total Scores
-	// std::system("CLS");
-	calculateScores();
-
-	// 7. Determine Winner
-	Display::displayWinner(players);
-	std::system("pause");
 }
