@@ -10,7 +10,9 @@ int main() {
 	cout << " " << endl;
 
 	Game* game = new Game();
-
+	GameStatisticsObserver* gsObserver = new GameStatisticsObserver(game);
+	GameObserver* gObserver = new GameObserver(game);
+	TurnObserver* tObserver = new TurnObserver(game);
 	vector<Player*>* players = game->getPlayers();
 
 	system("pause");
@@ -29,8 +31,11 @@ int main() {
 		player2->setPlayersVGMap(VGMapLoader::load("VGMapTest2.txt"));
 		Display::displayVillageBoard(player2);
 		
+		/*
 		game->calculateScores();
 		Display::displayWinner(game->getPlayers());
+		*/
+		gsObserver->display("end");
 	}
 	else if (players->size() == 3) {
 		//Load test maps for three players
@@ -49,8 +54,11 @@ int main() {
 		player3->setPlayersVGMap(VGMapLoader::load("VGMapTest3.txt"));
 		Display::displayVillageBoard(player3);
 
+		/*
 		game->calculateScores();
 		Display::displayWinner(game->getPlayers());
+		*/
+		gsObserver->display("end");
 	}
 	else {
 
@@ -74,12 +82,23 @@ int main() {
 		player4->setPlayersVGMap(VGMapLoader::load("VGMapTest3.txt"));
 		Display::displayVillageBoard(player4);
 
+		/*
 		game->calculateScores();
 		Display::displayWinner(game->getPlayers());
-
+		*/
+		gsObserver->display("end");
 	}
 
 	system("pause");
+
+	delete gsObserver;
+	delete gObserver;
+	delete tObserver;
+	delete game;
+	game = NULL;
+	gsObserver = NULL;
+	gObserver = NULL;
+	tObserver = NULL;
 
 	return 0;
 }

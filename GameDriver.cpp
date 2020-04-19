@@ -7,10 +7,21 @@ using namespace std;
 
 int main() {
     Game* game = new Game();
-    GameObserver* observer = new GameObserver(game);
+    GameStatisticsObserver* gsObserver = new GameStatisticsObserver(game);
+    GameObserver* gObserver = new GameObserver(game);
+    TurnObserver* tObserver = new TurnObserver(game);
+
     system("pause");
     game->run();
+    system("CLS");
+    gsObserver->display("end");
+    system("pause");
+    delete gsObserver;
+    delete gObserver;
+    delete tObserver;
     delete game;
     game = NULL;
-    system("pause");
+    gsObserver = NULL;
+    gObserver = NULL;
+    tObserver = NULL;
 }
